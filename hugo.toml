@@ -6,7 +6,7 @@ theme = 'PaperMod'
 [params]
   env = 'production'
   # Mesure d'audience GoatCounter : code du site (sous-domaine choisi a l'inscription).
-  goatcounter = ''
+  goatcounter = 'lesdeuxrecoltes'
   # Google Search Console : code de la balise HTML, si verification par DNS impossible.
   googleSiteVerification = ''
   ShowReadingTime = false

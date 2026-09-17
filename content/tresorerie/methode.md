@@ -1,5 +1,5 @@
 +++
-title = 'La trésorerie comme méthode'
+title = "Construire la trésorerie d'une exploitation"
 date = 2026-09-17
 lastmod = 2026-09-17
 draft = false

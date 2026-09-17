@@ -1,0 +1,21 @@
+baseURL = 'https://lesdeuxrecoltes.fr/'
+languageCode = 'fr-fr'
+title = 'Les Deux Récoltes'
+theme = 'PaperMod'
+
+[params]
+  env = 'production'
+  ShowReadingTime = false
+  ShowShareButtons = false
+  ShowPostNavLinks = false
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = false
+  ShowWordCount = false
+  ShowRssButtonInSectionTermList = false
+  ShowToc = false
+  comments = false
+  hidemeta = true
+
+  [params.homeInfoParams]
+    Title = 'Les Deux Récoltes'
+    Content = 'Corpus de méthodes et de notes, par Morbrazh.'

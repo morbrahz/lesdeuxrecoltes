@@ -1,3 +1,7 @@
 /public/
 /resources/_gen/
 .hugo_build.lock
+
+# Notes de travail, non publiees
+note-cadrage-site.md
+contenu prévisionnel/

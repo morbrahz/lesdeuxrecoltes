@@ -23,3 +23,23 @@ theme = 'PaperMod'
   [params.homeInfoParams]
     Title = 'Les Deux Récoltes'
     Content = 'Corpus de méthodes et de notes, par Morbrazh.'
+
+[[menu.main]]
+  name = 'Trésorerie'
+  url = '/tresorerie/'
+  weight = 10
+
+[[menu.main]]
+  name = 'À propos'
+  url = '/a-propos/'
+  weight = 20
+
+[[menu.main]]
+  name = 'Mentions légales'
+  url = '/mentions-legales/'
+  weight = 30
+
+[[menu.main]]
+  name = 'Confidentialité'
+  url = '/confidentialite/'
+  weight = 40

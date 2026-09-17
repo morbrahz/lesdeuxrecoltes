@@ -1,0 +1,13 @@
+{{/* Mesure d'audience GoatCounter — sans cookie.
+     Le code du site se règle dans hugo.toml : params.goatcounter.
+     Vide ou en développement local, aucun script n'est chargé. */}}
+{{- if and site.Params.goatcounter (eq hugo.Environment "production") }}
+<script data-goatcounter="https://{{ site.Params.goatcounter }}.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+{{- end }}
+
+{{/* Vérification Google Search Console (méthode balise HTML, en secours de la
+     vérification par DNS chez OVH) : params.googleSiteVerification */}}
+{{- with site.Params.googleSiteVerification }}
+<meta name="google-site-verification" content="{{ . }}">
+{{- end }}

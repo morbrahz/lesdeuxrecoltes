@@ -27,7 +27,7 @@ disableKinds = ['taxonomy', 'term']
 
   [params.homeInfoParams]
     Title = 'Les Deux Récoltes'
-    Content = "Corpus de méthodes et de notes, par Morbrazh."
+    Content = "Corpus de méthodes et de notes."
 
 [[menu.main]]
   name = 'Trésorerie'

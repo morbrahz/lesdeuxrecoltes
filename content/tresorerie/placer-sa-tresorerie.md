@@ -56,6 +56,8 @@ Le dernier critère est le plus souvent sous-estimé. Un montage qui rapporte un
 
 Une précision sur la lecture des rendements affichés. Sur un fonds monétaire, le chiffre mis en avant est souvent une **moyenne** — des trente derniers jours, ou des douze derniers mois. Ce n'est pas le taux servi aujourd'hui. Quand les taux baissent, cette moyenne reste au-dessus du marché et avantage optiquement le fonds face à un compte à terme, dont le taux est annoncé pour demain ; quand les taux montent, l'erreur joue dans l'autre sens. Avant de comparer deux supports, vérifier que les deux chiffres regardent dans la même direction.
 
+Seconde précision, sur la construction. Sous le même nom de « fonds monétaire » coexistent deux montages. Le premier **détient réellement** des titres d'État très courts. Le second obtient la même performance par un **échange avec une banque** — un swap —, adossé à un portefeuille d'actifs donné en garantie. Les deux servent le taux court du marché et se ressemblent sur une fiche de rendement, mais ils ne portent pas le même risque : le second y ajoute la défaillance possible de la contrepartie et la qualité du collatéral. Sur de l'argent qui sert d'assurance, cette question se pose avant celle des dixièmes de point de frais.
+
 Hors champ, et volontairement : actions, immobilier, parts sociales, actifs numériques. Ces classes d'actifs relèvent de l'épargne, pas de la trésorerie, parce qu'elles n'offrent aucune garantie sur la valeur disponible à une date donnée. Les placer dans un barreau revient à accepter exactement le risque contre lequel les barreaux ont été construits.
 
 ## 5. Barreau par barreau

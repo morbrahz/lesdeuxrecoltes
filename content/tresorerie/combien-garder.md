@@ -86,7 +86,7 @@ Ce qui dépasse le total n'a plus d'échéance et ne correspond plus à aucun be
 
 - [Le vrai coût du découvert sur une exploitation agricole](/tresorerie/cout-du-decouvert/) — ce que l'on paie à se passer de trésorerie, et pourquoi ce coût ne se lit pas dans les frais financiers.
 
-*À venir : comment investir sa trésorerie — pourquoi la faire fructifier, et concrètement sur quels supports.*
+- [Comment placer la trésorerie d'une exploitation agricole](/tresorerie/placer-sa-tresorerie/) — pourquoi une réserve qui dort se réduit toute seule, et quels supports correspondent à chaque barreau.
 
 ---
 

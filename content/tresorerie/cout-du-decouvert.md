@@ -60,7 +60,7 @@ Deux autres coûts ne figurent dans aucun compte.
 
 ## Et ensuite
 
-Le coût ne disparaît pas parce qu'on l'a chiffré : il disparaît quand l'exploitation recommence à financer son propre cycle. Reste à savoir combien garder pour cela, et pour combien de temps — c'est l'objet de la page [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/).
+Le coût ne disparaît pas parce qu'on l'a chiffré : il disparaît quand l'exploitation recommence à financer son propre cycle. Reste à savoir combien garder pour cela, et pour combien de temps — c'est l'objet de la page [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/), puis de [Comment placer la trésorerie d'une exploitation agricole](/tresorerie/placer-sa-tresorerie/).
 
 ---
 

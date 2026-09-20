@@ -10,6 +10,9 @@ disableKinds = ['taxonomy', 'term']
 
 [params]
   env = 'production'
+  # Utilisee comme meta description de la page d'accueil (les autres pages
+  # utilisent leur propre champ summary).
+  description = "Méthodes de gestion et d'investissement écrites depuis une exploitation agricole : trésorerie, structures, épargne et placements."
   # Mesure d'audience GoatCounter : code du site (sous-domaine choisi a l'inscription).
   goatcounter = 'lesdeuxrecoltes'
   # Google Search Console : code de la balise HTML, si verification par DNS impossible.

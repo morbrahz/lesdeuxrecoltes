@@ -27,7 +27,7 @@ disableKinds = ['taxonomy', 'term']
 
   [params.homeInfoParams]
     Title = 'Les Deux Récoltes'
-    Content = "Corpus de méthodes et de notes, par Morbrazh.\n\nÀ lire en premier : [combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/)."
+    Content = "Corpus de méthodes et de notes, par Morbrazh."
 
 [[menu.main]]
   name = 'Trésorerie'

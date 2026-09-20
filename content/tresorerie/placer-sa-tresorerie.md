@@ -70,7 +70,10 @@ Sur les barreaux courts, le fonds monétaire est le support le plus directement 
 Deux précisions qui évitent la sur-construction :
 
 - **Un même support peut porter plusieurs barreaux.** Les barreaux distinguent l'argent par sa nature, pas par son compte. Deux ou trois supports suffisent à en couvrir quatre.
+- **Quatre barreaux, trois échéances de placement.** Les deux premiers barreaux appellent les mêmes supports : au moment de placer, ils se traitent ensemble, en une seule échéance à moins d'un an. Les quatre barreaux restent utiles pour calculer le total ; ils se ramènent à trois échéances pour le mettre en œuvre.
 - **Le barreau ne se déduit pas du support, mais l'inverse.** On part de la durée du besoin, puis on cherche ce qui lui correspond. Choisir d'abord un produit intéressant et lui trouver ensuite un barreau est la manière habituelle de se retrouver à vendre au mauvais moment.
+
+Dernier point, propre aux structures transparentes fiscalement : les besoins personnels connus d'avance se rangent sur l'échéance qui leur correspond, au même titre que ceux de l'exploitation. Des travaux, un voyage, une hausse d'impôt ou de cotisations MSA identifiée à l'avance n'ont pas à être financés dans l'urgence au moment où ils tombent : ils occupent une place dans l'échelle, à la durée qui est la leur. C'est l'application directe du principe posé au paragraphe 2 de [Combien de trésorerie garder](/tresorerie/combien-garder/) — sans cloison étanche entre les deux trésoreries, l'échelle porte les deux.
 
 ## 6. Ce que l'on ne fait pas
 
@@ -80,7 +83,7 @@ Deux précisions qui évitent la sur-construction :
 - Ouvrir un support par barreau par réflexe de symétrie, puis six au total.
 - Placer une fois et ne plus rien regarder : les taux courts bougent, les échéances des comptes à terme arrivent, les barreaux se vident et se remplissent.
 
-> **Cas observé.** Sur une exploitation en polyculture-élevage sortie de plusieurs années de court terme subi, le basculement s'est fait en un seul exercice, avec trois supports pour quatre barreaux : un fonds monétaire pour les barreaux courts, des livrets réglementés à titre personnel, la structure étant transparente fiscalement, et deux fonds obligataires de maturités différentes pour les barreaux 1 à 3 ans et 3 à 5 ans. Le gain n'est pas le rendement obtenu : c'est l'**écart** entre un taux payé à la banque sur de l'argent emprunté et un taux perçu sur de l'argent détenu. Cet écart se chiffre en points, quand le rendement seul se chiffre en fractions de point. C'est la raison pour laquelle la première année de trésorerie propre rapporte davantage que toutes les optimisations de support qui suivront.
+> **Cas observé.** Sur une exploitation en polyculture-élevage sortie de plusieurs années de court terme subi, trois supports couvrent les quatre barreaux. Deux mois de charges sur les durées courtes, dont 60 % en compte courant et en livrets — le compte courant ne portant que le mois à venir — et le reste en fonds monétaire. Le troisième mois en obligataire, aux deux tiers sur du 1 à 3 ans, pour le reste sur du 3 à 5 ans. Les rendements servis à la mise en place suivaient la durée : environ 2,8 % sur le monétaire, 3,5 % sur l'obligataire court terme, 4,1 % sur le 3 à 5 ans, soit un peu plus d'un demi-point par cran de durée supplémentaire. Mais l'essentiel n'est pas dans ce classement. Le court terme subi coûtait 4 % sur la seule ligne d'intérêts : entre payer quatre points sur de l'argent emprunté et percevoir deux à quatre points sur de l'argent détenu, l'**écart se compte en six à huit points** — avant même d'y ajouter les deux tiers du coût complet qui ne figurent pas dans les intérêts. Aucun arbitrage entre supports ne produit un écart de cet ordre.
 
 ## 7. Une revue par an
 
@@ -94,7 +97,7 @@ Les taux cités sur cette page dateront ; la règle d'appariement, non.
 - Le risque qui compte n'est pas la baisse, c'est l'inadéquation entre la durée du besoin et celle du support.
 - Cinq critères départagent les supports, dont deux qu'on oublie : l'accessibilité selon la structure et la charge d'entretien.
 - Deux ou trois supports suffisent à couvrir les quatre barreaux.
-- L'écart entre un taux payé sur de l'argent emprunté et un taux perçu sur de l'argent détenu pèse plus lourd que le choix du support.
+- L'écart entre un taux payé sur de l'argent emprunté et un taux perçu sur de l'argent détenu se compte en points, quand le choix entre deux supports se joue en fractions de point.
 
 ## Pages liées
 

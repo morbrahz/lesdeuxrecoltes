@@ -22,7 +22,7 @@ theme = 'PaperMod'
 
   [params.homeInfoParams]
     Title = 'Les Deux Récoltes'
-    Content = 'Corpus de méthodes et de notes, par Morbrazh.'
+    Content = "Corpus de méthodes et de notes, par Morbrazh.\n\nÀ lire en premier : [construire la trésorerie d'une exploitation](/tresorerie/methode/)."
 
 [[menu.main]]
   name = 'Trésorerie'

@@ -3,6 +3,11 @@ languageCode = 'fr-fr'
 title = 'Les Deux Récoltes'
 theme = 'PaperMod'
 
+# Taxonomies desactivees : le site n'utilise ni tags ni categories.
+# Sans cela, Hugo genere /tags/ et /categories/ vides, qui entrent dans le
+# sitemap et diluent les quelques URL du site.
+disableKinds = ['taxonomy', 'term']
+
 [params]
   env = 'production'
   # Mesure d'audience GoatCounter : code du site (sous-domaine choisi a l'inscription).

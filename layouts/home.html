@@ -1,0 +1,20 @@
+{{- define "main" }}
+{{/* Accueil organisé par rubrique : présentation, puis un bloc par rubrique
+     (ordre : weight du _index.md), pages dans l'ordre de lecture (weight de
+     chaque page). Une nouvelle page apparaît seule dans son bloc. */}}
+{{- partial "home_info.html" . }}
+
+{{- range site.Sections.ByWeight }}
+<section class="rubrique">
+  <h2 class="rubrique-titre"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+  <ul class="rubrique-pages">
+    {{- range .RegularPages.ByWeight }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      {{- with .Summary }}<p>{{ . | plainify | htmlUnescape }}</p>{{ end }}
+    </li>
+    {{- end }}
+  </ul>
+</section>
+{{- end }}
+{{- end }}

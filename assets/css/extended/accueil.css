@@ -1,0 +1,33 @@
+/* Accueil organisé par rubrique (layouts/home.html) */
+.rubrique {
+  margin-bottom: var(--gap);
+  padding: var(--gap);
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.rubrique-titre {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+.rubrique-pages {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.rubrique-pages li {
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+}
+.rubrique-pages li:first-child {
+  border-top: none;
+}
+.rubrique-pages a {
+  font-weight: 600;
+}
+.rubrique-pages p {
+  margin: 4px 0 0;
+  color: var(--secondary);
+  font-size: 15px;
+  line-height: 1.5;
+}

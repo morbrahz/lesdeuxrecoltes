@@ -1,4 +1,5 @@
 +++
+weight = 1
 title = 'Trésorerie'
 summary = "Dimensionner, répartir et placer la trésorerie d'une exploitation agricole."
 +++

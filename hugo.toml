@@ -30,7 +30,7 @@ disableKinds = ['taxonomy', 'term']
 
   [params.homeInfoParams]
     Title = "Méthodes de gestion et d'investissement, écrites depuis une exploitation agricole"
-    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne et placements. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\nUne erreur, une objection, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr). Les retours d'exploitants sont ce qui corrige le mieux une méthode."
+    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne et placements. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\nUne question, une remarque, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr) : chaque message est lu."
 
 [[menu.main]]
   name = 'Trésorerie'

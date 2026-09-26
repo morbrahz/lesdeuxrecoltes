@@ -72,7 +72,7 @@ Une conséquence pratique : une fois les quatre barreaux constitués, l'autorisa
 
 ## 6. Au-delà du total
 
-Ce qui dépasse le total n'a plus d'échéance et ne correspond plus à aucun besoin : **ce n'est plus de la trésorerie**. Ces sommes relèvent d'une autre logique, celle de l'épargne et de l'investissement. La question ne se pose qu'une fois les quatre barreaux constitués.
+Ce qui dépasse le total n'a aucun emploi prévu à moins de cinq ans : **ce n'est plus de la trésorerie**. Ces sommes relèvent d'une autre logique, celle de l'épargne et de l'investissement, traitée dans [Où placer son épargne quand on est agriculteur](/epargne/ou-placer-son-epargne/). La question ne se pose qu'une fois les quatre barreaux constitués.
 
 ## À retenir
 

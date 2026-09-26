@@ -108,7 +108,7 @@ Les taux cités sur cette page dateront ; la règle d'appariement, non.
 - [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/) — fixer le total en mois de charges et le répartir sur quatre durées.
 - [Le vrai coût du découvert sur une exploitation agricole](/tresorerie/cout-du-decouvert/) — ce que l'on paie à se passer de trésorerie.
 
-*Ce qui dépasse le total n'entre pas dans cette page : sans échéance ni besoin identifié, ces sommes relèvent de l'épargne et de l'investissement, qui feront l'objet d'une rubrique distincte.*
+*Ce qui dépasse le total n'entre pas dans cette page : sans emploi prévu à moins de cinq ans, ces sommes relèvent de l'épargne et de l'investissement, traités dans [Où placer son épargne quand on est agriculteur](/epargne/ou-placer-son-epargne/).*
 
 ---
 

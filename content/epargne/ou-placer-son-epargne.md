@@ -74,6 +74,8 @@ Une fois l'exploitation comptée, la plupart des agriculteurs découvrent que le
 
 D'où la règle : **l'épargne financière d'un agriculteur ne doit pas reproduire son exposition professionnelle.** Ajouter des terres agricoles, des fonds de matières premières ou des actions du secteur agroalimentaire, c'est renforcer une position déjà dominante. L'épargne sert au contraire à rééquilibrer vers ce qui manque — le plus souvent les actions et les obligations. Chaque nouvel euro va vers la famille la plus en retard sur la cible.
 
+> **Cas observé.** Sur une exploitation en polyculture-élevage, le patrimoine du foyer se répartit ainsi : exploitation 27 %, foncier détenu en GFA 25 %, trésorerie 19 %, résidence principale 16 %, épargne financière 13 %, en actions et en actifs numériques. Regroupés par famille, les actifs réels — exploitation, foncier, résidence principale — pèsent **plus des deux tiers** du total, dont plus de la moitié pour les seuls actifs agricoles. Les obligations n'apparaissent qu'au travers de la trésorerie, dont environ un tiers est placé en obligataire, soit de l'ordre de 6 % du patrimoine. Les actions, actifs numériques compris, ne dépassent pas 13 %. Et ces proportions sous-estiment encore les actifs réels, puisque l'exploitation y figure à sa valeur comptable. Le constat ne se lit pas dans l'épargne financière, qui peut sembler bien diversifiée prise isolément, mais seulement à l'échelle du patrimoine : la totalité de l'épargne nouvelle a vocation à aller vers les actions et les obligations, et il faudra de nombreuses années pour que la part des actifs réels agricoles redescende sensiblement.
+
 ## 3. Les enveloppes disponibles
 
 | Enveloppe | Avantage à l'entrée | À la sortie | Disponibilité | Ce qu'on peut y loger | Condition |
@@ -81,7 +83,7 @@ D'où la règle : **l'épargne financière d'un agriculteur ne doit pas reprodui
 | **PEE** (plan d'épargne entreprise) | L'abondement versé par l'exploitation sort du bénéfice agricole ; exonéré d'impôt sur le revenu, seules CSG et CRDS restent dues | Plus-values soumises aux seuls prélèvements sociaux | Bloqué 5 ans, sauf cas de déblocage anticipé | Les fonds proposés par le gestionnaire du plan | Au moins un salarié ; plan ouvert à tous |
 | **PER individuel** | Versements déductibles du bénéfice agricole : baissent à la fois l'impôt et les cotisations MSA | Versements imposés au barème, plus-values au prélèvement forfaitaire | Bloqué jusqu'à la retraite, sauf achat de la résidence principale | Large choix de fonds, dont obligataires et immobiliers | Aucune |
 | **PERECO** (PER d'entreprise collectif) | Abondement : sort du bénéfice agricole. Versement volontaire : déductible du seul impôt sur le revenu, ou non déductible | Selon l'origine des sommes | Bloqué jusqu'à la retraite, sauf achat de la résidence principale | Les fonds proposés par le gestionnaire du plan | Au moins un salarié ; plan ouvert à tous |
-| **PEA** | Aucun | Après 5 ans, plus-values exonérées d'impôt sur le revenu, seuls les prélèvements sociaux restent dus | Disponible ; l'avantage fiscal suppose 5 ans de détention | Actions européennes, et fonds indiciels éligibles | Versements plafonnés |
+| **PEA** | Aucun | Après 5 ans, plus-values exonérées d'impôt sur le revenu, seuls les prélèvements sociaux restent dus | Disponible ; l'avantage fiscal suppose 5 ans de détention | Actions européennes, et fonds indiciels éligibles | Versements plafonnés à 150 000 € |
 | **Compte-titres** | Aucun | Plus-values et revenus imposés chaque année | Disponible | Tout : actions du monde entier, obligations, or, foncières cotées | Aucune |
 | **Assurance-vie** | Aucun | Fiscalité allégée après 8 ans ; régime successoral propre | Disponible | Fonds en euros, unités de compte, immobilier papier | Aucune |
 
@@ -117,7 +119,7 @@ La part du PER se dimensionne donc selon l'âge de départ prévu : plus l'écar
 
 ### Les conditions du PEE et du PERECO
 
-Ces deux plans supposent **au moins un salarié**. Ils doivent alors être ouverts à l'ensemble des salariés, avec les mêmes règles d'abondement pour tous : l'abondement versé aux salariés fait partie du coût du dispositif et entre dans le calcul de son intérêt.
+Ces deux plans supposent **au moins un salarié**. Ils doivent alors être ouverts à l'ensemble des salariés, avec les mêmes règles d'abondement pour tous : l'abondement versé aux salariés fait partie du coût du dispositif et entre dans le calcul de son intérêt. Sans salarié, ces deux plans sont fermés : l'ordre commence alors au PER individuel.
 
 ### Un plafond qui dépend du bénéfice
 
@@ -132,8 +134,6 @@ La méthode se fait donc en deux temps : l'ordre dit **où va le prochain euro**
 ## 6. Les frais
 
 Pour une même allocation, dans une même enveloppe, la seule variable qu'on maîtrise entièrement est le coût. Un point de frais annuel supplémentaire se paie chaque année, sur la totalité de l'encours, pendant toute la durée de l'épargne. Pour chaque enveloppe, viser les frais les plus bas.
-
-> **Cas observé.** Sur une exploitation en polyculture-élevage, le patrimoine du foyer se répartit ainsi : exploitation 27 %, foncier détenu en GFA 25 %, trésorerie 19 %, résidence principale 16 %, épargne financière 13 %, en actions et actifs numériques. Regroupés par famille, les actifs réels — exploitation, foncier, résidence principale — pèsent **plus des deux tiers** du total, dont plus de la moitié pour les seuls actifs agricoles. Les obligations n'apparaissent qu'au travers de la trésorerie, dont environ un tiers est placé en obligataire, soit de l'ordre de 6 % du patrimoine. Les actions ne dépassent pas 13 %. Et ces proportions sous-estiment encore les actifs réels, puisque l'exploitation y figure à sa valeur comptable. Le constat ne se lit pas dans l'épargne financière, qui peut sembler bien diversifiée prise isolément, mais seulement à l'échelle du patrimoine : la totalité de l'épargne nouvelle a vocation à aller vers les actions et les obligations, et il faudra de nombreuses années pour que la part des actifs réels agricoles redescende sensiblement.
 
 ## À retenir
 

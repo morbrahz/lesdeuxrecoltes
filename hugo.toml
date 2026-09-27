@@ -12,7 +12,7 @@ disableKinds = ['taxonomy', 'term']
   env = 'production'
   # Utilisee comme meta description de la page d'accueil (les autres pages
   # utilisent leur propre champ summary).
-  description = "Méthodes de gestion et d'investissement écrites depuis une exploitation agricole : trésorerie, épargne et placements."
+  description = "Méthodes de gestion, d'investissement et d'élevage laitier écrites depuis une exploitation agricole : trésorerie, épargne, placements et traite robotisée."
   # Mesure d'audience GoatCounter : code du site (sous-domaine choisi a l'inscription).
   goatcounter = 'lesdeuxrecoltes'
   # Google Search Console : code de la balise HTML, si verification par DNS impossible.
@@ -29,8 +29,8 @@ disableKinds = ['taxonomy', 'term']
   hidemeta = true
 
   [params.homeInfoParams]
-    Title = "Méthodes de gestion et d'investissement, écrites depuis une exploitation agricole"
-    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne et placements. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\nUne question, une remarque, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr) : chaque message est lu."
+    Title = "Méthodes de gestion, d'investissement et d'élevage, écrites depuis une exploitation agricole"
+    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne, placements et conduite d'un troupeau laitier trait au robot. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\nUne question, une remarque, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr) : chaque message est lu."
 
 [[menu.main]]
   name = 'Trésorerie'
@@ -41,6 +41,11 @@ disableKinds = ['taxonomy', 'term']
   name = 'Épargne'
   url = '/epargne/'
   weight = 15
+
+[[menu.main]]
+  name = 'Élevage'
+  url = '/elevage/'
+  weight = 17
 
 [[menu.main]]
   name = 'À propos'

@@ -1,0 +1,258 @@
+{{/* Outil « Quelles vaches pousser au robot ».
+     Le calcul est fait par static/outils/vaches-a-pousser/regle_pousser.py,
+     exécuté dans le navigateur par Pyodide (static/outils/pyodide/, hébergé
+     sur le site : aucune requête vers un tiers). Les fichiers déposés ne
+     quittent pas l'ordinateur du visiteur. */}}
+<div id="vap" class="vap">
+  <div class="vap-fichiers">
+    <label class="vap-fichier" data-cle="production">
+      <span class="vap-num">1</span>
+      <span class="vap-lib"><strong>Production journalière par vache</strong><br><small>obligatoire</small></span>
+      <input type="file" accept=".csv,text/csv">
+      <span class="vap-nom">Choisir le fichier…</span>
+    </label>
+    <label class="vap-fichier" data-cle="visites">
+      <span class="vap-num">2</span>
+      <span class="vap-lib"><strong>Liste des traites</strong><br><small>facultatif — passages spontanés</small></span>
+      <input type="file" accept=".csv,text/csv">
+      <span class="vap-nom">Choisir le fichier…</span>
+    </label>
+    <label class="vap-fichier" data-cle="retard">
+      <span class="vap-num">3</span>
+      <span class="vap-lib"><strong>Vaches en retard</strong><br><small>facultatif — liste de la tournée</small></span>
+      <input type="file" accept=".csv,text/csv">
+      <span class="vap-nom">Choisir le fichier…</span>
+    </label>
+  </div>
+
+  <fieldset class="vap-plages">
+    <legend><span class="vap-num">4</span> Vos plages de poussée</legend>
+    <p class="vap-note">Les heures où vous poussez des vaches vers le robot. Chaque plage doit couvrir la tournée
+      <strong>et le temps que les vaches poussées mettent à passer au robot</strong>. Tout passage en dehors de ces plages
+      est compté comme spontané : la vache est venue seule.</p>
+    <div id="vap-plages-liste"></div>
+    <button type="button" class="vap-bouton second vap-petit" id="vap-plage-plus">+ Ajouter une plage</button>
+  </fieldset>
+
+  <details class="vap-reglages">
+    <summary>Réglages</summary>
+    <div class="vap-grille">
+      <label>Seuil de lait par traite (kg)<input type="number" id="vap-seuil" value="12" step="0.5" min="1"></label>
+      <label>Hors classement sous (jours de lactation)<input type="number" id="vap-jel" value="7" min="0"></label>
+      <label>Jours avec passage spontané exigés<input type="number" id="vap-jmin" value="2" min="1" max="3"></label>
+      <label>Ignorer les données avant le<input type="date" id="vap-debut"></label>
+    </div>
+    <p class="vap-note">Les valeurs par défaut sont celles de la méthode.</p>
+  </details>
+
+  <button type="button" id="vap-go" disabled>Calculer</button>
+  <p id="vap-etat" class="vap-etat" aria-live="polite">Déposez au moins l'export de production.</p>
+
+  <div id="vap-res" hidden></div>
+</div>
+
+<style>
+.vap { margin: 1.5rem 0; }
+.vap-fichiers { display: grid; gap: .6rem; }
+.vap-fichier { display: grid; grid-template-columns: 2rem 1fr; gap: .2rem .8rem; align-items: center;
+  padding: .8rem 1rem; border: 1px dashed var(--tertiary); border-radius: var(--radius); cursor: pointer;
+  background: var(--entry); }
+.vap-fichier:hover, .vap-fichier:focus-within { border-color: var(--secondary); }
+.vap-fichier.ok { border-style: solid; border-color: var(--primary); }
+.vap-fichier input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.vap-num { grid-row: span 2; width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center;
+  background: var(--code-bg); font-weight: 600; }
+.vap-fichier.ok .vap-num { background: var(--primary); color: var(--theme); }
+.vap-lib small, .vap-nom { color: var(--secondary); font-size: .85em; }
+.vap-nom { grid-column: 2; overflow-wrap: anywhere; }
+.vap-reglages { margin: 1rem 0; }
+.vap-plages { margin: 1rem 0 0; padding: .8rem 1rem 1rem; border: 1px solid var(--tertiary); border-radius: var(--radius); background: var(--entry); }
+.vap-plages legend { display: flex; align-items: center; gap: .6rem; font-weight: 600; padding: 0 .3rem; }
+.vap-plages legend .vap-num { background: var(--primary); color: var(--theme); }
+.vap-plage { display: flex; align-items: center; gap: .4rem; margin: .5rem 0; }
+.vap-plage input { min-width: 0; flex: 0 1 8rem; }
+.vap-plage span, .vap-plage button { flex: none; }
+.vap-plage input { padding: .3rem .4rem; border: 1px solid var(--tertiary); border-radius: 6px; background: var(--theme); color: var(--primary); font: inherit; }
+.vap-plage button { border: none; background: none; color: var(--secondary); cursor: pointer; font-size: 1.2rem; line-height: 1; padding: .2rem .4rem; }
+.vap-petit { padding: .3rem .8rem; font-size: .9em; margin-top: .3rem; }
+.vap-reglages summary { cursor: pointer; color: var(--secondary); }
+.vap-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .6rem 1rem; margin-top: .8rem; }
+.vap-grille label { display: flex; flex-direction: column; gap: .2rem; font-size: .85em; color: var(--secondary); }
+.vap-grille input { padding: .35rem .5rem; border: 1px solid var(--tertiary); border-radius: 6px;
+  background: var(--theme); color: var(--primary); font: inherit; font-size: 1rem; }
+.vap-note { font-size: .85em; color: var(--secondary); margin-top: .6rem; }
+#vap-go, .vap-bouton { padding: .55rem 1.2rem; border-radius: var(--radius); border: 1px solid var(--primary);
+  background: var(--primary); color: var(--theme); font: inherit; cursor: pointer; }
+#vap-go:disabled { opacity: .45; cursor: not-allowed; }
+.vap-bouton.second { background: transparent; color: var(--primary); }
+.vap-etat { font-size: .9em; color: var(--secondary); margin-top: .6rem; }
+.vap-etat.erreur { color: #b3261e; }
+[data-theme="dark"] .vap-etat.erreur { color: #f2b8b5; }
+.vap-bloc { margin-top: 1.4rem; padding: 1rem 1.2rem; border-radius: var(--radius); background: var(--code-bg); }
+.vap-bloc h3 { margin: 0 0 .3rem; font-size: 1.1rem; }
+.vap-bloc > p { margin: .2rem 0 .6rem; font-size: .9em; color: var(--secondary); }
+.vap-liste { font-size: 1.6rem; font-weight: 700; letter-spacing: .02em; line-height: 1.5; margin: .4rem 0 .8rem; word-spacing: .4em; }
+.vap-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.vap-vaches { list-style: none; margin: .8rem 0 0; padding: 0; font-size: .9em; }
+.vap-vaches li { padding: .5rem 0; border-top: 1px solid var(--tertiary); margin: 0; }
+.vap-meta { color: var(--secondary); font-size: .9em; }
+.vap-raison { color: var(--content); }
+.vap details.vap-bloc summary { cursor: pointer; font-weight: 600; }
+.vap-pastille { display: inline-block; padding: 0 .4rem; border-radius: 4px; font-size: .8em; background: var(--primary); color: var(--theme); }
+@media print {
+  body * { visibility: hidden; }
+  #vap-res, #vap-res * { visibility: visible; }
+  #vap-res { position: absolute; left: 0; top: 0; width: 100%; }
+  .vap-actions { display: none; }
+  .vap details { display: block; }
+}
+</style>
+
+<script src="{{ "outils/pyodide/pyodide.js" | relURL }}" defer></script>
+<script>
+(function () {
+  const INDEX = "{{ "outils/pyodide/" | relURL }}";
+  const MOTEUR = "{{ "outils/vaches-a-pousser/regle_pousser.py" | relURL }}";
+  const racine = document.getElementById("vap");
+  const etat = document.getElementById("vap-etat");
+  const bouton = document.getElementById("vap-go");
+  const res = document.getElementById("vap-res");
+  const textes = { production: null, visites: null, retard: null };
+  let moteur = null;
+
+  function dire(msg, erreur) { etat.textContent = msg; etat.classList.toggle("erreur", !!erreur); }
+  function esc(s) { return String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+  async function lireTexte(f) {
+    const brut = await f.arrayBuffer();
+    try { return new TextDecoder("utf-8", { fatal: true }).decode(brut); }
+    catch (e) { return new TextDecoder("windows-1252").decode(brut); }
+  }
+
+  function charger() {
+    if (moteur) return moteur;
+    moteur = (async () => {
+      while (typeof loadPyodide === "undefined") await new Promise(r => setTimeout(r, 50));
+      const py = await loadPyodide({ indexURL: INDEX });
+      const code = await (await fetch(MOTEUR)).text();
+      py.FS.writeFile("regle_pousser.py", code);
+      return py.pyimport("regle_pousser");
+    })();
+    moteur.catch(() => { moteur = null; });
+    return moteur;
+  }
+
+  racine.querySelectorAll(".vap-fichier").forEach(zone => {
+    const input = zone.querySelector("input");
+    input.addEventListener("change", async () => {
+      const f = input.files[0];
+      if (!f) return;
+      textes[zone.dataset.cle] = await lireTexte(f);
+      zone.querySelector(".vap-nom").textContent = f.name;
+      zone.classList.add("ok");
+      bouton.disabled = !textes.production;
+      if (textes.production) dire("Prêt. Le premier calcul charge le moteur (une douzaine de Mo, une seule fois).");
+      charger();   // préchargement pendant que l'éleveur dépose les autres fichiers
+    });
+  });
+
+  const listePlages = document.getElementById("vap-plages-liste");
+  function ajouterPlage(debut, fin) {
+    const d = document.createElement("div");
+    d.className = "vap-plage";
+    d.innerHTML = `<span>de</span><input type="time" step="900" value="${debut}" aria-label="début">
+      <span>à</span><input type="time" step="900" value="${fin}" aria-label="fin">
+      <button type="button" title="Retirer cette plage" aria-label="Retirer cette plage">×</button>`;
+    d.querySelector("button").addEventListener("click", () => d.remove());
+    listePlages.appendChild(d);
+  }
+  ajouterPlage("07:00", "12:00");
+  ajouterPlage("16:00", "21:00");
+  document.getElementById("vap-plage-plus").addEventListener("click", () => ajouterPlage("", ""));
+  const heure = v => { if (!v) return null; const [h, m] = v.split(":").map(Number); return h + m / 60; };
+  function plages() {
+    return [...listePlages.querySelectorAll(".vap-plage")]
+      .map(d => [...d.querySelectorAll("input")].map(i => heure(i.value)))
+      .filter(([a, b]) => a !== null && b !== null && a !== b);
+  }
+
+  function parametres() {
+    const n = id => { const v = document.getElementById(id).value; return v === "" ? null : Number(v); };
+    return {
+      seuil_kg: n("vap-seuil"), jel_min: n("vap-jel"),
+      poussees: plages(),
+      jours_min: n("vap-jmin"), debut: document.getElementById("vap-debut").value || null,
+    };
+  }
+
+  const JOUR = s => { const [a, m, j] = s.split("-"); return `${j}/${m}/${a}`; };
+  const num = v => v === null || v === undefined ? "–" : String(v).replace(".", ",");
+
+  function tableau(vaches, r) {
+    return '<ul class="vap-vaches">' + vaches.map(v => {
+      const meta = [v.jel !== null ? v.jel + " JEL" : null,
+                    v.traites_2j !== null ? v.traites_2j + " traites en 2 j" : null].filter(Boolean).join(" · ");
+      return `<li><strong>${esc(v.vache)}</strong>${v.nom ? ' <span class="vap-meta">' + esc(v.nom) + "</span>" : ""}
+        ${v.en_retard ? ' <span class="vap-pastille">en retard</span>' : ""}
+        ${meta ? '<span class="vap-meta"> · ' + esc(meta) + "</span>" : ""}
+        <br><span class="vap-raison">${esc(v.raison)}</span>
+        ${v.passages_detail.length ? '<br><span class="vap-meta">Passages sans poussée : ' + esc(v.passages_detail.join(", ")) + "</span>" : ""}</li>`;
+    }).join("") + "</ul>";
+  }
+
+  function afficher(r) {
+    const par = s => r.vaches.filter(v => v.statut === s);
+    const apousser = par("a_pousser"), autonomes = par("autonome");
+    const autres = r.vaches.filter(v => !["a_pousser", "autonome"].includes(v.statut));
+    let h = "";
+    if (r.avec_retard) {
+      const t = r.vaches.filter(v => r.tournee.includes(v.vache));
+      h += `<section class="vap-bloc"><h3>À pousser maintenant : ${t.length} vache${t.length > 1 ? "s" : ""}</h3>
+        <p>En retard selon le robot, et non autonomes selon le classement.</p>
+        <div class="vap-liste" id="vap-tournee">${t.length ? t.map(v => esc(v.vache)).join(" ") : "Aucune"}</div>
+        <div class="vap-actions"><button type="button" class="vap-bouton" data-copie="${esc(t.map(v => v.vache).join(", "))}">Copier la liste</button>
+        <button type="button" class="vap-bouton second" onclick="window.print()">Imprimer</button></div>
+        ${t.length ? tableau(t, r) : ""}</section>`;
+    }
+    h += `<section class="vap-bloc"><h3>Classées à pousser : ${apousser.length} vache${apousser.length > 1 ? "s" : ""}</h3>
+      <p>Classement au ${JOUR(r.jour)}, dernier jour de l'export, sur ce jour et la veille.
+      ${r.avec_retard ? "À la tournée, ne pousser que celles qui sont aussi en retard." : "À croiser, à chaque tournée, avec la liste des vaches en retard du logiciel."}
+      ${r.avec_visites ? "" : "Sans la liste des traites, le correctif du passage spontané n'est pas appliqué."}</p>
+      <div class="vap-liste">${apousser.map(v => esc(v.vache)).join(" ") || "Aucune"}</div>
+      <div class="vap-actions"><button type="button" class="vap-bouton second" data-copie="${esc(apousser.map(v => v.vache).join(", "))}">Copier la liste</button>
+      ${r.avec_retard ? "" : '<button type="button" class="vap-bouton second" onclick="window.print()">Imprimer</button>'}</div>
+      ${apousser.length ? tableau(apousser, r) : ""}</section>`;
+    h += `<details class="vap-bloc"><summary>Autonomes : ${autonomes.length} vache${autonomes.length > 1 ? "s" : ""}</summary>${tableau(autonomes, r)}</details>`;
+    if (autres.length) h += `<details class="vap-bloc" open><summary>Hors classement : ${autres.length}</summary>
+      <p>Fraîches vêlées, vaches sans données la veille ou absentes de l'export de production. À décider au cas par cas.</p>${tableau(autres, r)}</details>`;
+    res.innerHTML = h;
+    res.hidden = false;
+    res.querySelectorAll("[data-copie]").forEach(b => b.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copie); b.textContent = "Copiée"; }
+      catch (e) { b.textContent = "Copie impossible"; }
+      setTimeout(() => { b.textContent = "Copier la liste"; }, 2000);
+    }));
+  }
+
+  bouton.addEventListener("click", async () => {
+    bouton.disabled = true;
+    try {
+      if (!moteur) charger();
+      dire("Chargement du moteur de calcul…");
+      const m = await charger();
+      dire("Calcul…");
+      const r = JSON.parse(m.classer_json(textes.production, textes.visites, textes.retard, JSON.stringify(parametres())));
+      if (r.erreur) { res.hidden = true; dire(r.erreur, true); return; }
+      afficher(r);
+      dire(`Calcul fait sur ${r.vaches.length} vaches. Rien n'a quitté cet ordinateur.`);
+      if (r.avec_visites && !r.parametres.poussees.length) dire("Aucune plage de poussée : tous les passages sont comptés comme spontanés.", true);
+      res.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (e) {
+      console.error(e);
+      dire("Le calcul a échoué : " + (e.message || e).toString().split("\n").slice(-2).join(" "), true);
+    } finally {
+      bouton.disabled = !textes.production;
+    }
+  });
+})();
+</script>

@@ -20,10 +20,10 @@ Trois rapports du logiciel Lely Horizon, exportés au format CSV. Le premier est
 | Rapport | Utilité | Colonnes indispensables |
 |---|---|---|
 | **Production journalière par vache** | Le classement : autonome ou à pousser | N° d'animal, Date de production, Production journalière, Nbre de traites, Nbre de refus, Jours de lactation |
-| **Liste des traites** | Le correctif du passage spontané | N° d'animal, Date et heure de visite |
+| **Liste des traites** (recommandé) | Le correctif du passage spontané : un tiers de vaches à pousser en moins dans le cas observé | N° d'animal, Date et heure de visite |
 | **Vaches en retard** | La liste de la tournée | N° d'animal |
 
-Seul le premier est obligatoire. Sans la liste des traites, les vaches qui passent seules la nuit restent classées à pousser. Sans les vaches en retard, l'outil donne le classement, à croiser soi-même avec la liste du robot.
+Le premier est obligatoire, le deuxième **fortement recommandé**. Sans la liste des traites, l'outil ne voit pas les vaches qui passent seules au robot en dehors des tournées, et les laisse dans la liste à pousser : dans le cas qui a servi à construire l'outil, l'ajouter a réduit cette liste d'un tiers. Le troisième est facultatif : sans les vaches en retard, l'outil donne le classement, à croiser soi-même avec la liste du robot.
 
 Trois précautions :
 

@@ -13,7 +13,7 @@
     </label>
     <label class="vap-fichier" data-cle="visites">
       <span class="vap-num">2</span>
-      <span class="vap-lib"><strong>Liste des traites</strong><br><small>facultatif — passages spontanés</small></span>
+      <span class="vap-lib"><strong>Liste des traites</strong><br><small>recommandé — sans elle, la liste à pousser s'allonge</small></span>
       <input type="file" accept=".csv,text/csv">
       <span class="vap-nom">Choisir le fichier…</span>
     </label>
@@ -89,6 +89,8 @@
 .vap-etat.erreur { color: #b3261e; }
 [data-theme="dark"] .vap-etat.erreur { color: #f2b8b5; }
 .vap-bloc { margin-top: 1.4rem; padding: 1rem 1.2rem; border-radius: var(--radius); background: var(--code-bg); }
+.vap-alerte { border-left: 4px solid #b3261e; }
+[data-theme="dark"] .vap-alerte { border-left-color: #f2b8b5; }
 .vap-bloc h3 { margin: 0 0 .3rem; font-size: 1.1rem; }
 .vap-bloc > p { margin: .2rem 0 .6rem; font-size: .9em; color: var(--secondary); }
 .vap-liste { font-size: 1.6rem; font-weight: 700; letter-spacing: .02em; line-height: 1.5; margin: .4rem 0 .8rem; word-spacing: .4em; }
@@ -205,6 +207,9 @@
     const apousser = par("a_pousser"), autonomes = par("autonome");
     const autres = r.vaches.filter(v => !["a_pousser", "autonome"].includes(v.statut));
     let h = "";
+    if (!r.avec_visites) h += `<section class="vap-bloc vap-alerte"><h3>Liste des traites absente</h3>
+      <p>Le passage spontané n'est pas vérifié : des vaches qui viennent seules au robot restent classées à pousser.
+      Ajoutez l'export n° 2 pour une liste plus courte et plus juste.</p></section>`;
     if (r.avec_retard) {
       const t = r.vaches.filter(v => r.tournee.includes(v.vache));
       h += `<section class="vap-bloc"><h3>À pousser maintenant : ${t.length} vache${t.length > 1 ? "s" : ""}</h3>
@@ -217,7 +222,7 @@
     h += `<section class="vap-bloc"><h3>Classées à pousser : ${apousser.length} vache${apousser.length > 1 ? "s" : ""}</h3>
       <p>Classement au ${JOUR(r.jour)}, dernier jour de l'export, sur ce jour et la veille.
       ${r.avec_retard ? "À la tournée, ne pousser que celles qui sont aussi en retard." : "À croiser, à chaque tournée, avec la liste des vaches en retard du logiciel."}
-      ${r.avec_visites ? "" : "Sans la liste des traites, le correctif du passage spontané n'est pas appliqué."}</p>
+</p>
       <div class="vap-liste">${apousser.map(v => esc(v.vache)).join(" ") || "Aucune"}</div>
       <div class="vap-actions"><button type="button" class="vap-bouton second" data-copie="${esc(apousser.map(v => v.vache).join(", "))}">Copier la liste</button>
       ${r.avec_retard ? "" : '<button type="button" class="vap-bouton second" onclick="window.print()">Imprimer</button>'}</div>

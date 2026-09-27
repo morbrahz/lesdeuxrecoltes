@@ -138,7 +138,8 @@ décrit). Deux exports servent au classement :
    refus, jours de lactation.
 2. **La liste des traites**, qui donne l'heure de chaque visite, réussie ou
    non. C'est elle qui permet le correctif du § 3. Sans elle, la règle de
-   base du § 2 s'applique seule.
+   base du § 2 s'applique seule, au prix d'une liste à pousser plus longue :
+   dans le cas observé, ce correctif la réduit d'un tiers.
 
 La liste des vaches en retard, elle, se consulte directement à la tournée,
 sans export.

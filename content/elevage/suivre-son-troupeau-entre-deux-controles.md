@@ -37,7 +37,7 @@ Une indication qui manque un jour n'est pas une valeur nulle : c'est une mesure 
 
 | Rubrique | Indicateur | Lecture |
 |---|---|---|
-| Production | Lait par vache et par jour, lait du troupeau, stade moyen, rang moyen, part de primipares | Situer le troupeau ; le nuage lait selon le stade montre les vaches hors de la courbe |
+| Production | Lait par vache et par jour, lait du troupeau, niveau d'étable estimé, stade moyen, rang moyen, part de primipares | Situer le troupeau ; le nuage lait selon le stade montre les vaches hors de la courbe |
 | Taux | TB, TP, écart TB − TP, rapport TB/TP | L'équilibre de la ration et l'état énergétique, surtout en début de lactation |
 | Cellules | Cellules pondérées, part de vaches saines et infectées | La santé de la mamelle et sa tendance |
 | Stades | Les mêmes indicateurs de 0 à 100 jours, de 101 à 200 jours, au-delà | Où se situe un écart |
@@ -59,15 +59,33 @@ Deux précisions de méthode :
 - ces seuils ont été établis sur des analyses de laboratoire ; appliqués à des indications de robot, ils désignent **des vaches à regarder, pas des diagnostics** ;
 - pour les cellules, une vache est signalée si **sa moyenne ou sa dernière indication** dépasse le seuil. La moyenne seule noierait une mammite apparue la veille.
 
-## 5. Ce que ce bilan ne remplace pas
+## 5. Le niveau d'étable estimé
 
-- **Le niveau d'étable.** Il rapporte le lait produit sur douze mois aux vaches présentes, taries comprises. Quelques jours de données de robot, qui ne voient pas les vaches taries, ne permettent pas de le calculer. Aucun coefficient ne transforme honnêtement une production du jour en niveau annuel.
+Le niveau d'étable du contrôle laitier rapporte le lait produit sur douze mois aux vaches présentes, taries comprises. Les données de quelques jours ne le permettent pas. Le bilan en donne une **estimation** : la production actuelle de chaque vache, projetée sur une lactation de 305 jours, puis moyennée sur le troupeau.
+
+Lait estimé d'une vache = lait moyen de la période × 305 × coefficient de stade × coefficient de rang.
+
+| Stade de lactation | Coefficient | | Rang de lactation | Coefficient |
+|---|---|---|---|---|
+| Moins de 60 jours | 1,15 | | 1re lactation | 1,12 |
+| 60 à 99 jours | 1,08 | | 2e lactation | 1,04 |
+| 100 à 199 jours | 1,03 | | 3e et plus | 1,00 |
+| 200 à 304 jours | 0,98 | | | |
+| 305 jours et plus | 0,88 | | | |
+
+Les coefficients corrigent la forme de la courbe de lactation : une vache en début de lactation n'a pas encore atteint son pic, une primipare a une courbe plus plate et plus persistante. Ce sont des coefficients d'usage, retenus sur l'expérience d'un troupeau, pas des coefficients officiels.
+
+L'estimation se lit donc comme un **ordre de grandeur**, et surtout **dans le temps** : sa variation d'un mois sur l'autre, avec la même méthode, dit plus que sa valeur absolue. Elle ignore les vaches taries et reflète la production du moment, saison et ration comprises.
+
+## 6. Ce que ce bilan ne remplace pas
+
+- **Le niveau d'étable officiel**, calculé sur douze mois par le contrôle laitier.
 - **Les lactations de référence.** Une lactation sur 305 jours se calcule à partir des contrôles successifs de toute la lactation, pas d'un instantané.
 - **Les analyses officielles.** Le paiement du lait et les résultats de contrôle laitier restent ceux du laboratoire.
 
 > **Cas observé.** Troupeau classé sur cinq jours, juste après un changement de robot. Rapport TB/TP du troupeau de 1,41, dans le haut de la plage habituelle. En début de lactation, une vache sur six dépassait 1,5. Pour les cellules, 78 % des vaches étaient sous 300 000 et 8 % au-dessus de 800 000 en moyenne de période. Mais la dernière indication a presque doublé le nombre de vaches signalées : l'une d'elles passait de moins de 100 000 à plus de 3 millions en deux jours, avec une moyenne de période encore sous 800 000.
 
-## 6. Exemple chiffré fictif
+## 7. Exemple chiffré fictif
 
 Deux vaches : l'une à 40 kg de lait et 38 g/kg de TB, l'autre à 15 kg et 50 g/kg.
 
@@ -84,6 +102,6 @@ La moyenne simple surestime le TB de près de 3 g/kg, parce qu'elle donne autant
 - Une indication manquante n'est pas un zéro.
 - Taux et cellules du troupeau se pondèrent par le lait.
 - Les seuils désignent des vaches à regarder, pas des diagnostics.
-- Le niveau d'étable et les lactations de référence restent l'affaire du contrôle laitier.
+- Le niveau d'étable estimé est une projection à suivre dans le temps ; le niveau d'étable officiel et les lactations de référence restent l'affaire du contrôle laitier.
 
 *Sources des seuils : rapport TB/TP habituel et lecture du TB, [Le Point Vétérinaire](https://www.lepointveterinaire.fr/publications/le-point-veterinaire/article/n-262/tb-tp-taux-d-uree-des-outils-diagnostiques.html) ; rapport TB/TP et cétose subclinique, [Le suivi de reproduction](https://suividereproductionenvt.wordpress.com/lacetonemie-ou-la-cetose-subclinique/) ; seuils cellulaires, [Maison de l'élevage du Tarn](http://www.elevage-tarn.fr/73-bovins-lait-mammite-taux-cellulaire.html).*

@@ -32,6 +32,6 @@ Quatre colonnes sont indispensables : N° d'animal, Date de production, Producti
 
 Les seuils se modifient dans le bloc « Seuils ». Leurs valeurs par défaut et leurs sources sont données dans la [page méthode](/elevage/suivre-son-troupeau-entre-deux-controles/).
 
-Le bilan ne calcule ni niveau d'étable ni lactation de référence : quelques jours de données de robot ne le permettent pas.
+Le **niveau d'étable estimé** est une projection de la production du moment sur une lactation de 305 jours, corrigée du stade et du rang de lactation. C'est un ordre de grandeur pour suivre le troupeau d'un mois sur l'autre, pas le niveau d'étable du contrôle laitier ; son calcul est détaillé dans la [page méthode](/elevage/suivre-son-troupeau-entre-deux-controles/#5-le-niveau-détable-estimé).
 
 *Le calcul s'exécute avec [Pyodide](https://pyodide.org), distribué sous licence MPL 2.0 et hébergé sur ce site. [Code source du calcul](/outils/bilan-troupeau/bilan_troupeau.py).*

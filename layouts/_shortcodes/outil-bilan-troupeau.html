@@ -173,7 +173,7 @@
       ${r.nb_jours < 3 ? '<p class="bt-etat erreur">Moins de 3 jours dans l\'export : les moyennes reposent sur peu de mesures. Exportez les 3 à 5 derniers jours.</p>' : ""}</section>`;
 
     h += `<section class="bt-bloc"><h3>Production</h3><div class="bt-tuiles">
-      ${tuile("Lait par vache et par jour", num(t.lait), "kg")}${tuile("Lait du troupeau par jour", num(t.lait_total, 0), "kg")}
+      ${tuile("Lait par vache et par jour", num(t.lait), "kg")}${tuile("Lait du troupeau par jour", num(t.lait_total, 0), "kg")}${tuile("Niveau d'étable estimé", num(t.niveau_estime, 0), "kg · projection")}
       ${tuile("Stade moyen", num(t.jel, 0), "j de lactation")}${tuile("Rang de lactation moyen", num(t.rang))}
       ${tuile("Primipares", num(t.primipares_pct, 0), "%")}${tuile("Lait par kg de concentré robot", num(t.lait_conc, 2), "kg")}
       </div>${nuage(V.filter(v => v.lait !== null && v.jel !== null).map(v => ({ x: v.jel, y: v.lait, cls: v.rang === 1 ? "p-primi" : "p-multi", t: `${v.vache} : ${num(v.lait)} kg à ${v.jel} j` })), "Jours de lactation", "Lait par jour (kg)")}

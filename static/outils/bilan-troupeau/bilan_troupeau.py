@@ -14,6 +14,9 @@ Principes de calcul :
     lait de tank ; les autres moyennes sont des moyennes par vache ;
   - TB, TP et cellules sont des indications mesurées au robot, pas des
     analyses de laboratoire ;
+  - niveau d'étable estimé : moyenne des vaches de (lait moyen de la période
+    x 305 x coefficient de stade x coefficient de rang) — une projection
+    d'ordre de grandeur, pas le niveau d'étable officiel ;
   - alerte cellules si la moyenne de la période OU la dernière indication
     dépasse le seuil : une moyenne seule noierait une mammite récente.
 """
@@ -31,7 +34,21 @@ PARAMETRES = {
     "cellules_saine": 300,    # milliers de cellules/ml : en dessous, mamelle considérée saine
     "cellules_infectee": 800, # au-dessus, mamelle considérée infectée
     "stades": [100, 200],     # bornes des stades de lactation (jours)
+    # Niveau d'étable estimé : lait du jour x 305, corrigé du stade et du rang.
+    # Projection d'ordre de grandeur, pas le niveau d'étable du contrôle laitier.
+    "niveau_stade": [[60, 1.15], [100, 1.08], [200, 1.03], [305, 0.98], [None, 0.88]],
+    "niveau_rang": {"1": 1.12, "2": 1.04, "autres": 1.0},
 }
+
+
+def _projection(lait, jel, rang, p):
+    """Lait du jour projeté sur une lactation de 305 jours."""
+    if lait is None or jel is None:
+        return None
+    fs = next(c for borne, c in p["niveau_stade"] if borne is None or jel < borne)
+    r = p["niveau_rang"]
+    fr = r["1"] if rang == 1 else r["2"] if rang == 2 else r["autres"]
+    return lait * 305 * fs * fr
 
 
 class ErreurExport(Exception):
@@ -223,6 +240,7 @@ def bilan(texte, parametres=None):
     troupeau = groupe(vaches)
     troupeau.update({
         "lait_total": _r(sum(x["lait"] for x in vaches if x["lait"]), 0),
+        "niveau_estime": _r(_moy([_projection(x["lait"], x["jel"], x["rang"] or 1, p) for x in vaches]), 0),
         "jel": _r(_moy(col("jel")), 0),
         "rang": _r(_moy(rangs)),
         "primipares_pct": _r(100 * sum(1 for r in rangs if r == 1) / len(rangs), 0) if rangs else None,

@@ -7,13 +7,13 @@
   <div class="vap-fichiers">
     <label class="vap-fichier" data-cle="production">
       <span class="vap-num">1</span>
-      <span class="vap-lib"><strong>Production journalière par vache</strong><br><small>obligatoire</small></span>
+      <span class="vap-lib"><strong>Production journalière par vache</strong><br><small>obligatoire · 3 à 5 derniers jours</small></span>
       <input type="file" accept=".csv,text/csv">
       <span class="vap-nom">Choisir le fichier…</span>
     </label>
     <label class="vap-fichier" data-cle="visites">
       <span class="vap-num">2</span>
-      <span class="vap-lib"><strong>Liste des traites</strong><br><small>recommandé — sans elle, la liste à pousser s'allonge</small></span>
+      <span class="vap-lib"><strong>Liste des traites</strong><br><small>recommandé · 3 à 5 derniers jours</small></span>
       <input type="file" accept=".csv,text/csv">
       <span class="vap-nom">Choisir le fichier…</span>
     </label>
@@ -210,6 +210,13 @@
     if (!r.avec_visites) h += `<section class="vap-bloc vap-alerte"><h3>Liste des traites absente</h3>
       <p>Le passage spontané n'est pas vérifié : des vaches qui viennent seules au robot restent classées à pousser.
       Ajoutez l'export n° 2 pour une liste plus courte et plus juste.</p></section>`;
+    if (r.avec_visites && r.couverture_visites !== null && r.couverture_visites < 3) h += `<section class="vap-bloc vap-alerte">
+      <h3>Liste des traites trop courte</h3><p>Elle ne couvre que ${num(r.couverture_visites)} jour${r.couverture_visites >= 2 ? "s" : ""}.
+      Les passages spontanés des jours précédents ne sont pas comptés : des vaches qui viennent seules restent à pousser.
+      Exportez les 3 à 5 derniers jours.</p></section>`;
+    if (r.jours_production < 3) h += `<section class="vap-bloc vap-alerte">
+      <h3>Production journalière courte</h3><p>L'export ne couvre que ${r.jours_production} jour${r.jours_production > 1 ? "s" : ""} ;
+      la règle en demande deux consécutifs. Exportez les 3 à 5 derniers jours pour garder une marge.</p></section>`;
     if (r.avec_retard) {
       const t = r.vaches.filter(v => r.tournee.includes(v.vache));
       h += `<section class="vap-bloc"><h3>À pousser maintenant : ${t.length} vache${t.length > 1 ? "s" : ""}</h3>

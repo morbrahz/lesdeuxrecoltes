@@ -141,6 +141,9 @@ décrit). Deux exports servent au classement :
    base du § 2 s'applique seule, au prix d'une liste à pousser plus longue :
    dans le cas observé, ce correctif la réduit d'un tiers.
 
+Les deux exports gagnent à couvrir les 3 à 5 derniers jours : deux jours
+consécutifs pour le classement, trois pour le passage spontané, et une marge.
+
 La liste des vaches en retard, elle, se consulte directement à la tournée,
 sans export.
 

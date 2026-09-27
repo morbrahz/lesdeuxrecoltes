@@ -192,11 +192,13 @@ def classer(texte_production, texte_visites=None, texte_retard=None, parametres=
     visites = None
     if texte_visites:
         visites = {}
+        instants = []
         for r in _lire(texte_visites, COLS_VISITES, "Liste des traites"):
             try:
                 dt = _date_heure(r["dt"])
             except ErreurExport:
                 continue
+            instants.append(dt)
             j = _jour_spontane(dt, p)
             if j is not None:
                 visites.setdefault(_vache(r["vache"]), set()).add((j, dt))
@@ -270,6 +272,10 @@ def classer(texte_production, texte_visites=None, texte_retard=None, parametres=
     return {
         "jour": jour_j.isoformat(),
         "avec_visites": visites is not None,
+        # durée couverte par la liste des traites, en jours (3 à 5 recommandés)
+        "couverture_visites": (round((max(instants) - min(instants)).total_seconds() / 86400, 1)
+                               if visites is not None and instants else None),
+        "jours_production": len({d for _, d in prod}),
         "avec_retard": retard is not None,
         "parametres": p,
         "vaches": vaches,

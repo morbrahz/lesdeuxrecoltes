@@ -25,11 +25,11 @@ Trois rapports du logiciel Lely Horizon, exportés au format CSV. Le premier est
 
 Le premier est obligatoire, le deuxième **fortement recommandé**. Sans la liste des traites, l'outil ne voit pas les vaches qui passent seules au robot en dehors des tournées, et les laisse dans la liste à pousser : dans le cas qui a servi à construire l'outil, l'ajouter a réduit cette liste d'un tiers. Le troisième est facultatif : sans les vaches en retard, l'outil donne le classement, à croiser soi-même avec la liste du robot.
 
-Trois précautions :
+Précautions :
 
 - si une colonne manque, l'outil la nomme : il suffit de l'ajouter à la copie du rapport, comme décrit dans la [page dédiée](/elevage/rapport-production-journaliere-lely-horizon/) ;
-- la production journalière doit couvrir **au moins les deux derniers jours complets** ;
-- la liste des traites doit couvrir **les trois derniers jours** pour que le passage spontané soit compté entièrement. Sur une période plus courte, l'outil compte moins de passages, et laisse donc des vaches à pousser plutôt que l'inverse.
+- la production journalière et la liste des traites doivent couvrir, idéalement, **les 3 à 5 derniers jours**. Le classement porte sur deux jours consécutifs, et le passage spontané se compte sur trois ; quelques jours de plus donnent une marge si le dernier jour exporté est incomplet ou si une journée manque. Au-delà de cinq jours, l'export s'alourdit sans rien apporter au calcul ;
+- sur une période plus courte, l'outil le signale. Il compte alors moins de passages spontanés, et laisse donc des vaches à pousser plutôt que l'inverse.
 
 ## 2. L'outil
 

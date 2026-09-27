@@ -71,7 +71,7 @@ Cliquer sur **Enregistrer rapport**. La copie est prête ; elle se réutilise te
 
 ## 5. Exporter et vérifier
 
-Ouvrir le rapport, choisir la période — les derniers jours suffisent pour l'outil des vaches à pousser, qui en utilise deux — et l'exporter au format **CSV**.
+Ouvrir le rapport, choisir la période — **les 3 à 5 derniers jours** pour l'outil des vaches à pousser — et l'exporter au format **CSV**. La même période vaut pour la liste des traites, exportée à côté.
 
 Pour vérifier le rapport, le plus simple est de déposer l'export dans l'[outil en ligne](/elevage/outil-vaches-a-pousser/). S'il manque un champ, l'outil l'indique par son nom, sans rien calculer ; il suffit alors de revenir au § 3.
 

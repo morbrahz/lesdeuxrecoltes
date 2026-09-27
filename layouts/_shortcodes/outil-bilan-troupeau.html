@@ -1,0 +1,238 @@
+{{/* Outil « Bilan du troupeau au robot ».
+     Calcul : static/outils/bilan-troupeau/bilan_troupeau.py, exécuté dans le
+     navigateur par Pyodide (static/outils/pyodide/, hébergé sur le site).
+     Les fichiers déposés ne quittent pas l'ordinateur du visiteur. */}}
+<div id="bt" class="bt">
+  <label class="bt-fichier">
+    <span class="bt-lib"><strong>Production journalière par vache</strong><br><small>export CSV · 3 à 5 derniers jours</small></span>
+    <input type="file" accept=".csv,text/csv">
+    <span class="bt-nom">Choisir le fichier…</span>
+  </label>
+
+  <details class="bt-reglages">
+    <summary>Seuils</summary>
+    <div class="bt-grille">
+      <label>TB/TP au-dessus duquel suspecter une cétose<input type="number" id="bt-cet" value="1.5" step="0.05"></label>
+      <label>… jusqu'à (jours de lactation)<input type="number" id="bt-cetj" value="100" step="10"></label>
+      <label>TB/TP en dessous duquel signaler une acidose<input type="number" id="bt-aci" value="1.0" step="0.05"></label>
+      <label>Cellules : mamelle saine en dessous de (milliers/ml)<input type="number" id="bt-cs" value="300" step="50"></label>
+      <label>Cellules : mamelle infectée au-dessus de (milliers/ml)<input type="number" id="bt-ci" value="800" step="50"></label>
+    </div>
+  </details>
+
+  <button type="button" id="bt-go" disabled>Établir le bilan</button>
+  <p id="bt-etat" class="bt-etat" aria-live="polite">Déposez l'export de production journalière.</p>
+  <div id="bt-res" hidden></div>
+</div>
+
+<style>
+.bt { margin: 1.5rem 0; }
+.bt-fichier { display: grid; gap: .2rem; padding: .8rem 1rem; border: 1px dashed var(--tertiary); border-radius: var(--radius); cursor: pointer; background: var(--entry); }
+.bt-fichier:hover, .bt-fichier:focus-within { border-color: var(--secondary); }
+.bt-fichier.ok { border-style: solid; border-color: var(--primary); }
+.bt-fichier input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.bt-lib small, .bt-nom { color: var(--secondary); font-size: .85em; }
+.bt-reglages { margin: 1rem 0; }
+.bt-reglages summary { cursor: pointer; color: var(--secondary); }
+.bt-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .6rem 1rem; margin-top: .8rem; }
+.bt-grille label { display: flex; flex-direction: column; gap: .2rem; font-size: .85em; color: var(--secondary); }
+.bt-grille input { padding: .35rem .5rem; border: 1px solid var(--tertiary); border-radius: 6px; background: var(--theme); color: var(--primary); font: inherit; font-size: 1rem; }
+#bt-go, .bt-bouton { padding: .55rem 1.2rem; border-radius: var(--radius); border: 1px solid var(--primary); background: var(--primary); color: var(--theme); font: inherit; cursor: pointer; }
+#bt-go:disabled { opacity: .45; cursor: not-allowed; }
+.bt-bouton.second { background: transparent; color: var(--primary); }
+.bt-etat { font-size: .9em; color: var(--secondary); margin-top: .6rem; }
+.bt-etat.erreur { color: #b3261e; }
+[data-theme="dark"] .bt-etat.erreur { color: #f2b8b5; }
+.bt-bloc { margin-top: 1.2rem; padding: 1rem 1.2rem; border-radius: var(--radius); background: var(--code-bg); break-inside: avoid; }
+.bt-bloc h3 { margin: 0 0 .5rem; font-size: 1.05rem; }
+.bt-bloc > p, .bt-note { font-size: .85em; color: var(--secondary); margin: .3rem 0 .6rem; }
+.bt-tuiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: .6rem; }
+.bt-tuile { background: var(--theme); border-radius: 6px; padding: .55rem .7rem; }
+.bt-tuile span { display: block; font-size: .78em; color: var(--secondary); line-height: 1.3; }
+.bt-tuile strong { font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.bt-tuile small { font-size: .75em; color: var(--secondary); }
+.bt-tab { overflow-x: auto; }
+.bt table { width: 100%; border-collapse: collapse; font-size: .85em; margin: .2rem 0; }
+.bt th, .bt td { padding: .3rem .45rem; border-bottom: 1px solid var(--tertiary); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bt th:first-child, .bt td:first-child { text-align: left; }
+.bt th { font-weight: 600; color: var(--secondary); font-size: .9em; }
+.bt-alerte { display: flex; gap: .6rem; align-items: baseline; padding: .45rem 0; border-top: 1px solid var(--tertiary); font-size: .9em; }
+.bt-alerte:first-of-type { border-top: none; }
+.bt-alerte b { min-width: 1.6rem; text-align: right; font-size: 1.15rem; }
+.bt-ids { font-weight: 600; word-spacing: .3em; }
+.bt-graphe { width: 100%; height: auto; display: block; margin-top: .4rem; }
+.bt-graphe text { fill: var(--secondary); font-size: 11px; }
+.bt-graphe .axe { stroke: var(--tertiary); }
+.bt-graphe .seuil { stroke: #b3261e; stroke-dasharray: 4 3; }
+.bt-graphe .p-multi { fill: var(--primary); opacity: .75; }
+.bt-graphe .p-primi { fill: #2a78c2; }
+.bt-graphe .p-alerte { fill: #b3261e; }
+.bt-graphe .barre { fill: var(--primary); opacity: .8; }
+.bt-graphe .barre.b-inf { fill: #b3261e; opacity: .85; }
+[data-theme="dark"] .bt-graphe .p-primi { fill: #7fb3e6; }
+[data-theme="dark"] .bt-graphe .p-alerte, [data-theme="dark"] .bt-graphe .barre.b-inf { fill: #f2b8b5; }
+[data-theme="dark"] .bt-graphe .seuil { stroke: #f2b8b5; }
+.bt-legende { font-size: .78em; color: var(--secondary); display: flex; gap: 1rem; flex-wrap: wrap; }
+.bt-legende i { display: inline-block; width: .6rem; height: .6rem; border-radius: 50%; margin-right: .3rem; vertical-align: middle; }
+.bt-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+@media print {
+  body * { visibility: hidden; }
+  #bt-res, #bt-res * { visibility: visible; }
+  #bt-res { position: absolute; left: 0; top: 0; width: 100%; }
+  .bt-actions { display: none; }
+  .bt details > *:not(summary) { display: block; }
+}
+</style>
+
+<script src="{{ "outils/pyodide/pyodide.js" | relURL }}" defer></script>
+<script>
+(function () {
+  const INDEX = "{{ "outils/pyodide/" | relURL }}";
+  const MOTEUR = "{{ "outils/bilan-troupeau/bilan_troupeau.py" | relURL }}";
+  const zone = document.querySelector("#bt .bt-fichier");
+  const etat = document.getElementById("bt-etat");
+  const bouton = document.getElementById("bt-go");
+  const res = document.getElementById("bt-res");
+  let texte = null, moteur = null;
+
+  const dire = (m, e) => { etat.textContent = m; etat.classList.toggle("erreur", !!e); };
+  const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const num = (v, d = 1) => v === null || v === undefined ? "–" : Number(v).toLocaleString("fr-FR", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const JOUR = s => { const [a, m, j] = s.split("-"); return `${j}/${m}/${a}`; };
+
+  async function lireTexte(f) {
+    const b = await f.arrayBuffer();
+    try { return new TextDecoder("utf-8", { fatal: true }).decode(b); }
+    catch (e) { return new TextDecoder("windows-1252").decode(b); }
+  }
+  function charger() {
+    if (moteur) return moteur;
+    moteur = (async () => {
+      while (typeof loadPyodide === "undefined") await new Promise(r => setTimeout(r, 50));
+      const py = await loadPyodide({ indexURL: INDEX });
+      py.FS.writeFile("bilan_troupeau.py", await (await fetch(MOTEUR)).text());
+      return py.pyimport("bilan_troupeau");
+    })();
+    moteur.catch(() => { moteur = null; });
+    return moteur;
+  }
+  zone.querySelector("input").addEventListener("change", async e => {
+    const f = e.target.files[0]; if (!f) return;
+    texte = await lireTexte(f);
+    zone.querySelector(".bt-nom").textContent = f.name; zone.classList.add("ok");
+    bouton.disabled = false;
+    dire("Prêt. Le premier calcul charge le moteur (une douzaine de Mo, une seule fois).");
+    charger();
+  });
+
+  const tuile = (lib, val, unite = "") => `<div class="bt-tuile"><span>${lib}</span><strong>${val}</strong>${unite ? ` <small>${unite}</small>` : ""}</div>`;
+
+  // Nuage de points en SVG : points [{x, y, cls}], seuils {h: [..], v: [..]}
+  const largeur = () => Math.max(320, Math.min(640, (document.getElementById("bt").clientWidth || 640) - 40));
+  function pas(etendue) {   // pas de graduation « rond » : 1, 2, 2,5 ou 5 × 10^n
+    const brut = etendue / 4, e = Math.pow(10, Math.floor(Math.log10(brut))), f = brut / e;
+    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * e;
+  }
+  function nuage(points, xl, yl, seuils = {}) {
+    const W = largeur(), H = W < 480 ? 240 : 300, g = 46, d = 12, h = 14, b = 38;
+    if (!points.length) return '<p class="bt-note">Données non disponibles dans l\'export.</p>';
+    const xs = points.map(p => p.x), ys = points.map(p => p.y).concat(seuils.h || []);
+    const px = pas(Math.max(...xs) || 1), x0 = 0, x1 = Math.ceil(Math.max(...xs) / px) * px || px;
+    const ymin = Math.min(...ys), ymax = Math.max(...ys), py = pas((ymax - ymin) || 1);
+    const y0 = Math.floor(ymin / py) * py, y1 = (Math.ceil(ymax / py) * py > ymax ? Math.ceil(ymax / py) * py : Math.ceil(ymax / py) * py + py);
+    const X = v => g + (v - x0) / (x1 - x0) * (W - g - d), Y = v => H - b - (v - y0) / (y1 - y0) * (H - b - h);
+    let s = `<svg class="bt-graphe" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(yl)} selon ${esc(xl)}">`;
+    const dy = py >= 1 ? 0 : (Math.abs(py * 10 - Math.round(py * 10)) < 1e-9 ? 1 : 2);
+    for (let vx = x0; vx <= x1 + 1e-9; vx += px)
+      s += `<line class="axe" x1="${X(vx)}" y1="${h}" x2="${X(vx)}" y2="${H - b}"/><text x="${X(vx)}" y="${H - b + 15}" text-anchor="middle">${num(vx, 0)}</text>`;
+    for (let vy = y0; vy <= y1 + 1e-9; vy += py)
+      s += `<line class="axe" x1="${g}" y1="${Y(vy)}" x2="${W - d}" y2="${Y(vy)}"/><text x="${g - 6}" y="${Y(vy) + 4}" text-anchor="end">${num(vy, dy)}</text>`;
+    (seuils.h || []).forEach(v => s += `<line class="seuil" x1="${g}" y1="${Y(v)}" x2="${W - d}" y2="${Y(v)}"/>`);
+    (seuils.v || []).forEach(v => s += `<line class="seuil" x1="${X(v)}" y1="${h}" x2="${X(v)}" y2="${H - b}"/>`);
+    points.forEach(p => s += `<circle class="${p.cls}" cx="${X(p.x).toFixed(1)}" cy="${Y(p.y).toFixed(1)}" r="4"><title>${esc(p.t)}</title></circle>`);
+    s += `<text x="${(g + W - d) / 2}" y="${H - 4}" text-anchor="middle">${esc(xl)}</text>`;
+    s += `<text x="12" y="${(h + H - b) / 2}" text-anchor="middle" transform="rotate(-90 12 ${(h + H - b) / 2})">${esc(yl)}</text></svg>`;
+    return s;
+  }
+  function barres(vals, libs, cls) {
+    const W = largeur(), H = 170, g = 12, b = 34, max = Math.max(...vals, 1), w = (W - 2 * g) / vals.length;
+    let s = `<svg class="bt-graphe" viewBox="0 0 ${W} ${H}" role="img" aria-label="Répartition des vaches par classe de cellules">`;
+    vals.forEach((v, i) => {
+      const hh = v / max * (H - b - 22), x = g + i * w + w * 0.2;
+      s += `<rect class="barre ${cls[i]}" x="${x}" y="${H - b - hh}" width="${w * 0.6}" height="${hh}" rx="3"/>`;
+      s += `<text x="${x + w * 0.3}" y="${H - b - hh - 6}" text-anchor="middle">${v}</text><text x="${x + w * 0.3}" y="${H - 12}" text-anchor="middle">${esc(libs[i])}</text>`;
+    });
+    return s + "</svg>";
+  }
+
+  function afficher(r) {
+    const t = r.troupeau, p = r.parametres, V = r.vaches, S = ["0 à " + p.stades[0] + " j", (p.stades[0] + 1) + " à " + p.stades[1] + " j", "plus de " + p.stades[1] + " j"];
+    let h = `<section class="bt-bloc"><h3>Bilan du troupeau au ${JOUR(r.fin)}</h3>
+      <p>${t.n} vaches traites le dernier jour · moyennes du ${JOUR(r.debut)} au ${JOUR(r.fin)} (${r.nb_jours} jour${r.nb_jours > 1 ? "s" : ""}).
+      TB, TP et cellules sont des indications mesurées au robot, pas des analyses de laboratoire.</p>
+      ${r.nb_jours < 3 ? '<p class="bt-etat erreur">Moins de 3 jours dans l\'export : les moyennes reposent sur peu de mesures. Exportez les 3 à 5 derniers jours.</p>' : ""}</section>`;
+
+    h += `<section class="bt-bloc"><h3>Production</h3><div class="bt-tuiles">
+      ${tuile("Lait par vache et par jour", num(t.lait), "kg")}${tuile("Lait du troupeau par jour", num(t.lait_total, 0), "kg")}
+      ${tuile("Stade moyen", num(t.jel, 0), "j de lactation")}${tuile("Rang de lactation moyen", num(t.rang))}
+      ${tuile("Primipares", num(t.primipares_pct, 0), "%")}${tuile("Lait par kg de concentré robot", num(t.lait_conc, 2), "kg")}
+      </div>${nuage(V.filter(v => v.lait !== null && v.jel !== null).map(v => ({ x: v.jel, y: v.lait, cls: v.rang === 1 ? "p-primi" : "p-multi", t: `${v.vache} : ${num(v.lait)} kg à ${v.jel} j` })), "Jours de lactation", "Lait par jour (kg)")}
+      <div class="bt-legende"><span><i style="background:var(--primary)"></i>multipares</span><span><i style="background:#2a78c2"></i>primipares</span></div></section>`;
+
+    h += `<section class="bt-bloc"><h3>Taux</h3><div class="bt-tuiles">
+      ${tuile("TB", num(t.tb), "g/kg")}${tuile("TP", num(t.tp), "g/kg")}${tuile("Écart TB − TP", num(t.ecart), "g/kg")}${tuile("Rapport TB/TP", num(t.ratio, 2))}
+      </div><p class="bt-note">Taux pondérés par le lait, comme un lait de tank.</p>
+      ${nuage(V.filter(v => v.ratio !== null && v.jel !== null).map(v => ({ x: v.jel, y: v.ratio, cls: v.alertes.includes("cetose") || v.alertes.includes("acidose") ? "p-alerte" : (v.rang === 1 ? "p-primi" : "p-multi"), t: `${v.vache} : TB/TP ${num(v.ratio, 2)} à ${v.jel} j` })), "Jours de lactation", "Rapport TB/TP", { h: [p.acidose_ratio, p.cetose_ratio], v: [p.cetose_jel] })}
+      <p class="bt-note">Lignes pointillées : TB/TP ${num(p.cetose_ratio, 2)} avant ${p.cetose_jel} jours (suspicion de cétose) et TB/TP ${num(p.acidose_ratio, 2)} (TB inférieur au TP, signal d'acidose). Points rouges : vaches concernées.</p></section>`;
+
+    h += `<section class="bt-bloc"><h3>Cellules</h3><div class="bt-tuiles">
+      ${tuile("Cellules, pondérées par le lait", num(t.cell, 0), "milliers/ml")}${tuile(`Vaches sous ${p.cellules_saine} 000`, num(t.cell_saine_pct, 0), "%")}${tuile(`Vaches au-dessus de ${p.cellules_infectee} 000`, num(t.cell_infectee_pct, 0), "%")}
+      </div>${t.cell_n ? barres([V.filter(v => v.cell !== null && v.cell < p.cellules_saine).length, V.filter(v => v.cell !== null && v.cell >= p.cellules_saine && v.cell <= p.cellules_infectee).length, V.filter(v => v.cell !== null && v.cell > p.cellules_infectee).length], [`moins de ${p.cellules_saine}`, `${p.cellules_saine} à ${p.cellules_infectee}`, `plus de ${p.cellules_infectee}`], ["", "", "b-inf"]) : ""}
+      <p class="bt-note">Moyenne de chaque vache sur la période, en milliers de cellules par ml.</p></section>`;
+
+    const al = r.alertes, ligne = (n, lib, ids) => `<div class="bt-alerte"><b>${n}</b><div>${lib}${ids.length ? `<br><span class="bt-ids">${ids.map(esc).join(" ")}</span>` : ""}</div></div>`;
+    h += `<section class="bt-bloc"><h3>Vaches à regarder</h3>
+      ${ligne(al.cetose.length, `TB/TP au-dessus de ${num(p.cetose_ratio, 2)} avant ${p.cetose_jel} jours : suspicion de cétose`, al.cetose)}
+      ${ligne(al.acidose.length, `TB/TP sous ${num(p.acidose_ratio, 2)} (TB inférieur au TP) : acidose possible`, al.acidose)}
+      ${ligne(al.cellules.length, `Cellules au-dessus de ${p.cellules_infectee} 000, en moyenne ou à la dernière indication`, al.cellules)}
+      <p class="bt-note">Des signaux à vérifier, pas des diagnostics.</p></section>`;
+
+    const colG = (g) => g ? `<td>${g.n}</td><td>${num(g.lait)}</td><td>${num(g.tb)}</td><td>${num(g.tp)}</td><td>${num(g.ratio, 2)}</td><td>${num(g.cell, 0)}</td><td>${num(g.rum, 0)}</td><td>${num(g.ing, 0)}</td><td>${num(g.lait_conc, 2)}</td>` : `<td>0</td>` + "<td>–</td>".repeat(8);
+    const tete = `<tr><th></th><th>Vaches</th><th>Lait kg</th><th>TB</th><th>TP</th><th>TB/TP</th><th>Cellules</th><th>Rumination min</th><th>Ingestion min</th><th>Lait/kg conc.</th></tr>`;
+    h += `<section class="bt-bloc"><h3>Par stade de lactation</h3><div class="bt-tab"><table>${tete}
+      ${r.stades.map((g, i) => `<tr><td>${S[i]}</td>${colG(g)}</tr>`).join("")}</table></div>
+      <h3 style="margin-top:1rem">Début de lactation (0 à ${p.stades[0]} j)</h3><div class="bt-tab"><table>${tete}
+      <tr><td>Primipares</td>${colG(r.debut_lactation.primi)}</tr><tr><td>Multipares</td>${colG(r.debut_lactation.multi)}</tr></table></div>
+      ${r.stades.some(g => g && g.poids_n) ? `<p class="bt-note">Variation de poids sur la période : ${r.stades.map((g, i) => g && g.poids_n ? `${S[i]} ${num(g.poids_var)} kg (${g.poids_n} vaches)` : "").filter(Boolean).join(" · ")}.</p>` : ""}</section>`;
+
+    h += `<section class="bt-bloc"><h3>Robot</h3><div class="bt-tuiles">
+      ${tuile("Traites par vache et par jour", num(t.traites))}${tuile("Refus par vache et par jour", num(t.refus))}${tuile("Échecs par vache et par jour", num(t.echecs, 2))}</div></section>`;
+
+    h += `<details class="bt-bloc"><summary><strong>Détail par vache (${V.length})</strong></summary><div class="bt-tab"><table>
+      <tr><th>N°</th><th>JEL</th><th>Rang</th><th>Lait</th><th>TB</th><th>TP</th><th>TB/TP</th><th>Cellules</th><th>Dern. cell.</th><th>Rum.</th><th>Traites</th><th>Signal</th></tr>
+      ${V.map(v => `<tr><td><strong>${esc(v.vache)}</strong></td><td>${num(v.jel, 0)}</td><td>${num(v.rang, 0)}</td><td>${num(v.lait)}</td><td>${num(v.tb)}</td><td>${num(v.tp)}</td><td>${num(v.ratio, 2)}</td><td>${num(v.cell, 0)}</td><td>${num(v.cell_dern, 0)}</td><td>${num(v.rum, 0)}</td><td>${num(v.traites)}</td><td>${v.alertes.map(x => ({ cetose: "cétose ?", acidose: "acidose ?", cellules: "cellules" }[x])).join(", ")}</td></tr>`).join("")}
+      </table></div></details>
+      <div class="bt-actions"><button type="button" class="bt-bouton second" onclick="window.print()">Imprimer ou enregistrer en PDF</button></div>`;
+    res.innerHTML = h; res.hidden = false;
+  }
+
+  bouton.addEventListener("click", async () => {
+    bouton.disabled = true;
+    try {
+      dire("Chargement du moteur de calcul…");
+      const m = await charger();
+      dire("Calcul…");
+      const n = id => { const v = document.getElementById(id).value; return v === "" ? null : Number(v); };
+      const par = { cetose_ratio: n("bt-cet"), cetose_jel: n("bt-cetj"), acidose_ratio: n("bt-aci"), cellules_saine: n("bt-cs"), cellules_infectee: n("bt-ci") };
+      const r = JSON.parse(m.bilan_json(texte, JSON.stringify(par)));
+      if (r.erreur) { res.hidden = true; dire(r.erreur, true); return; }
+      afficher(r);
+      dire(`Bilan établi sur ${r.troupeau.n} vaches. Rien n'a quitté cet ordinateur.`);
+      res.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (e) {
+      console.error(e);
+      dire("Le calcul a échoué : " + String(e.message || e).split("\n").slice(-2).join(" "), true);
+    } finally { bouton.disabled = !texte; }
+  });
+})();
+</script>

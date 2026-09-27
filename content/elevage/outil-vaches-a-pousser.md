@@ -44,13 +44,9 @@ Précautions :
 
 Le classement porte sur le dernier jour présent dans l'export de production et la veille. Exporter après la fin de la journée donne donc le classement le plus à jour.
 
-## 4. Le calcul
+## 4. Le calcul et ses réglages
 
-Le moteur est un court programme Python, lisible et [téléchargeable](/outils/vaches-a-pousser/regle_pousser.py). Il fonctionne aussi sur un ordinateur, sans connexion, avec Python installé :
-
-```
-python regle_pousser.py production.csv liste_traites.csv vaches_en_retard.csv
-```
+Le calcul applique exactement la règle décrite dans [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/), sans rien y ajouter. Il s'exécute dans votre navigateur : aucun fichier n'est envoyé.
 
 Les réglages de l'outil reprennent ceux de la méthode : 12 kg par traite, 7 jours de lactation, passage spontané exigé 2 jours sur 3, dans le bloc « Réglages ». Ils ont été arrêtés sur un seul troupeau, et gagnent à être ajustés sur le sien.
 
@@ -58,4 +54,4 @@ Les **plages de poussée** sont à renseigner d'abord : ce sont elles qui distin
 
 L'outil a été construit sur les exports d'une version française de Lely Horizon. Si vos rapports ont d'autres intitulés de colonnes, le message d'erreur l'indique.
 
-*Le calcul s'exécute avec [Pyodide](https://pyodide.org), distribué sous licence MPL 2.0 et hébergé sur ce site.*
+*Le calcul s'exécute avec [Pyodide](https://pyodide.org), distribué sous licence MPL 2.0 et hébergé sur ce site. [Code source du calcul](/outils/vaches-a-pousser/regle_pousser.py).*

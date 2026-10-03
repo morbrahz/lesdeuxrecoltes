@@ -4,6 +4,7 @@ date = 2026-10-03
 summary = "Inscription aux nouvelles pages confirmée."
 robotsNoIndex = true
 hiddenInRss = true
+inscription = false
 [sitemap]
   disable = true
 +++

@@ -1,5 +1,6 @@
-{{/* Après le contenu de chaque page de rubrique (pas sur les pages fixes :
-     À propos, Mentions légales, Confidentialité). */}}
-{{- if and .IsPage .Section }}
+{{/* Après le contenu de chaque page, rubriques et pages fixes comprises.
+     Une page s'en retire avec `inscription = false` dans son en-tête
+     (pages d'étape de l'inscription elle-même). */}}
+{{- if and .IsPage (ne .Params.inscription false) }}
 {{- partial "inscription.html" . }}
 {{- end }}

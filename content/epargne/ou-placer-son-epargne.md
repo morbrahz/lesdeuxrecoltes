@@ -148,6 +148,7 @@ Pour une même allocation, dans une même enveloppe, la seule variable qu'on ma�
 
 - [Comment placer la trésorerie d'une exploitation agricole](/tresorerie/placer-sa-tresorerie/) — ce qui précède l'épargne : une réserve placée à la durée de chaque besoin.
 - [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/) — le total à constituer avant toute enveloppe bloquée.
+- [Créer une holding quand on est agriculteur : à partir de quel bénéfice est-elle rentable ?](/structures/creer-une-holding-agriculteur/) — l'autre façon d'épargner sur le bénéfice : une holding à l'IS, et le seuil à partir duquel elle bat les enveloppes personnelles.
 
 ---
 

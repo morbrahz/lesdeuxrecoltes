@@ -1,0 +1,40 @@
+name: Annonce manuelle (brouillon Brevo)
+
+# Lancée à la main depuis l'onglet Actions (« Run workflow »). Crée dans Brevo
+# une campagne EN BROUILLON annonçant les pages ajoutées entre deux commits,
+# avec le même script que l'annonce automatique. Ne publie rien, n'envoie
+# rien : la campagne se relit, puis s'envoie ou se supprime dans Brevo.
+# Sert à tester la chaîne, ou à rattraper une annonce qui aurait échoué.
+# Valeurs par défaut : l'ajout de la page holding (3 octobre 2026).
+
+on:
+  workflow_dispatch:
+    inputs:
+      avant:
+        description: "Commit de départ (avant l'ajout des pages)"
+        required: true
+        default: "7bd01a1"
+      apres:
+        description: "Commit d'arrivée (après l'ajout des pages)"
+        required: true
+        default: "5db2345"
+
+permissions:
+  contents: read
+
+jobs:
+  annonce:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Créer le brouillon
+        env:
+          AVANT: ${{ inputs.avant }}
+          APRES: ${{ inputs.apres }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LISTE: ${{ vars.BREVO_LISTE }}
+          BREVO_ENVOI: brouillon
+        run: python3 .github/scripts/annonce_nouvelles_pages.py

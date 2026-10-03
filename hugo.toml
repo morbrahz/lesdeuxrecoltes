@@ -15,6 +15,10 @@ disableKinds = ['taxonomy', 'term']
   description = "Méthodes de gestion, d'investissement et d'élevage laitier écrites depuis une exploitation agricole : trésorerie, épargne, placements, structures et traite robotisée."
   # Mesure d'audience GoatCounter : code du site (sous-domaine choisi a l'inscription).
   goatcounter = 'lesdeuxrecoltes'
+  # Inscription aux nouvelles pages : adresse du formulaire Brevo
+  # (https://....sibforms.com/serve/..., code « HTML simple » du formulaire).
+  # Vide, le formulaire n'apparait nulle part (layouts/_partials/inscription.html).
+  brevoFormulaire = 'https://affc8437.sibforms.com/serve/MUIFADXGhy7hEEWgPRZ2HulxKdeVL_jhaf7_RHf3dTGhlk1GF71VUfVtiJ53HmTYIh3OyrGoJBqyYjyBokwmrFoezbuW3UQ3FJh60HZnVtCX9Qt37X1q3XKto0K7pO0ZZCQ1d4uEQnjzsWIGVrQJoZGeabQIAkVDYiWF_kB9ksQD5SZ5aO-nyhaXimEKR8T_xyRd8oiz6H4YeSWRlQ=='
   # Google Search Console : code de la balise HTML, si verification par DNS impossible.
   googleSiteVerification = ''
   ShowReadingTime = false

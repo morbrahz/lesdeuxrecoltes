@@ -1,0 +1,5 @@
+{{/* Après le contenu de chaque page de rubrique (pas sur les pages fixes :
+     À propos, Mentions légales, Confidentialité). */}}
+{{- if and .IsPage .Section }}
+{{- partial "inscription.html" . }}
+{{- end }}

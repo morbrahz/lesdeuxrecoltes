@@ -1,0 +1,45 @@
+{{/* Formulaire d'inscription aux nouvelles pages (Brevo).
+     Aucun script tiers n'est chargé : Brevo n'est contacté qu'au moment où le
+     lecteur valide son inscription. Le petit script ci-dessous (hébergé sur le
+     site) envoie l'adresse à Brevo puis affiche /inscription-envoyee/ ; s'il
+     ne peut pas s'exécuter, le formulaire part normalement vers Brevo, qui
+     affiche sa propre page : l'inscription fonctionne dans tous les cas.
+     L'adresse du formulaire se règle dans hugo.toml : params.brevoFormulaire
+     (adresse https://….sibforms.com/serve/…). Vide, le formulaire ne s'affiche
+     nulle part. */}}
+{{- with site.Params.brevoFormulaire }}
+<aside class="inscription" aria-labelledby="inscription-titre">
+  <h2 id="inscription-titre" class="inscription-titre">Être prévenu des nouvelles pages</h2>
+  <p>Un e-mail à chaque nouvelle page publiée, et rien d’autre. Inscription confirmée par un e-mail, désinscription en un clic depuis chaque envoi. <a href="/confidentialite/#lettre-dinformation">Ce qui est fait de votre adresse</a>.</p>
+  <form class="inscription-form" action="{{ . }}" method="post">
+    <label for="inscription-email" class="inscription-label">Adresse e-mail</label>
+    <input type="email" id="inscription-email" name="EMAIL" required
+           autocomplete="email" placeholder="vous@exemple.fr">
+    {{/* Champ piège attendu par Brevo : doit rester vide. */}}
+    <input type="text" name="email_address_check" value="" tabindex="-1"
+           autocomplete="off" class="inscription-label" aria-hidden="true">
+    <input type="hidden" name="locale" value="fr">
+    <input type="hidden" name="html_type" value="simple">
+    <button type="submit">M’inscrire</button>
+    <p class="inscription-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<script>
+(function () {
+  var f = document.currentScript.previousElementSibling.querySelector("form");
+  if (!f || !window.fetch) return;
+  var err = f.querySelector(".inscription-erreur"), bouton = f.querySelector("button");
+  f.addEventListener("submit", function (e) {
+    e.preventDefault();
+    bouton.disabled = true; err.hidden = true;
+    fetch(f.action, { method: "POST", body: new FormData(f) })
+      .then(function (r) {
+        if (r.ok) { window.location.href = "/inscription-envoyee/"; return; }
+        err.textContent = "Cette adresse n’a pas été acceptée. Vérifiez-la et réessayez.";
+        err.hidden = false; bouton.disabled = false;
+      })
+      .catch(function () { f.submit(); });
+  });
+})();
+</script>
+{{- end }}

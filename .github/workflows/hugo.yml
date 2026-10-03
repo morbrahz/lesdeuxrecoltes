@@ -53,3 +53,26 @@ jobs:
       - name: Déployer sur GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # Annonce par e-mail des pages ajoutées, une fois le site en ligne (Brevo).
+  # Inactif tant que le secret BREVO_API_KEY et la variable BREVO_LISTE ne sont
+  # pas définis dans le dépôt. Par défaut, crée une campagne en brouillon dans
+  # Brevo (à relire et envoyer) ; variable BREVO_ENVOI = immediat pour un envoi
+  # direct. Un échec ici ne touche pas au site, déjà déployé.
+  annonce:
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: github.event_name == 'push'
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Annoncer les nouvelles pages
+        env:
+          AVANT: ${{ github.event.before }}
+          APRES: ${{ github.sha }}
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+          BREVO_LISTE: ${{ vars.BREVO_LISTE }}
+          BREVO_ENVOI: ${{ vars.BREVO_ENVOI }}
+        run: python3 .github/scripts/annonce_nouvelles_pages.py

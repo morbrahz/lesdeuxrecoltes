@@ -1,0 +1,59 @@
+/* Formulaire d'inscription aux nouvelles pages (layouts/_partials/inscription.html) */
+.inscription {
+  margin: calc(var(--gap) * 2) 0 var(--gap);
+  padding: var(--gap);
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.inscription-titre {
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+.inscription p {
+  margin: 0 0 12px;
+  color: var(--secondary);
+  font-size: 15px;
+  line-height: 1.5;
+}
+.inscription-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.inscription-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+.inscription-form input[type="email"] {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 8px 12px;
+  font-size: 16px;
+  color: var(--primary);
+  background: var(--theme);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.inscription-form button {
+  padding: 8px 16px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--theme);
+  background: var(--primary);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+}
+.inscription-erreur {
+  flex-basis: 100%;
+  margin: 4px 0 0 !important;
+  color: #b42318 !important;
+}
+.inscription-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

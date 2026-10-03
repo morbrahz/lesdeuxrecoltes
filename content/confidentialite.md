@@ -1,8 +1,8 @@
 +++
 title = "Confidentialité"
 date = 2026-09-17
-lastmod = 2026-09-27
-summary = "Ce que ce site mesure, ce qu'il ne collecte pas, et comment exercer vos droits."
+lastmod = 2026-10-03
+summary = "Ce que ce site mesure, ce qu'il collecte pour la lettre d'information, et comment exercer vos droits."
 +++
 
 ## Mesure d'audience
@@ -27,14 +27,22 @@ Le site est hébergé par **GitHub Pages** (GitHub, Inc., 88 Colin P. Kelly Jr. 
 
 Les outils proposés sur ce site, comme la [liste des vaches à pousser au robot](/elevage/outil-vaches-a-pousser/), s'exécutent **entièrement dans votre navigateur**. Les fichiers que vous y déposez ne sont ni envoyés, ni enregistrés, ni vus par l'éditeur du site ou par un tiers : ils disparaissent à la fermeture de la page. Le moteur de calcul est téléchargé depuis ce site lui-même, sans appel à un service extérieur.
 
-## Formulaires
+## Lettre d'information
 
-Aucun formulaire ne collecte d'adresse e-mail ni de donnée personnelle à ce jour. Si cela change, cette page sera mise à jour avant la mise en ligne du formulaire.
+Le formulaire « Être prévenu des nouvelles pages » permet de recevoir un e-mail à chaque nouvelle page publiée. C'est le seul endroit du site où une donnée personnelle est collectée.
+
+- **Donnée collectée** : votre adresse e-mail, et rien d'autre. Aucun nom n'est demandé.
+- **Finalité** : vous envoyer un e-mail quand une page est ajoutée au site. L'adresse n'est utilisée à aucune autre fin, ni cédée, ni revendue, ni partagée.
+- **Base légale** : votre consentement. L'inscription n'est effective qu'après un clic sur le lien de confirmation reçu par e-mail (double confirmation) ; sans ce clic, aucun envoi n'a lieu.
+- **Prestataire** : les adresses sont conservées et les e-mails envoyés par **Brevo** (Brevo SAS, 106 boulevard Haussmann, 75008 Paris, France), qui agit comme sous-traitant. Selon sa politique de confidentialité, Brevo peut faire appel à des sous-traitants situés hors de l'Union européenne, avec des garanties appropriées. Le formulaire ne charge aucun script de Brevo : ce service n'est contacté qu'au moment où vous validez votre inscription. Les e-mails envoyés portent la mention « Sent with Brevo ».
+- **Durée de conservation** : tant que vous restez inscrit. À la désinscription, l'adresse cesse de recevoir tout envoi ; elle est effacée définitivement sur simple demande.
+- **Désinscription** : un lien figure au bas de chaque e-mail ; un clic suffit.
+- **Vos droits** : accès, rectification, suppression, retrait du consentement à tout moment, en écrivant à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr). Vous pouvez aussi adresser une réclamation à la [CNIL](https://www.cnil.fr/).
 
 ## Vos droits
 
-Aucune donnée personnelle identifiante n'étant conservée, il n'existe pas de fichier permettant de retrouver un visiteur. Pour toute question relative à cette page, la demande peut être adressée via les coordonnées figurant dans les mentions légales.
+En dehors de la lettre d'information, aucune donnée personnelle identifiante n'est conservée : il n'existe pas de fichier permettant de retrouver un visiteur. Pour toute question relative à cette page, la demande peut être adressée via les coordonnées figurant dans les mentions légales.
 
 ---
 
-*Dernière mise à jour : 27 septembre 2026.*
+*Dernière mise à jour : 3 octobre 2026.*

@@ -1,0 +1,32 @@
+name: Brevo - garder la clé d'API active
+
+# La clé d'API Brevo expire après 90 jours sans utilisation. Les pages sont
+# publiées de façon irrégulière : cet appel mensuel, en lecture seule
+# (informations du compte), la maintient active. S'il échoue, la clé a été
+# révoquée ou a expiré : GitHub l'indique par e-mail, et il faut en générer
+# une nouvelle dans Brevo (SMTP et API) puis remplacer le secret BREVO_API_KEY.
+
+on:
+  schedule:
+    - cron: "17 6 1 * *"   # le 1er de chaque mois, 6 h 17 UTC
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Interroger Brevo avec la clé
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+        run: |
+          if [ -z "$BREVO_API_KEY" ]; then
+            echo "Secret BREVO_API_KEY absent : rien à vérifier."
+            exit 0
+          fi
+          code=$(curl -s -o /dev/null -w '%{http_code}' \
+            -H "api-key: $BREVO_API_KEY" -H "accept: application/json" \
+            https://api.brevo.com/v3/account)
+          echo "Réponse de Brevo : HTTP $code"
+          test "$code" = "200"

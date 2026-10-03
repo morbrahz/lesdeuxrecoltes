@@ -11,6 +11,8 @@ inscription = false
 
 Un e-mail de confirmation vient de vous être envoyé. **Cliquez sur le lien qu’il contient** pour terminer l’inscription : sans ce clic, aucun message ne vous sera adressé.
 
-Rien reçu d’ici quelques minutes ? Regardez dans les indésirables ou l’onglet Promotions, puis réessayez depuis le bas de n’importe quelle page.
+Rien reçu d’ici quelques minutes ? Regardez dans les **indésirables** ou l’onglet Promotions. Le site est récent, et certaines messageries — Outlook et Hotmail en particulier — classent d’abord ses messages comme indésirables. Si c’est le cas, marquez le message comme légitime et **ajoutez contact@lesdeuxrecoltes.fr à vos contacts** : les envois suivants arriveront dans votre boîte de réception.
+
+Toujours rien ? Réessayez depuis le bas de n’importe quelle page, en vérifiant l’adresse saisie.
 
 [Retour à l’accueil](/)

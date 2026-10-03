@@ -12,7 +12,7 @@ disableKinds = ['taxonomy', 'term']
   env = 'production'
   # Utilisee comme meta description de la page d'accueil (les autres pages
   # utilisent leur propre champ summary).
-  description = "Méthodes de gestion, d'investissement et d'élevage laitier écrites depuis une exploitation agricole : trésorerie, épargne, placements, structures et traite robotisée."
+  description = "Méthodes de gestion, d'investissement et d'élevage laitier écrites depuis une exploitation : trésorerie, épargne, placements, structures, traite robotisée."
   # Mesure d'audience GoatCounter : code du site (sous-domaine choisi a l'inscription).
   goatcounter = 'lesdeuxrecoltes'
   # Inscription aux nouvelles pages : adresse du formulaire Brevo

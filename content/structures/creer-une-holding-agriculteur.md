@@ -4,7 +4,7 @@ date = 2026-10-03
 lastmod = 2026-10-03
 draft = false
 weight = 1
-summary = "Holding à l'IS associée d'une société agricole : ce qu'elle rapporte vraiment (un report d'impôt, pas une économie), les hypothèses qui décident du résultat, la DEP, l'entrée au capital, et le bénéfice à partir duquel elle l'emporte sur l'impôt sur le revenu. Tableur de décision à télécharger."
+summary = "Holding à l'IS pour un agriculteur : un report d'impôt, pas une économie. À partir de quel bénéfice elle bat l'impôt sur le revenu. Tableur à télécharger."
 +++
 
 Faire entrer au capital de l'exploitation une holding soumise à l'impôt sur les sociétés permet d'imposer une partie du bénéfice à 15 %, au lieu de lui faire supporter l'impôt sur le revenu et les cotisations MSA. Sur le papier, l'écart de taux paraît décisif, et un comparatif rapide conclut facilement en faveur de la holding. Celui qui a servi de point de départ à cette page le faisait : ses formules étaient justes, mais il ne comparait pas les bonnes choses. Cette page reprend la question dans l'ordre : ce que la holding rapporte vraiment, les hypothèses qui décident du résultat, puis **à partir de quel bénéfice, de quel niveau de dépenses et de quel horizon** elle l'emporte. Le tableur qui applique la méthode est à télécharger en section 7.

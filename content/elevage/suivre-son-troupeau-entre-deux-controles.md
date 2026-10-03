@@ -4,7 +4,7 @@ date = 2026-09-27
 lastmod = 2026-09-27
 draft = false
 weight = 4
-summary = "Robot de traite : tirer des données du robot un tableau de bord du troupeau entre deux contrôles laitiers — production, taux, cellules — avec des moyennes justes, des seuils sourcés et ce que ces données ne remplacent pas."
+summary = "Robot de traite : un tableau de bord du troupeau entre deux contrôles laitiers (production, taux, cellules), avec moyennes justes et seuils sourcés."
 +++
 
 Le contrôle laitier donne une photographie du troupeau une fois par mois, à partir d'analyses de laboratoire. Le robot, lui, mesure chaque traite. Entre deux contrôles, ses données peuvent tenir lieu de tableau de bord : production, taux, cellules, comportement. À deux conditions : savoir ce qu'elles mesurent vraiment, et les calculer correctement.

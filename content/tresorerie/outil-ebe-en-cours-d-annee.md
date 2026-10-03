@@ -5,7 +5,7 @@ lastmod = 2026-10-03
 draft = false
 weight = 5
 annonce = false
-summary = "Déposez la balance comptable à date de votre exploitation et obtenez l'EBE de gestion comparé à la même date des années précédentes, les annuités ramenées aux mois écoulés et, avec la balance analytique, la marge sur coût alimentaire du lait. Le calcul se fait dans votre navigateur."
+summary = "Déposez la balance comptable de l'exploitation : EBE en cours d'année comparé à l'an passé et marge sur coût alimentaire. Calcul dans le navigateur."
 +++
 
 Cet outil applique la méthode décrite dans [Calculer l'EBE de son exploitation agricole en cours d'année](/tresorerie/ebe-en-cours-d-annee/) à vos propres balances : EBE de gestion à date, comparaison avec la même date des années précédentes, annuités et prélèvements ramenés aux mois écoulés, et, si vous déposez les balances analytiques, prix du lait, marge sur coût alimentaire et marges par atelier.

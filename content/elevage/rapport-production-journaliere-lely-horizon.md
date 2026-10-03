@@ -4,7 +4,7 @@ date = 2026-09-27
 lastmod = 2026-09-27
 draft = false
 weight = 3
-summary = "Lely Horizon : dupliquer le rapport de production journalière par vache et y ajouter refus, traites, jours de lactation et indicateurs de suivi, pour un export CSV complet, en quelques minutes et une fois pour toutes."
+summary = "Lely Horizon : dupliquer le rapport de production journalière par vache et y ajouter refus, traites et jours de lactation, pour un export CSV complet."
 +++
 
 Les rapports standards de Lely Horizon ne contiennent pas forcément toutes les colonnes dont on a besoin. Horizon permet en revanche d'en faire une copie et d'y ajouter les champs voulus. Cette page décrit la copie du rapport de production journalière par vache utilisée par l'[outil des vaches à pousser au robot](/elevage/outil-vaches-a-pousser/), qui applique la méthode décrite dans [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/). Elle contient plus de champs que cet outil n'en lit : les autres servent au [bilan du troupeau](/elevage/outil-bilan-troupeau/), qui utilise le même export.

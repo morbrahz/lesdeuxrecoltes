@@ -4,7 +4,7 @@ date = 2026-09-27
 lastmod = 2026-09-27
 draft = false
 weight = 5
-summary = "Déposez l'export de production journalière de Lely Horizon et obtenez un bilan du troupeau entre deux contrôles laitiers : production, taux, cellules, stades de lactation et vaches à regarder. Le calcul se fait dans votre navigateur."
+summary = "Bilan du troupeau laitier depuis l'export Lely Horizon : production, taux, cellules et vaches à regarder entre deux contrôles. Calcul dans le navigateur."
 +++
 
 Cet outil établit, à partir d'un seul export du robot, le tableau de bord décrit dans [Suivre son troupeau entre deux contrôles laitiers avec les données du robot de traite](/elevage/suivre-son-troupeau-entre-deux-controles/) : production, taux, cellules, stades de lactation, fréquentation du robot, et la liste des vaches à regarder, par numéro.

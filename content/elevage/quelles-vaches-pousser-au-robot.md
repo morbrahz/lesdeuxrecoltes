@@ -4,7 +4,7 @@ date = 2026-09-27
 lastmod = 2026-09-27
 draft = false
 weight = 1
-summary = "Robot de traite : décider à chaque tournée quelles vaches aller chercher et lesquelles laisser venir seules, en classant le troupeau sur deux indicateurs — les refus et le lait par traite — puis en le croisant avec la liste des vaches en retard."
+summary = "Robot de traite : quelles vaches aller chercher à chaque tournée et lesquelles laisser venir seules, selon les refus, le lait par traite et les retards."
 +++
 
 À chaque tournée, la même question : quelles vaches aller chercher ? Les

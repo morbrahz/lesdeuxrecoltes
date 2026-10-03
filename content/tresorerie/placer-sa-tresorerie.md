@@ -4,7 +4,7 @@ date = 2026-09-20
 lastmod = 2026-09-26
 draft = false
 weight = 3
-summary = "Aligner chaque barreau de trésorerie sur un support de même durée : pourquoi une réserve qui dort se réduit toute seule, cinq critères pour juger un support, et les familles disponibles barreau par barreau."
+summary = "Placer la trésorerie d'une exploitation agricole : chaque barreau sur un support de même durée, cinq critères de choix, les familles de supports."
 +++
 
 Une trésorerie dimensionnée et répartie n'a pas encore d'emploi : elle est sur un compte courant, et elle y reste. Cette page traite la question suivante — que mettre sur chaque barreau, c'est-à-dire sur chacune des quatre durées de la réserve. Elle suppose réglées celles du total et de sa répartition, traitées dans [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/), et s'arrête à la limite du total : ce qui le dépasse n'est plus de la trésorerie.

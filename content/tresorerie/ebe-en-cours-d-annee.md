@@ -4,7 +4,7 @@ date = 2026-10-03
 lastmod = 2026-10-03
 draft = false
 weight = 4
-summary = "Prendre la température de l'exploitation avant la clôture : un EBE de gestion tiré de la balance comptable à date, comparé à la même date de l'année précédente, avec les annuités ramenées aux mois écoulés et la marge sur coût alimentaire du lait."
+summary = "Calculer l'EBE de l'exploitation agricole en cours d'année : balance à date comparée à l'an passé, annuités au prorata, marge sur coût alimentaire du lait."
 +++
 
 Le dossier de gestion arrive plusieurs mois après la clôture, quand les décisions de l'exercice sont prises depuis longtemps. Pourtant, la comptabilité tenue au fil de l'eau contient déjà presque tout : une balance comptable sortie en cours d'année suffit à savoir si l'exercice se présente mieux ou moins bien que le précédent. Cette page décrit comment en tirer un EBE de gestion, et comment le lire sans lui faire dire ce qu'il ne dit pas. Un [outil en ligne](/tresorerie/outil-ebe-en-cours-d-annee/) fait le calcul à partir de vos propres balances.

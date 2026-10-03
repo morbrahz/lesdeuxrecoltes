@@ -4,7 +4,7 @@ date = 2026-09-26
 lastmod = 2026-09-26
 draft = false
 weight = 1
-summary = "Épargne de l'exploitant agricole : fixer une allocation sur l'ensemble du patrimoine, exploitation comprise, puis la loger dans les enveloppes par ordre de rentabilité — PEE, PER individuel, PERECO, PEA, compte-titres, assurance-vie."
+summary = "Épargne de l'agriculteur : allocation sur tout le patrimoine, exploitation comprise, puis l'ordre des enveloppes : PEE, PER, PERECO, PEA, assurance-vie."
 +++
 
 La question « où placer son épargne » commence presque toujours par le choix d'un produit. C'est la mauvaise porte d'entrée. Une enveloppe — PEA, PER, assurance-vie — n'est qu'un contenant fiscal : elle ne dit rien de ce qu'on y met. Cette page suit l'ordre inverse : **d'abord l'allocation, ensuite les enveloppes**, et pour ces dernières un ordre de priorité propre au statut d'exploitant agricole.

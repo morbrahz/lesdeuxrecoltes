@@ -4,7 +4,7 @@ date = 2026-09-27
 lastmod = 2026-09-27
 draft = false
 weight = 2
-summary = "Déposez vos exports Lely Horizon et obtenez, numéro par numéro, les vaches à pousser à la prochaine tournée. Le calcul se fait dans votre navigateur : aucun fichier n'est envoyé."
+summary = "Déposez vos exports Lely Horizon et obtenez, numéro par numéro, les vaches à pousser à la prochaine tournée. Calcul dans le navigateur, aucun envoi."
 +++
 
 Cet outil applique la méthode décrite dans [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/) à vos propres exports, et donne la liste des vaches à aller chercher, avec leur numéro d'animal.

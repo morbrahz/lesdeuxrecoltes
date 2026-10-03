@@ -156,6 +156,9 @@ pousser, numéro par numéro. Le calcul se fait dans le navigateur, sans
 envoyer aucun fichier. Le rapport de production à exporter se prépare comme
 décrit dans [Créer un rapport de production journalière par vache dans Lely
 Horizon](/elevage/rapport-production-journaliere-lely-horizon/).
+Le même export alimente l'[outil de bilan du troupeau](/elevage/outil-bilan-troupeau/),
+dont la méthode est décrite dans [Suivre son troupeau entre deux contrôles
+laitiers](/elevage/suivre-son-troupeau-entre-deux-controles/).
 
 ## 7. Exemple chiffré fictif
 

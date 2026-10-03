@@ -9,7 +9,7 @@ summary = "Robot de traite : tirer des données du robot un tableau de bord du t
 
 Le contrôle laitier donne une photographie du troupeau une fois par mois, à partir d'analyses de laboratoire. Le robot, lui, mesure chaque traite. Entre deux contrôles, ses données peuvent tenir lieu de tableau de bord : production, taux, cellules, comportement. À deux conditions : savoir ce qu'elles mesurent vraiment, et les calculer correctement.
 
-Cette page décrit la méthode appliquée par l'[outil de bilan du troupeau](/elevage/outil-bilan-troupeau/).
+Cette page décrit la méthode appliquée par l'[outil de bilan du troupeau](/elevage/outil-bilan-troupeau/). Les données viennent du même rapport de production journalière que [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/) ; il se prépare une fois pour toutes, comme décrit dans [Créer un rapport de production journalière par vache dans Lely Horizon](/elevage/rapport-production-journaliere-lely-horizon/).
 
 *Dernière mise à jour : 27 septembre 2026.*
 

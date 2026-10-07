@@ -7,14 +7,20 @@
 {{- range site.Sections.ByWeight }}
 <section class="rubrique">
   <h2 class="rubrique-titre"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+  {{- /* Veille : seule la dernière édition à l'accueil, les autres sur /veille/. */}}
+  {{- $pages := .RegularPages.ByWeight }}
+  {{- if eq .Section "veille" }}{{ $pages = first 1 .RegularPages.ByDate.Reverse }}{{ end }}
   <ul class="rubrique-pages">
-    {{- range .RegularPages.ByWeight }}
+    {{- range $pages }}
     <li>
       <a href="{{ .RelPermalink }}">{{ .Title }}</a>
       {{- with .Summary }}<p>{{ . | plainify | htmlUnescape }}</p>{{ end }}
     </li>
     {{- end }}
   </ul>
+  {{- if and (eq .Section "veille") (gt (len .RegularPages) 1) }}
+  <p><a href="{{ .RelPermalink }}">Toutes les éditions de la veille</a></p>
+  {{- end }}
 </section>
 {{- end }}
 

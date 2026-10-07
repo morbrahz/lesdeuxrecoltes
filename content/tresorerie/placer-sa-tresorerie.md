@@ -1,5 +1,6 @@
 +++
 title = "Comment placer la trésorerie d'une exploitation agricole"
+seoTitle = "Comment placer la trésorerie d'une exploitation agricole"
 date = 2026-09-20
 lastmod = 2026-09-26
 draft = false

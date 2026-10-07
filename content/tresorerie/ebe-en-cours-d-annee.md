@@ -1,5 +1,6 @@
 +++
 title = "Calculer l'EBE de son exploitation agricole en cours d'année"
+seoTitle = "Calculer l'EBE de son exploitation agricole en cours d'année"
 date = 2026-10-03
 lastmod = 2026-10-03
 draft = false

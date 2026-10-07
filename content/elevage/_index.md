@@ -1,7 +1,7 @@
 +++
 weight = 3
 title = 'Élevage laitier'
-summary = "Protocoles et outils d'un élevage laitier en traite robotisée."
+summary = "Protocoles et outils d'un élevage laitier en traite robotisée Lely : vaches à pousser, bilan du troupeau, suivi entre deux contrôles laitiers."
 +++
 
 Ce qui a été résolu sur un troupeau laitier trait au robot : règles de conduite, protocoles et outils, écrits pour être repris et ajustés sur d'autres troupeaux.

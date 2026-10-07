@@ -1,5 +1,6 @@
 +++
 title = "Préparer sa retraite quand on est agriculteur : combien épargner en plus de la pension MSA"
+seoTitle = "Retraite agricole : combien épargner en plus de la pension MSA"
 date = 2026-10-04
 lastmod = 2026-10-04
 draft = false

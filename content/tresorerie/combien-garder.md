@@ -1,5 +1,6 @@
 +++
 title = "Combien de trésorerie garder sur une exploitation agricole"
+seoTitle = "Combien de trésorerie garder sur une exploitation agricole"
 date = 2026-09-17
 lastmod = 2026-09-26
 draft = false

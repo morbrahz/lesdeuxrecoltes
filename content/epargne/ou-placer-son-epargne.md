@@ -1,5 +1,6 @@
 +++
 title = "Où placer son épargne quand on est agriculteur : PEA, assurance-vie, PER"
+seoTitle = "Où placer son épargne d'agriculteur : PEA, assurance-vie, PER"
 date = 2026-09-26
 lastmod = 2026-09-26
 draft = false

@@ -1,5 +1,6 @@
 +++
 title = "Suivre son troupeau entre deux contrôles laitiers avec les données du robot de traite"
+seoTitle = "Suivre son troupeau entre deux contrôles laitiers au robot"
 date = 2026-09-27
 lastmod = 2026-09-27
 draft = false

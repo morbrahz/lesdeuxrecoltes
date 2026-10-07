@@ -1,5 +1,6 @@
 +++
 title = "Outil en ligne : la liste des vaches à pousser au robot, depuis les exports Lely Horizon"
+seoTitle = "Outil : les vaches à pousser au robot, depuis Lely Horizon"
 date = 2026-09-27
 lastmod = 2026-09-27
 draft = false

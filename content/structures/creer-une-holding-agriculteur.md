@@ -1,5 +1,6 @@
 +++
 title = "Créer une holding quand on est agriculteur : à partir de quel bénéfice est-elle rentable ?"
+seoTitle = "Holding agricole : à partir de quel bénéfice est-elle rentable ?"
 date = 2026-10-03
 lastmod = 2026-10-03
 draft = false

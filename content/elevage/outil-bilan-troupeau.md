@@ -1,5 +1,6 @@
 +++
 title = "Outil en ligne : bilan du troupeau laitier depuis les exports Lely Horizon"
+seoTitle = "Outil : bilan du troupeau laitier depuis Lely Horizon"
 date = 2026-09-27
 lastmod = 2026-09-27
 draft = false

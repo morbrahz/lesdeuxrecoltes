@@ -1,5 +1,6 @@
 +++
 title = "Le vrai coût du découvert sur une exploitation agricole"
+seoTitle = "Le vrai coût du découvert sur une exploitation agricole"
 date = 2026-09-17
 lastmod = 2026-09-20
 draft = false

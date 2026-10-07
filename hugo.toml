@@ -1,7 +1,13 @@
 baseURL = 'https://lesdeuxrecoltes.fr/'
-languageCode = 'fr-fr'
+# Langue du site. defaultContentLanguage fixe <html lang> et les libelles du
+# theme (i18n/fr.yaml de PaperMod) ; languageCode seul ne suffit pas.
+defaultContentLanguage = 'fr'
+languageCode = 'fr-FR'
 title = 'Les Deux Récoltes'
 theme = 'PaperMod'
+
+# Genere /robots.txt (tout autoriser + adresse du sitemap).
+enableRobotsTXT = true
 
 # Taxonomies desactivees : le site n'utilise ni tags ni categories.
 # Sans cela, Hugo genere /tags/ et /categories/ vides, qui entrent dans le
@@ -9,6 +15,8 @@ theme = 'PaperMod'
 disableKinds = ['taxonomy', 'term']
 
 [params]
+  # Balise <title> de l'accueil (sinon le seul nom du site, sans mot-cle).
+  homeTitle = 'Les Deux Récoltes – gestion, épargne et élevage laitier'
   env = 'production'
   # Utilisee comme meta description de la page d'accueil (les autres pages
   # utilisent leur propre champ summary).

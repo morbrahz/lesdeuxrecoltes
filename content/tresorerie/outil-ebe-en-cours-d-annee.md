@@ -1,5 +1,6 @@
 +++
 title = "Outil en ligne : l'EBE en cours d'année depuis la balance comptable"
+seoTitle = "Outil : l'EBE en cours d'année depuis la balance comptable"
 date = 2026-10-03
 lastmod = 2026-10-03
 draft = false

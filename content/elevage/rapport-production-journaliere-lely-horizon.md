@@ -1,5 +1,6 @@
 +++
 title = "Créer un rapport de production journalière par vache dans Lely Horizon"
+seoTitle = "Rapport de production journalière par vache dans Lely Horizon"
 date = 2026-09-27
 lastmod = 2026-09-27
 draft = false

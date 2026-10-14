@@ -12,7 +12,7 @@
 
   <div class="rn-banner" id="rn-exampleBanner" hidden>
     <span><b>Données d'exemple fictives.</b> Importez votre export Horizon ou saisissez vos gestations : l'exemple sera effacé.</span>
-    <button type="button" class="rn-btn rn-sm" data-act="clearExample">Partir d'une liste vide</button>
+    <span class="rn-inline"><button type="button" class="rn-btn rn-sm rn-primary" data-act="goImport">Importer mon export Horizon</button><button type="button" class="rn-btn rn-sm" data-act="clearExample">Partir d'une liste vide</button></span>
   </div>
 
   <section class="rn-bilan" aria-labelledby="rn-bilanTitle">
@@ -58,6 +58,7 @@
     <div class="rn-toolbar">
       <label><input type="checkbox" id="rn-onlyMissing"> Seulement les semences à saisir</label>
       <span class="rn-muted rn-small" id="rn-gestInfo"></span>
+      <button type="button" class="rn-btn rn-sm" data-act="goImport">Importer depuis Horizon</button>
     </div>
     <div class="rn-list" id="rn-gestList"></div>
   </section>
@@ -225,6 +226,7 @@
 #rn .rn-f { display: grid; gap: 3px; font-size: .78rem; color: var(--secondary); font-weight: 600; }
 #rn input[type=text], #rn input[type=number], #rn input[type=date], #rn select { background: var(--theme); color: var(--primary); border: 1px solid var(--rn-line); border-radius: 7px; padding: 7px 9px; min-width: 0; font-size: .95rem; font-weight: 400; }
 #rn input[type=file] { font-size: .85rem; font-weight: 400; color: var(--primary); max-width: 100%; }
+#rn input[type=file]::file-selector-button { font: inherit; font-size: .95rem; font-weight: 600; border: 1px solid var(--primary); background: var(--primary); color: var(--theme); border-radius: 8px; padding: 7px 12px; margin-right: 10px; cursor: pointer; }
 #rn .rn-num { width: 7.5em; font-family: var(--rn-mono); }
 #rn .rn-btn { display: inline-block; border: 1px solid var(--rn-line); background: var(--entry); color: var(--primary); border-radius: 8px; padding: 7px 12px; font-weight: 600; font-size: .95rem; line-height: 1.4; }
 #rn .rn-btn.rn-primary { background: var(--primary); border-color: var(--primary); color: var(--theme); }
@@ -586,6 +588,8 @@ root.addEventListener("click", e=>{
     case "vDel": state.velages = state.velages.filter(x=>x.id!==id); delAsk=null; persist(); break;
     case "clearExample": leaveExample(); persist(); break;
     case "saveFile": saveFile(); break;
+    case "goImport": showTab("data"); try{ sessionStorage.setItem(KEY+"-tab", tab); }catch(_){}
+      $("tabs").scrollIntoView({behavior:"smooth", block:"start"}); $("csvIn").focus({preventScroll:true}); break;
     case "wipeAsk": $("wipeBox").innerHTML = `<span class="rn-small">Effacer ${state.gestations.length} gestations et ${state.velages.length} vêlages ?</span> <button type="button" class="rn-btn rn-danger" data-act="wipe">Oui, tout effacer</button> <button type="button" class="rn-btn" data-act="wipeNo">Annuler</button>`; break;
     case "wipeNo": $("wipeBox").innerHTML = `<button type="button" class="rn-btn rn-danger" data-act="wipeAsk">Effacer les données…</button>`; break;
     case "wipe": state.gestations=[]; state.velages=[]; state.example=false; persist(); $("wipeBox").innerHTML = `<button type="button" class="rn-btn rn-danger" data-act="wipeAsk">Effacer les données…</button>`; toast("Données effacées"); break;

@@ -28,9 +28,9 @@ L'outil accepte aussi deux listes importées ensemble, **Planning génisse et ta
 
 ## 2. L'outil
 
-{{< outil-renouvellement >}}
+Au premier affichage, l'outil montre un **élevage fictif** de 60 vaches, calé sur la date du jour. Pour passer à vos données, cliquez sur **Importer mon export Horizon** (ou ouvrez l'onglet « Import et sauvegarde ») et choisissez le fichier CSV : l'exemple s'efface au premier import, comme à la première saisie.
 
-Au premier affichage, l'outil montre un **élevage fictif** de 60 vaches, calé sur la date du jour. Il s'efface dès le premier import ou la première saisie.
+{{< outil-renouvellement >}}
 
 ## 3. La fenêtre de 12 mois et le calcul
 

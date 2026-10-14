@@ -10,4 +10,4 @@ Méthode de gestion de la trésorerie d'une exploitation agricole : ce que coût
 - [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/) — fixer un total en mois de charges, puis le répartir sur quatre durées.
 - [Comment placer la trésorerie d'une exploitation agricole](/tresorerie/placer-sa-tresorerie/) — apparier chaque barreau à un support de même durée, et ce que l'on ne fait pas avec une réserve.
 - [Calculer l'EBE de son exploitation agricole en cours d'année](/tresorerie/ebe-en-cours-d-annee/) — un EBE de gestion tiré de la balance à date, comparé à la même date de l'année précédente, annuités ramenées aux mois écoulés.
-- [Outil en ligne : l'EBE en cours d'année depuis la balance comptable](/tresorerie/outil-ebe-en-cours-d-annee/) — le calcul appliqué à vos balances, dans votre navigateur.
+- [Outil en ligne : l'EBE en cours d'année depuis la comptabilité](/tresorerie/outil-ebe-en-cours-d-annee/) — le calcul appliqué à vos balances, dans votre navigateur.

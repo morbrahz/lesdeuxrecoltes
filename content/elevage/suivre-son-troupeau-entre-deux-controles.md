@@ -2,7 +2,7 @@
 title = "Suivre son troupeau entre deux contrôles laitiers avec les données du robot de traite"
 seoTitle = "Suivre son troupeau entre deux contrôles laitiers au robot"
 date = 2026-09-27
-lastmod = 2026-09-27
+lastmod = 2026-10-14
 draft = false
 weight = 4
 summary = "Robot de traite : un tableau de bord du troupeau entre deux contrôles laitiers (production, taux, cellules), avec moyennes justes et seuils sourcés."
@@ -10,9 +10,14 @@ summary = "Robot de traite : un tableau de bord du troupeau entre deux contrôle
 
 Le contrôle laitier donne une photographie du troupeau une fois par mois, à partir d'analyses de laboratoire. Le robot, lui, mesure chaque traite. Entre deux contrôles, ses données peuvent tenir lieu de tableau de bord : production, taux, cellules, comportement. À deux conditions : savoir ce qu'elles mesurent vraiment, et les calculer correctement.
 
-Cette page décrit la méthode appliquée par l'[outil de bilan du troupeau](/elevage/outil-bilan-troupeau/). Les données viennent du même rapport de production journalière que [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/) ; il se prépare une fois pour toutes, comme décrit dans [Créer un rapport de production journalière par vache dans Lely Horizon](/elevage/rapport-production-journaliere-lely-horizon/).
+Cette page décrit la méthode appliquée par l'[outil de bilan du troupeau](/elevage/outil-bilan-troupeau/). Les données viennent de Lely Horizon, par deux voies :
 
-*Dernière mise à jour : 27 septembre 2026.*
+- **les rapports standard** « Traite – Production journalière par vache » et « Traite – Données de traites », tels que Lely les livre : une photo du jour, une ligne par vache ;
+- **une copie enrichie du rapport de production journalière**, exportée sur plusieurs jours : c'est le rapport de [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/), qui se prépare une fois pour toutes comme décrit dans [Créer un rapport de production journalière par vache dans Lely Horizon](/elevage/rapport-production-journaliere-lely-horizon/).
+
+La première suffit pour le bilan du troupeau ; la seconde est recommandée pour repérer les vaches (§ 2).
+
+*Dernière mise à jour : 14 octobre 2026.*
 
 ## 1. Ce que le robot mesure
 
@@ -28,9 +33,11 @@ Une indication qui manque un jour n'est pas une valeur nulle : c'est une mesure 
 
 ## 2. Trois règles de calcul
 
-**Moyenner sur plusieurs jours.** Les indications d'une vache varient d'un jour à l'autre. Chaque indicateur d'une vache est donc la moyenne de ses valeurs sur **les 3 à 5 derniers jours**, en ignorant les cases vides. Remplacer une case vide par zéro tirerait les taux vers le bas et ferait passer des vaches sous les seuils de cellules.
+**Moyenner sur plusieurs jours pour repérer les vaches.** Les indications d'une vache varient d'un jour à l'autre, les cellules surtout. Pour dire quelles vaches regarder, chaque indicateur d'une vache est donc la moyenne de ses valeurs sur **les 3 à 5 derniers jours**, en ignorant les cases vides. Remplacer une case vide par zéro tirerait les taux vers le bas et ferait passer des vaches sous les seuils de cellules. Pour le seul bilan du troupeau, la photo du jour des rapports standard suffit : les écarts d'une vache à l'autre se compensent dans la moyenne (voir le cas observé, § 6).
 
 **Pondérer les taux et les cellules par le lait.** Le taux du troupeau est celui du lait mélangé, comme dans le tank. Une vache à 40 kg pèse plus qu'une vache à 15 kg. Les autres indicateurs — stade, rumination, traites — sont des moyennes par vache.
+
+**Écarter les premiers jours de lactation pour les taux.** Le colostrum puis le lait de transition ont un TB et un TP qui n'ont rien à voir avec ceux d'une lactation installée : un TB sous le TP le lendemain du vêlage n'est pas un signal d'acidose. Le TB et le TP des 5 premiers jours de lactation ne sont donc pas comptés, ni dans les taux du troupeau, ni dans les vaches à regarder.
 
 **Étudier les vaches traites le dernier jour.** Le troupeau du bilan est celui qui est au robot à la fin de la période. Une vache tarie ou partie en cours de période n'y figure plus.
 
@@ -58,7 +65,7 @@ Une indication qui manque un jour n'est pas une valeur nulle : c'est une mesure 
 Deux précisions de méthode :
 
 - ces seuils ont été établis sur des analyses de laboratoire ; appliqués à des indications de robot, ils désignent **des vaches à regarder, pas des diagnostics** ;
-- pour les cellules, une vache est signalée si **sa moyenne ou sa dernière indication** dépasse le seuil. La moyenne seule noierait une mammite apparue la veille.
+- pour les cellules, avec un export sur plusieurs jours, une vache est signalée si **sa moyenne ou sa dernière indication** dépasse le seuil. La moyenne seule noierait une mammite apparue la veille.
 
 ## 5. Le niveau d'étable estimé
 
@@ -86,6 +93,8 @@ L'estimation se lit donc comme un **ordre de grandeur**, et surtout **dans le te
 
 > **Cas observé.** Troupeau classé sur cinq jours, juste après un changement de robot. Rapport TB/TP du troupeau de 1,41, dans le haut de la plage habituelle. En début de lactation, une vache sur six dépassait 1,5. Pour les cellules, 78 % des vaches étaient sous 300 000 et 8 % au-dessus de 800 000 en moyenne de période. Mais la dernière indication a presque doublé le nombre de vaches signalées : l'une d'elles passait de moins de 100 000 à plus de 3 millions en deux jours, avec une moyenne de période encore sous 800 000.
 
+> **Cas observé.** Même troupeau, même jour : photo du jour des rapports standard d'un côté, moyenne sur cinq jours de la copie enrichie de l'autre. Pour le troupeau, les deux concordent : même lait par vache au dixième près, TB et TP à moins d'un g/kg, même part de vaches sous 300 000 cellules (92 %) et au-dessus de 800 000 (2 %). Pour les vaches, les listes divergent. En cellules, les deux listes n'ont aucune vache en commun : la photo signale une vache sur une mesure isolée, et laisse de côté une vache passée au-dessus d'un million la veille de l'export. En début de lactation, la photo signale près de 8 % des vaches au-dessus de 1,5 de TB/TP, la moyenne sur cinq jours 2 % : sur un jour, une hausse passagère suffit.
+
 ## 7. Exemple chiffré fictif
 
 Deux vaches : l'une à 40 kg de lait et 38 g/kg de TB, l'autre à 15 kg et 50 g/kg.
@@ -99,7 +108,8 @@ La moyenne simple surestime le TB de près de 3 g/kg, parce qu'elle donne autant
 
 ## À retenir
 
-- Les données du robot font un bon tableau de bord entre deux contrôles, à condition de les moyenner sur 3 à 5 jours.
+- Les données du robot font un bon tableau de bord entre deux contrôles. La photo du jour des rapports standard suffit pour le troupeau ; pour repérer les vaches, il faut les moyenner sur 3 à 5 jours.
+- Le TB et le TP des premiers jours de lactation ne s'interprètent pas.
 - Une indication manquante n'est pas un zéro.
 - Taux et cellules du troupeau se pondèrent par le lait.
 - Les seuils désignent des vaches à regarder, pas des diagnostics.

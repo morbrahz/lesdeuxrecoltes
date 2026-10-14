@@ -3,15 +3,28 @@
 Méthode décrite sur https://lesdeuxrecoltes.fr/elevage/suivre-son-troupeau-entre-deux-controles/
 
 Exécuté dans le navigateur du visiteur par l'outil en ligne : aucune donnée
-n'est envoyée. Entrée : l'export CSV du rapport « Production journalière par
-vache » de Lely Horizon, idéalement sur les 3 à 5 derniers jours.
+n'est envoyée. Deux sortes d'exports CSV de Lely Horizon sont acceptées :
+
+  - « photo du jour » : les rapports standard d'Horizon, tels que livrés,
+    une ligne par vache et pas de colonne de date :
+      « Traite – Production journalière par vache » (lait, taux, cellules)
+      « Traite – Données de traites » (traites, refus, échecs),
+    l'un, l'autre ou les deux, fusionnés par numéro d'animal ;
+  - « historique » : une copie enrichie du rapport de production
+    journalière, avec la colonne « Date de production », sur les 3 à 5
+    derniers jours (une ligne par vache et par jour).
 
 Principes de calcul :
   - le troupeau étudié = les vaches présentes le dernier jour de l'export ;
-  - chaque indicateur d'une vache est la moyenne de ses valeurs sur la période,
-    cases vides ignorées (une case vide n'est jamais comptée comme un zéro) ;
+  - en historique, chaque indicateur d'une vache est la moyenne de ses valeurs
+    sur la période, cases vides ignorées (une case vide n'est jamais comptée
+    comme un zéro) ; en photo du jour, c'est la valeur calculée par Horizon ;
   - les taux et les cellules du troupeau sont pondérés par le lait, comme un
     lait de tank ; les autres moyennes sont des moyennes par vache ;
+  - TB et TP des premiers jours de lactation (colostrum, lait de transition)
+    ne sont pas pris en compte : ils déclencheraient de fausses alertes ;
+  - concentré : la quantité programmée, comme dans la méthode ; la quantité
+    consommée seulement si l'export ne donne pas la programmée ;
   - TB, TP et cellules sont des indications mesurées au robot, pas des
     analyses de laboratoire ;
   - niveau d'étable estimé : moyenne des vaches de (lait moyen de la période
@@ -23,9 +36,9 @@ Principes de calcul :
 import csv
 import io
 import json
-import math
+import re
 import unicodedata
-from datetime import datetime
+from datetime import date, datetime
 
 PARAMETRES = {
     "cetose_ratio": 1.5,      # TB/TP au-dessus : suspicion de cétose (début de lactation)
@@ -34,6 +47,8 @@ PARAMETRES = {
     "cellules_saine": 300,    # milliers de cellules/ml : en dessous, mamelle considérée saine
     "cellules_infectee": 800, # au-dessus, mamelle considérée infectée
     "stades": [100, 200],     # bornes des stades de lactation (jours)
+    "taux_jel_min": 5,        # TB et TP non interprétés avant ce stade : colostrum et
+                              # lait de transition (TB/TP faussés juste après le vêlage)
     # Niveau d'étable estimé : lait du jour x 305, corrigé du stade et du rang.
     # Projection d'ordre de grandeur, pas le niveau d'étable du contrôle laitier.
     "niveau_stade": [[60, 1.15], [100, 1.08], [200, 1.03], [305, 0.98], [None, 0.88]],
@@ -56,66 +71,85 @@ class ErreurExport(Exception):
 
 
 def _norm(t):
-    t = unicodedata.normalize("NFKD", str(t)).encode("ascii", "ignore").decode()
+    t = str(t).replace("’", "'").replace("‘", "'")
+    t = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode()
     return " ".join(t.lower().replace(".", " ").replace("°", " ").split())
 
 
 COLONNES = {
-    # clé: (intitulés acceptés, obligatoire)
-    "vache": (["N° d'animal", "No d'animal", "Numéro d'animal"], True),
-    "date": (["Date de production"], True),
-    "lait": (["Production journalière"], True),
-    "jel": (["Jours de lactation"], True),
-    "rang": (["N° de Lactation", "Numéro de lactation"], False),
-    "mg": (["MG indication"], False),
-    "mp": (["MP indication"], False),
-    "cell": (["Indication Cellules"], False),
-    "conc": (["Alim. total programmé", "Alim total programmé"], False),
-    "rum": (["Minutes de rumination"], False),
-    "ing": (["Minutes d'ingestion totales"], False),
-    "poids": (["Poids"], False),
-    "traites": (["Nbre de traites"], False),
-    "refus": (["Nbre de refus"], False),
-    "echecs": (["Nbre d'échecs"], False),
-    "etat": (["Etat reprod."], False),
+    # clé: (intitulés acceptés, par ordre de préférence)
+    "vache": ["N° d'animal", "No d'animal", "Numéro d'animal"],
+    "date": ["Date de production"],
+    "lait": ["Production journalière"],
+    "jel": ["Jours de lactation"],
+    "rang": ["N° de Lactation", "Numéro de lactation", "N°. lac."],
+    "mg": ["MG indication"],
+    "mp": ["MP indication"],
+    "cell": ["Indication Cellules"],
+    # concentré : la quantité programmée ; la consommée seulement à défaut
+    "conc": ["Alim. total programmé", "Alim total programmé", "Total programmé aujourd'hui",
+             "Consommation totale réelle"],
+    "rum": ["Minutes de rumination"],
+    "ing": ["Minutes d'ingestion totales"],
+    "poids": ["Poids"],
+    # robot : le compte du jour (historique), sinon la moyenne calculée par Horizon
+    "traites": ["Nbre de traites", "Traites moyennes", "Moy. Traites"],
+    "refus": ["Nbre de refus", "Refus moyens", "Moy. Refus"],
+    "echecs": ["Nbre d'échecs", "Echecs moyens", "Moy. Echecs"],
+    "etat": ["Etat reprod."],
 }
+OBLIGATOIRES = ["vache", "lait", "jel"]
+CONC_REEL = _norm("Consommation totale réelle")
 
 
-def _lire(texte):
-    texte = texte.lstrip("﻿")
+def _lire(texte, nom=""):
+    """Lit un export : lignes, colonnes reconnues, et sorte d'export."""
+    texte = (texte or "").lstrip("﻿")
     premiere = texte.splitlines()[0] if texte.strip() else ""
     sep = ";" if premiere.count(";") > premiere.count(",") else ","
     lignes = list(csv.reader(io.StringIO(texte), delimiter=sep))
     for i, ligne in enumerate(lignes[:5]):
         entetes = [_norm(c) for c in ligne]
-        index = {}
-        for cle, (noms, _) in COLONNES.items():
-            voulus = {_norm(n) for n in noms}
-            for j, e in enumerate(entetes):
-                if e in voulus:
-                    index[cle] = j
+        index, libelles = {}, {}
+        for cle, noms in COLONNES.items():
+            for n in noms:                       # premier intitulé présent = préféré
+                if _norm(n) in entetes:
+                    index[cle] = entetes.index(_norm(n))
+                    libelles[cle] = entetes[index[cle]]
                     break
-        if "vache" in index:
-            manquantes = [COLONNES[k][0][0] for k, (_, obl) in COLONNES.items() if obl and k not in index]
-            if manquantes:
+        if "vache" not in index:
+            continue
+        historique = "date" in index
+        manquantes = [COLONNES[k][0] for k in OBLIGATOIRES if k not in index]
+        if manquantes:
+            raise ErreurExport(
+                f"Fichier « {nom} » : colonne(s) introuvable(s) : "
+                + ", ".join(f"« {m} »" for m in manquantes)
+                + ". Utilisez le rapport « Traite – Production journalière par vache » "
+                  "ou « Traite – Données de traites » d'Horizon, exporté en CSV.")
+        sortie = []
+        for ligne in lignes[i + 1:]:
+            if not ligne or index["vache"] >= len(ligne) or not ligne[index["vache"]].strip():
+                continue
+            if ligne[index["vache"]].strip().upper() in ("AVG", "SUM", "MOY", "SOM", "TOTAL"):
+                continue
+            sortie.append({k: (ligne[j].strip() if j < len(ligne) else "") for k, j in index.items()})
+        if not historique:
+            vues = [_vache(r["vache"]) for r in sortie]
+            if len(vues) != len(set(vues)):
                 raise ErreurExport(
-                    "Export « Production journalière par vache » : colonne(s) introuvable(s) : "
-                    + ", ".join(f"« {m} »" for m in manquantes)
-                    + ". Ajoutez-les au rapport dans Lely Horizon, puis exportez à nouveau.")
-            sortie = []
-            for ligne in lignes[i + 1:]:
-                if not ligne or not ligne[index["vache"]].strip():
-                    continue
-                if ligne[index["vache"]].strip().upper() in ("AVG", "SUM", "MOY", "TOTAL"):
-                    continue
-                sortie.append({k: (ligne[j].strip() if j < len(ligne) else "") for k, j in index.items()})
-            return sortie, sorted(index)
-    raise ErreurExport("Colonne « N° d'animal » introuvable : vérifiez qu'il s'agit bien de l'export "
-                       "« Production journalière par vache », au format CSV.")
+                    f"Fichier « {nom} » : plusieurs lignes pour une même vache, sans colonne "
+                    "« Date de production ». Ajoutez cette colonne au rapport dans Horizon, "
+                    "ou exportez le rapport standard, qui donne une ligne par vache.")
+        return {"nom": nom, "lignes": sortie, "colonnes": set(index), "historique": historique,
+                "conc_reel": libelles.get("conc") == CONC_REEL}
+    raise ErreurExport(f"Fichier « {nom} » : colonne « N° d'animal » introuvable. Vérifiez qu'il "
+                       "s'agit d'un export CSV de Lely Horizon (rapport « Traite – Production "
+                       "journalière par vache » ou « Traite – Données de traites »).")
 
 
 def _nombre(v):
-    v = (v or "").replace(",", ".").replace(" ", "").strip()
+    v = (v or "").replace(",", ".").replace(" ", "").replace(" ", "").strip()
     try:
         return float(v) if v else None
     except ValueError:
@@ -129,6 +163,17 @@ def _date(v):
             return datetime.strptime(v, f).date()
         except ValueError:
             pass
+    return None
+
+
+def _date_du_nom(nom):
+    """Date d'export lue dans le nom de fichier d'Horizon (…-14_10_2026_12_06_28.csv)."""
+    m = re.search(r"(\d{1,2})[-_. ](\d{1,2})[-_. ](\d{4})", nom or "")
+    if m:
+        try:
+            return date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+        except ValueError:
+            return None
     return None
 
 
@@ -155,17 +200,54 @@ def _r(v, n=1):
     return None if v is None else round(v, n)
 
 
-def bilan(texte, parametres=None):
+def _assembler(exports):
+    """Choisit et fusionne les exports : (parvache {vache: {jour: ligne}}, colonnes, infos)."""
+    hist = [e for e in exports if e["historique"]]
+    if hist:
+        retenus = hist[:1]                       # l'historique se suffit à lui-même
+        e = retenus[0]
+        parvache = {}
+        for r in e["lignes"]:
+            d = _date(r["date"])
+            if d is None:
+                continue
+            parvache.setdefault(_vache(r["vache"]), {})[d] = r   # un doublon : la dernière ligne l'emporte
+        return parvache, set(e["colonnes"]), {
+            "mode": "historique", "retenus": [e["nom"]], "conc_reel": e["conc_reel"],
+            "ignores": [x["nom"] for x in exports if x is not e], "date_photo": None}
+
+    # Photo du jour : fusion par numéro d'animal, le fichier le plus complet d'abord.
+    exports = sorted(exports, key=lambda e: -len(e["colonnes"]))
+    fusion, colonnes = {}, set()
+    for e in exports:
+        colonnes |= e["colonnes"]
+        for r in e["lignes"]:
+            f = fusion.setdefault(_vache(r["vache"]), {})
+            for k, v in r.items():
+                if v and not f.get(k):
+                    f[k] = v
+    # Concentré : un export qui donne la quantité programmée l'emporte.
+    prog = next((e for e in exports if "conc" in e["colonnes"] and not e["conc_reel"]), None)
+    if prog:
+        for r in prog["lignes"]:
+            fusion[_vache(r["vache"])]["conc"] = r["conc"]
+    jour = next((d for d in (_date_du_nom(e["nom"]) for e in exports) if d), None)
+    cle = jour or date.min
+    parvache = {v: {cle: r} for v, r in fusion.items()}
+    return parvache, colonnes, {
+        "mode": "photo", "retenus": [e["nom"] for e in exports], "ignores": [],
+        "conc_reel": not prog and any("conc" in e["colonnes"] for e in exports), "date_photo": jour}
+
+
+def bilan_fichiers(fichiers, parametres=None):
+    """fichiers : [{"nom": ..., "texte": ...}, ...] ; un ou plusieurs exports."""
     p = dict(PARAMETRES)
     p.update({k: v for k, v in (parametres or {}).items() if v is not None})
-    lignes, colonnes = _lire(texte)
+    if not fichiers:
+        raise ErreurExport("Aucun fichier déposé.")
+    exports = [_lire(f.get("texte", ""), f.get("nom", "")) for f in fichiers]
+    parvache, colonnes, infos = _assembler(exports)
 
-    parvache = {}
-    for r in lignes:
-        d = _date(r["date"])
-        if d is None:
-            continue
-        parvache.setdefault(_vache(r["vache"]), {})[d] = r   # un doublon : la dernière ligne l'emporte
     if not parvache:
         raise ErreurExport("L'export ne contient aucune ligne exploitable.")
     dates = sorted({d for jours in parvache.values() for d in jours})
@@ -177,10 +259,13 @@ def bilan(texte, parametres=None):
             continue                      # vache sortie ou tarie avant le dernier jour
         dern = jours[jour_j]
         serie = [jours[d] for d in sorted(jours)]
-        m = lambda k: _moy([_nombre(x.get(k)) for x in serie]) if k in colonnes else None
+        m = lambda k, s=serie: _moy([_nombre(x.get(k)) for x in s]) if k in colonnes else None
+        # TB et TP : jours de colostrum et de lait de transition écartés
+        apres = [x for x in serie
+                 if _nombre(x.get("jel")) is None or _nombre(x.get("jel")) >= p["taux_jel_min"]]
         f = {"vache": v, "jel": _nombre(dern["jel"]), "rang": _nombre(dern.get("rang")),
              "etat": dern.get("etat", ""), "jours": len(serie),
-             "lait": m("lait"), "mg": m("mg"), "mp": m("mp"), "cell": m("cell"), "conc": m("conc"),
+             "lait": m("lait"), "mg": m("mg", apres), "mp": m("mp", apres), "cell": m("cell"), "conc": m("conc"),
              "rum": m("rum"), "ing": m("ing"), "traites": m("traites"), "refus": m("refus"),
              "echecs": m("echecs")}
         pesees = [(d, _nombre(jours[d].get("poids"))) for d in sorted(jours)] if "poids" in colonnes else []
@@ -206,7 +291,6 @@ def bilan(texte, parametres=None):
     if not vaches:
         raise ErreurExport("Aucune vache présente le dernier jour de l'export.")
 
-    n = len(vaches)
     col = lambda k: [x[k] for x in vaches]
 
     def groupe(vs):
@@ -267,18 +351,49 @@ def bilan(texte, parametres=None):
         for k in ("ratio", "lait_conc", "traites", "refus", "echecs"):
             x[k] = _r(x[k], 2)
         x.pop("mg"), x.pop("mp")
+
+    # Ce qu'un rapport standard de plus apporterait au bilan.
+    conseils = []
+    if infos["mode"] == "photo":
+        if not {"mg", "mp", "cell"} & colonnes:
+            conseils.append("Ajoutez l'export « Traite – Production journalière par vache » "
+                            "pour les taux et les cellules.")
+        if not {"traites", "refus", "echecs"} & colonnes:
+            conseils.append("Ajoutez l'export « Traite – Données de traites » pour les traites, "
+                            "refus et échecs du robot.")
+
+    photo = infos["mode"] == "photo"
+    iso = lambda d: None if d is None or d == date.min else d.isoformat()
     return {
-        "debut": dates[0].isoformat(), "fin": jour_j.isoformat(), "nb_jours": len(dates),
-        "colonnes": colonnes, "parametres": p,
+        "mode": infos["mode"],
+        "debut": iso(dates[0]), "fin": iso(jour_j), "nb_jours": None if photo else len(dates),
+        "fichiers": infos["retenus"], "ignores": infos["ignores"], "conseils": conseils,
+        "concentre": "consommé" if infos["conc_reel"] else "programmé",
+        "colonnes": sorted(colonnes), "parametres": p,
         "troupeau": troupeau, "stades": stades, "debut_lactation": debut,
         "alertes": {k: [x["vache"] for x in vaches if k in x["alertes"]] for k in ("cetose", "acidose", "cellules")},
         "vaches": vaches,
     }
 
 
-def bilan_json(texte, parametres_json):
-    """Point d'entrée de l'outil en ligne."""
+def bilan(texte, parametres=None):
+    """Un seul export (compatibilité)."""
+    return bilan_fichiers([{"nom": "", "texte": texte}], parametres)
+
+
+def _json(fn):
     try:
-        return json.dumps(bilan(texte or "", json.loads(parametres_json or "{}")))
+        return json.dumps(fn())
     except ErreurExport as e:
         return json.dumps({"erreur": str(e)})
+
+
+def bilan_json(texte, parametres_json):
+    """Point d'entrée historique de l'outil en ligne : un seul fichier."""
+    return _json(lambda: bilan(texte or "", json.loads(parametres_json or "{}")))
+
+
+def bilan_fichiers_json(fichiers_json, parametres_json):
+    """Point d'entrée de l'outil en ligne : [{"nom", "texte"}, ...] en JSON."""
+    return _json(lambda: bilan_fichiers(json.loads(fichiers_json or "[]"),
+                                        json.loads(parametres_json or "{}")))

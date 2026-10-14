@@ -2,23 +2,40 @@
 title = "Outil en ligne : bilan du troupeau laitier depuis les exports Lely Horizon"
 seoTitle = "Outil : bilan du troupeau laitier depuis Lely Horizon"
 date = 2026-09-27
-lastmod = 2026-09-27
+lastmod = 2026-10-14
 draft = false
 weight = 5
-summary = "Bilan du troupeau laitier depuis l'export Lely Horizon : production, taux, cellules et vaches à regarder entre deux contrôles. Calcul dans le navigateur."
+summary = "Bilan du troupeau laitier depuis les rapports standard de Lely Horizon : production, taux, cellules et vaches à regarder entre deux contrôles. Calcul dans le navigateur."
 +++
 
-Cet outil établit, à partir d'un seul export du robot, le tableau de bord décrit dans [Suivre son troupeau entre deux contrôles laitiers avec les données du robot de traite](/elevage/suivre-son-troupeau-entre-deux-controles/) : production, taux, cellules, stades de lactation, fréquentation du robot, et la liste des vaches à regarder, par numéro.
+Cet outil établit, à partir des rapports standard de Lely Horizon, le tableau de bord décrit dans [Suivre son troupeau entre deux contrôles laitiers avec les données du robot de traite](/elevage/suivre-son-troupeau-entre-deux-controles/) : production, taux, cellules, stades de lactation, fréquentation du robot, et la liste des vaches à regarder, par numéro.
 
-**Votre fichier ne quitte pas votre ordinateur.** Le calcul s'exécute dans votre navigateur ; rien n'est envoyé ni conservé. Au premier calcul, le navigateur télécharge le moteur de calcul depuis ce site (une douzaine de Mo, gardés ensuite en mémoire).
+**Vos fichiers ne quittent pas votre ordinateur.** Le calcul s'exécute dans votre navigateur ; rien n'est envoyé ni conservé. Au premier calcul, le navigateur télécharge le moteur de calcul depuis ce site (une douzaine de Mo, gardés ensuite en mémoire).
 
-*Dernière mise à jour : 27 septembre 2026.*
+*Dernière mise à jour : 14 octobre 2026.*
 
-## 1. L'export à préparer
+## 1. Les exports à préparer
 
-Un seul fichier : le rapport **Production journalière par vache** de Lely Horizon, exporté au format CSV sur **les 3 à 5 derniers jours**. C'est le même rapport que pour l'[outil des vaches à pousser](/elevage/outil-vaches-a-pousser/) ; sa création est décrite dans [Créer un rapport de production journalière par vache dans Lely Horizon](/elevage/rapport-production-journaliere-lely-horizon/).
+Deux rapports **standard** d'Horizon, tels que Lely les livre, sans rien y ajouter. Tous deux portent le mot-clé *Traite* et s'exportent au format CSV :
 
-Quatre colonnes sont indispensables : N° d'animal, Date de production, Production journalière, Jours de lactation. Les autres enrichissent le bilan quand elles sont présentes — taux, cellules, rang de lactation, rumination, ingestion, concentré, poids, traites, refus, échecs. Une rubrique dont les colonnes manquent s'affiche vide, sans erreur.
+| Rapport standard | Ce qu'il apporte au bilan |
+|---|---|
+| **Traite – Production journalière par vache** | Lait, jours et rang de lactation, TB, TP, cellules, concentré |
+| **Traite – Données de traites** | Traites, refus et échecs par vache, concentré |
+
+On dépose les deux fichiers ensemble (sélection multiple). Un seul suffit pour obtenir un bilan : le premier donne tout sauf la rubrique Robot, le second tout sauf les taux et les cellules. L'outil indique ce qu'apporterait le rapport manquant.
+
+Ces rapports sont une **photo du jour** : une ligne par vache, avec les chiffres calculés par Horizon au moment de l'export. L'outil les reprend tels quels. La date du bilan est lue dans le nom du fichier exporté ; mieux vaut donc ne pas le renommer.
+
+### Pour la liste des vaches à regarder : la moyenne sur plusieurs jours
+
+La photo du jour suffit pour **le bilan du troupeau** : sur un même troupeau, production, taux, cellules et fréquentation du robot sortent à quelques dixièmes près de ceux d'une moyenne sur cinq jours.
+
+Elle ne suffit pas pour **repérer les vaches**, surtout pour les cellules. Une indication de robot varie fortement d'un jour à l'autre : sur un seul jour, une vache passée au-dessus d'un million de cellules la veille peut ne pas apparaître, et une autre être signalée sur une seule mesure haute. Dès qu'on se sert de la liste par vache, **la copie enrichie du rapport de production journalière, exportée sur les 3 à 5 derniers jours, est recommandée**. Elle ajoute aussi la rumination, l'ingestion et le poids.
+
+Sa création, qui ne se fait qu'une fois, est décrite dans [Créer un rapport de production journalière par vache dans Lely Horizon](/elevage/rapport-production-journaliere-lely-horizon/). C'est aussi le rapport de l'[outil des vaches à pousser](/elevage/outil-vaches-a-pousser/). L'outil reconnaît cette copie à sa colonne « Date de production » et l'utilise alors seule.
+
+Dans tous les cas, trois colonnes sont indispensables : N° d'animal, Production journalière, Jours de lactation. Une rubrique dont les colonnes manquent s'affiche vide, sans erreur.
 
 ## 2. L'outil
 
@@ -26,9 +43,11 @@ Quatre colonnes sont indispensables : N° d'animal, Date de production, Producti
 
 ## 3. Lire le bilan
 
-- **Les moyennes portent sur toute la période exportée**, vache par vache, cases vides ignorées. Le troupeau étudié est celui qui est au robot le dernier jour.
+- **Avec les rapports standard**, chaque chiffre d'une vache est celui du jour d'export. **Avec la copie enrichie**, c'est sa moyenne sur la période exportée, cases vides ignorées, et le troupeau étudié est celui qui est au robot le dernier jour.
 - **TB, TP et cellules sont des indications du robot.** Elles servent à suivre des tendances et à repérer des vaches ; les chiffres officiels restent ceux du contrôle laitier.
-- **« Vaches à regarder »** liste, par numéro, les vaches qui dépassent un seuil : rapport TB/TP élevé en début de lactation, TB inférieur au TP, cellules élevées en moyenne ou à la dernière indication. Ce sont des signaux, pas des diagnostics.
+- **Le concentré** est la quantité programmée au robot, comme dans la [page méthode](/elevage/suivre-son-troupeau-entre-deux-controles/), pour que l'indicateur reste comparable d'un bilan à l'autre. Avec le seul rapport « Données de traites », qui ne donne que la quantité consommée, l'outil prend celle-ci et le signale.
+- **TB et TP des premiers jours de lactation ne sont pas comptés** (5 jours par défaut, modifiable dans les seuils) : le colostrum et le lait de transition donnent des taux qui déclencheraient de fausses alertes.
+- **« Vaches à regarder »** liste, par numéro, les vaches qui dépassent un seuil : rapport TB/TP élevé en début de lactation, TB inférieur au TP, cellules élevées (en moyenne ou à la dernière indication, avec la copie enrichie). Ce sont des signaux, pas des diagnostics.
 - **Le bouton d'impression** produit une version papier ou PDF du bilan, sans le reste de la page.
 
 Les seuils se modifient dans le bloc « Seuils ». Leurs valeurs par défaut et leurs sources sont données dans la [page méthode](/elevage/suivre-son-troupeau-entre-deux-controles/).

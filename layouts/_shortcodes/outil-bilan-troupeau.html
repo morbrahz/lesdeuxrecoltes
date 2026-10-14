@@ -4,9 +4,9 @@
      Les fichiers déposés ne quittent pas l'ordinateur du visiteur. */}}
 <div id="bt" class="bt">
   <label class="bt-fichier">
-    <span class="bt-lib"><strong>Production journalière par vache</strong><br><small>export CSV · 3 à 5 derniers jours</small></span>
-    <input type="file" accept=".csv,text/csv">
-    <span class="bt-nom">Choisir le fichier…</span>
+    <span class="bt-lib"><strong>Exports Lely Horizon</strong><br><small>CSV · un ou deux fichiers : « Production journalière par vache » et « Données de traites »</small></span>
+    <input type="file" accept=".csv,text/csv" multiple>
+    <span class="bt-nom">Choisir les fichiers…</span>
   </label>
 
   <details class="bt-reglages">
@@ -14,6 +14,7 @@
     <div class="bt-grille">
       <label>TB/TP au-dessus duquel suspecter une cétose<input type="number" id="bt-cet" value="1.5" step="0.05"></label>
       <label>… jusqu'à (jours de lactation)<input type="number" id="bt-cetj" value="100" step="10"></label>
+      <label>TB et TP ignorés avant (jours de lactation)<input type="number" id="bt-tj" value="5" step="1" min="0"></label>
       <label>TB/TP en dessous duquel signaler une acidose<input type="number" id="bt-aci" value="1.0" step="0.05"></label>
       <label>Cellules : mamelle saine en dessous de (milliers/ml)<input type="number" id="bt-cs" value="300" step="50"></label>
       <label>Cellules : mamelle infectée au-dessus de (milliers/ml)<input type="number" id="bt-ci" value="800" step="50"></label>
@@ -21,7 +22,7 @@
   </details>
 
   <button type="button" id="bt-go" disabled>Établir le bilan</button>
-  <p id="bt-etat" class="bt-etat" aria-live="polite">Déposez l'export de production journalière.</p>
+  <p id="bt-etat" class="bt-etat" aria-live="polite">Déposez un ou deux exports Horizon (sélection multiple possible).</p>
   <div id="bt-res" hidden></div>
 </div>
 
@@ -93,7 +94,7 @@
   const etat = document.getElementById("bt-etat");
   const bouton = document.getElementById("bt-go");
   const res = document.getElementById("bt-res");
-  let texte = null, moteur = null;
+  let fichiers = [], moteur = null;
 
   const dire = (m, e) => { etat.textContent = m; etat.classList.toggle("erreur", !!e); };
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -117,9 +118,9 @@
     return moteur;
   }
   zone.querySelector("input").addEventListener("change", async e => {
-    const f = e.target.files[0]; if (!f) return;
-    texte = await lireTexte(f);
-    zone.querySelector(".bt-nom").textContent = f.name; zone.classList.add("ok");
+    const fs = [...e.target.files]; if (!fs.length) return;
+    fichiers = await Promise.all(fs.map(async f => ({ nom: f.name, texte: await lireTexte(f) })));
+    zone.querySelector(".bt-nom").textContent = fs.map(f => f.name).join(" · "); zone.classList.add("ok");
     bouton.disabled = false;
     dire("Prêt. Le premier calcul charge le moteur (une douzaine de Mo, une seule fois).");
     charger();
@@ -167,34 +168,39 @@
 
   function afficher(r) {
     const t = r.troupeau, p = r.parametres, V = r.vaches, S = ["0 à " + p.stades[0] + " j", (p.stades[0] + 1) + " à " + p.stades[1] + " j", "plus de " + p.stades[1] + " j"];
-    let h = `<section class="bt-bloc"><h3>Bilan du troupeau au ${JOUR(r.fin)}</h3>
-      <p>${t.n} vaches traites le dernier jour · moyennes du ${JOUR(r.debut)} au ${JOUR(r.fin)} (${r.nb_jours} jour${r.nb_jours > 1 ? "s" : ""}).
+    const photo = r.mode === "photo";
+    let h = `<section class="bt-bloc"><h3>Bilan du troupeau ${r.fin ? "au " + JOUR(r.fin) : "au jour de l'export"}</h3>
+      ${photo
+        ? `<p>${t.n} vaches à la traite · photo du jour exportée par Horizon : chaque chiffre est celui du rapport pour la vache, pas une moyenne calculée ici sur plusieurs jours.`
+        : `<p>${t.n} vaches traites le dernier jour · moyennes du ${JOUR(r.debut)} au ${JOUR(r.fin)} (${r.nb_jours} jour${r.nb_jours > 1 ? "s" : ""}).`}
       TB, TP et cellules sont des indications mesurées au robot, pas des analyses de laboratoire.</p>
-      ${r.nb_jours < 3 ? '<p class="bt-etat erreur">Moins de 3 jours dans l\'export : les moyennes reposent sur peu de mesures. Exportez les 3 à 5 derniers jours.</p>' : ""}</section>`;
+      ${!photo && r.nb_jours < 3 ? '<p class="bt-etat erreur">Moins de 3 jours dans l\'export : les moyennes reposent sur peu de mesures. Exportez les 3 à 5 derniers jours.</p>' : ""}
+      ${r.conseils.map(c => `<p class="bt-note">${esc(c)}</p>`).join("")}
+      ${r.ignores.length ? `<p class="bt-note">Export sur plusieurs jours utilisé seul ; fichier(s) non utilisé(s) : ${r.ignores.map(esc).join(", ")}.</p>` : ""}</section>`;
 
     h += `<section class="bt-bloc"><h3>Production</h3><div class="bt-tuiles">
       ${tuile("Lait par vache et par jour", num(t.lait), "kg")}${tuile("Lait du troupeau par jour", num(t.lait_total, 0), "kg")}${tuile("Niveau d'étable estimé", num(t.niveau_estime, 0), "kg · projection")}
       ${tuile("Stade moyen", num(t.jel, 0), "j de lactation")}${tuile("Rang de lactation moyen", num(t.rang))}
-      ${tuile("Primipares", num(t.primipares_pct, 0), "%")}${tuile("Lait par kg de concentré robot", num(t.lait_conc, 2), "kg")}
+      ${tuile("Primipares", num(t.primipares_pct, 0), "%")}${tuile("Lait par kg de concentré robot", num(t.lait_conc, 2), "kg · concentré " + esc(r.concentre))}
       </div>${nuage(V.filter(v => v.lait !== null && v.jel !== null).map(v => ({ x: v.jel, y: v.lait, cls: v.rang === 1 ? "p-primi" : "p-multi", t: `${v.vache} : ${num(v.lait)} kg à ${v.jel} j` })), "Jours de lactation", "Lait par jour (kg)")}
       <div class="bt-legende"><span><i style="background:var(--primary)"></i>multipares</span><span><i style="background:#2a78c2"></i>primipares</span></div></section>`;
 
     h += `<section class="bt-bloc"><h3>Taux</h3><div class="bt-tuiles">
       ${tuile("TB", num(t.tb), "g/kg")}${tuile("TP", num(t.tp), "g/kg")}${tuile("Écart TB − TP", num(t.ecart), "g/kg")}${tuile("Rapport TB/TP", num(t.ratio, 2))}
-      </div><p class="bt-note">Taux pondérés par le lait, comme un lait de tank.</p>
+      </div><p class="bt-note">Taux pondérés par le lait, comme un lait de tank. Les ${p.taux_jel_min} premiers jours de lactation (colostrum, lait de transition) ne sont pas comptés.</p>
       ${nuage(V.filter(v => v.ratio !== null && v.jel !== null).map(v => ({ x: v.jel, y: v.ratio, cls: v.alertes.includes("cetose") || v.alertes.includes("acidose") ? "p-alerte" : (v.rang === 1 ? "p-primi" : "p-multi"), t: `${v.vache} : TB/TP ${num(v.ratio, 2)} à ${v.jel} j` })), "Jours de lactation", "Rapport TB/TP", { h: [p.acidose_ratio, p.cetose_ratio], v: [p.cetose_jel] })}
       <p class="bt-note">Lignes pointillées : TB/TP ${num(p.cetose_ratio, 2)} avant ${p.cetose_jel} jours (suspicion de cétose) et TB/TP ${num(p.acidose_ratio, 2)} (TB inférieur au TP, signal d'acidose). Points rouges : vaches concernées.</p></section>`;
 
     h += `<section class="bt-bloc"><h3>Cellules</h3><div class="bt-tuiles">
       ${tuile("Cellules, pondérées par le lait", num(t.cell, 0), "milliers/ml")}${tuile(`Vaches sous ${p.cellules_saine} 000`, num(t.cell_saine_pct, 0), "%")}${tuile(`Vaches au-dessus de ${p.cellules_infectee} 000`, num(t.cell_infectee_pct, 0), "%")}
       </div>${t.cell_n ? barres([V.filter(v => v.cell !== null && v.cell < p.cellules_saine).length, V.filter(v => v.cell !== null && v.cell >= p.cellules_saine && v.cell <= p.cellules_infectee).length, V.filter(v => v.cell !== null && v.cell > p.cellules_infectee).length], [`moins de ${p.cellules_saine}`, `${p.cellules_saine} à ${p.cellules_infectee}`, `plus de ${p.cellules_infectee}`], ["", "", "b-inf"]) : ""}
-      <p class="bt-note">Moyenne de chaque vache sur la période, en milliers de cellules par ml.</p></section>`;
+      <p class="bt-note">${photo ? "Indication du jour de chaque vache" : "Moyenne de chaque vache sur la période"}, en milliers de cellules par ml.</p></section>`;
 
     const al = r.alertes, ligne = (n, lib, ids) => `<div class="bt-alerte"><b>${n}</b><div>${lib}${ids.length ? `<br><span class="bt-ids">${ids.map(esc).join(" ")}</span>` : ""}</div></div>`;
     h += `<section class="bt-bloc"><h3>Vaches à regarder</h3>
       ${ligne(al.cetose.length, `TB/TP au-dessus de ${num(p.cetose_ratio, 2)} avant ${p.cetose_jel} jours : suspicion de cétose`, al.cetose)}
       ${ligne(al.acidose.length, `TB/TP sous ${num(p.acidose_ratio, 2)} (TB inférieur au TP) : acidose possible`, al.acidose)}
-      ${ligne(al.cellules.length, `Cellules au-dessus de ${p.cellules_infectee} 000, en moyenne ou à la dernière indication`, al.cellules)}
+      ${ligne(al.cellules.length, `Cellules au-dessus de ${p.cellules_infectee} 000${photo ? "" : ", en moyenne ou à la dernière indication"}`, al.cellules)}
       <p class="bt-note">Des signaux à vérifier, pas des diagnostics.</p></section>`;
 
     const colG = (g) => g ? `<td>${g.n}</td><td>${num(g.lait)}</td><td>${num(g.tb)}</td><td>${num(g.tp)}</td><td>${num(g.ratio, 2)}</td><td>${num(g.cell, 0)}</td><td>${num(g.rum, 0)}</td><td>${num(g.ing, 0)}</td><td>${num(g.lait_conc, 2)}</td>` : `<td>0</td>` + "<td>–</td>".repeat(8);
@@ -206,7 +212,8 @@
       ${r.stades.some(g => g && g.poids_n) ? `<p class="bt-note">Variation de poids sur la période : ${r.stades.map((g, i) => g && g.poids_n ? `${S[i]} ${num(g.poids_var)} kg (${g.poids_n} vaches)` : "").filter(Boolean).join(" · ")}.</p>` : ""}</section>`;
 
     h += `<section class="bt-bloc"><h3>Robot</h3><div class="bt-tuiles">
-      ${tuile("Traites par vache et par jour", num(t.traites))}${tuile("Refus par vache et par jour", num(t.refus))}${tuile("Échecs par vache et par jour", num(t.echecs, 2))}</div></section>`;
+      ${tuile("Traites par vache et par jour", num(t.traites))}${tuile("Refus par vache et par jour", num(t.refus))}${tuile("Échecs par vache et par jour", num(t.echecs, 2))}</div>
+      ${photo && t.traites !== null ? '<p class="bt-note">Moyennes par vache calculées par Horizon dans le rapport « Données de traites ».</p>' : ""}</section>`;
 
     h += `<details class="bt-bloc"><summary><strong>Détail par vache (${V.length})</strong></summary><div class="bt-tab"><table>
       <tr><th>N°</th><th>JEL</th><th>Rang</th><th>Lait</th><th>TB</th><th>TP</th><th>TB/TP</th><th>Cellules</th><th>Dern. cell.</th><th>Rum.</th><th>Traites</th><th>Signal</th></tr>
@@ -223,8 +230,8 @@
       const m = await charger();
       dire("Calcul…");
       const n = id => { const v = document.getElementById(id).value; return v === "" ? null : Number(v); };
-      const par = { cetose_ratio: n("bt-cet"), cetose_jel: n("bt-cetj"), acidose_ratio: n("bt-aci"), cellules_saine: n("bt-cs"), cellules_infectee: n("bt-ci") };
-      const r = JSON.parse(m.bilan_json(texte, JSON.stringify(par)));
+      const par = { cetose_ratio: n("bt-cet"), cetose_jel: n("bt-cetj"), acidose_ratio: n("bt-aci"), taux_jel_min: n("bt-tj"), cellules_saine: n("bt-cs"), cellules_infectee: n("bt-ci") };
+      const r = JSON.parse(m.bilan_fichiers_json(JSON.stringify(fichiers), JSON.stringify(par)));
       if (r.erreur) { res.hidden = true; dire(r.erreur, true); return; }
       afficher(r);
       dire(`Bilan établi sur ${r.troupeau.n} vaches. Rien n'a quitté cet ordinateur.`);
@@ -232,7 +239,7 @@
     } catch (e) {
       console.error(e);
       dire("Le calcul a échoué : " + String(e.message || e).split("\n").slice(-2).join(" "), true);
-    } finally { bouton.disabled = !texte; }
+    } finally { bouton.disabled = !fichiers.length; }
   });
 })();
 </script>

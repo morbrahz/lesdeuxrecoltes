@@ -1,7 +1,7 @@
 +++
 title = "Confidentialité"
 date = 2026-09-17
-lastmod = 2026-10-03
+lastmod = 2026-10-14
 summary = "Ce que ce site mesure, ce qu'il collecte pour la lettre d'information, et comment exercer vos droits."
 +++
 
@@ -27,6 +27,8 @@ Le site est hébergé par **GitHub Pages** (GitHub, Inc., 88 Colin P. Kelly Jr. 
 
 Les outils proposés sur ce site, comme la [liste des vaches à pousser au robot](/elevage/outil-vaches-a-pousser/), s'exécutent **entièrement dans votre navigateur**. Les fichiers que vous y déposez ne sont ni envoyés, ni enregistrés, ni vus par l'éditeur du site ou par un tiers : ils disparaissent à la fermeture de la page. Le moteur de calcul est téléchargé depuis ce site lui-même, sans appel à un service extérieur.
 
+Seul le [compteur de renouvellement](/elevage/outil-renouvellement/) garde vos saisies d'une visite à l'autre, pour que vous n'ayez pas à tout ressaisir : elles sont enregistrées **dans la mémoire de votre navigateur** (stockage local), sur votre appareil uniquement. Elles ne sont jamais transmises au site ni à un tiers. Vous pouvez les effacer depuis l'outil (« Tout effacer ») ou en supprimant les données du site dans les réglages de votre navigateur.
+
 ## Lettre d'information
 
 Le formulaire « Être prévenu des nouvelles pages » permet de recevoir un e-mail à chaque nouvelle page publiée. C'est le seul endroit du site où une donnée personnelle est collectée.
@@ -45,4 +47,4 @@ En dehors de la lettre d'information, aucune donnée personnelle identifiante n'
 
 ---
 
-*Dernière mise à jour : 3 octobre 2026.*
+*Dernière mise à jour : 14 octobre 2026.*

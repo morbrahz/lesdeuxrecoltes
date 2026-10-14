@@ -1,0 +1,746 @@
+{{/* Outil « Compteur de renouvellement ».
+     Calcul en JavaScript, entièrement dans le navigateur du visiteur.
+     Les données (gestations, vêlages, réglages, historique) sont gardées dans
+     le localStorage du navigateur, clé « compteur-renouvellement-v1 », et dans
+     une copie .json que le visiteur enregistre lui-même. Rien n'est envoyé.
+     Classes et identifiants préfixés « rn- » ; styles limités à #rn. */}}
+<div id="rn" class="rn">
+  <div class="rn-top">
+    <p class="rn-farm" id="rn-farmName">Mon élevage</p>
+    <p class="rn-sync" id="rn-sync"><i></i><span>Enregistré dans ce navigateur</span></p>
+  </div>
+
+  <div class="rn-banner" id="rn-exampleBanner" hidden>
+    <span><b>Données d'exemple fictives.</b> Importez votre export Horizon ou saisissez vos gestations : l'exemple sera effacé.</span>
+    <button type="button" class="rn-btn rn-sm" data-act="clearExample">Partir d'une liste vide</button>
+  </div>
+
+  <section class="rn-bilan" aria-labelledby="rn-bilanTitle">
+    <p class="rn-window" id="rn-windowTxt"></p>
+    <div class="rn-verdict">
+      <div class="rn-kv"><span class="rn-eyebrow" id="rn-bilanTitle">Femelles sur la fenêtre</span><span class="rn-big" id="rn-total">–</span></div>
+      <div class="rn-kv"><span class="rn-eyebrow">Besoin (marge incluse)</span><b id="rn-need">–</b></div>
+      <div class="rn-kv"><span class="rn-eyebrow">Écart</span><b id="rn-gap">–</b></div>
+      <div id="rn-status" class="rn-status"></div>
+    </div>
+    <div class="rn-gauge">
+      <div class="rn-gtrack" id="rn-gauge" role="img"></div>
+      <div class="rn-legend" style="margin-top:24px">
+        <span><i style="background:var(--rn-nees)"></i>Nées (réel)</span>
+        <span><i style="background:var(--rn-sexee)"></i>Attendues · sexée</span>
+        <span><i style="background:var(--rn-conv)"></i>Attendues · conventionnelle</span>
+        <span><i style="border-left:2px solid var(--primary);border-radius:0;width:2px"></i>Besoin</span>
+      </div>
+    </div>
+    <p class="rn-reco" id="rn-reco"></p>
+    <div>
+      <h3 style="margin-bottom:6px">Naissances femelles par trimestre</h3>
+      <div class="rn-chart" id="rn-chart"></div>
+    </div>
+  </section>
+
+  <div class="rn-tabs" role="tablist" id="rn-tabs">
+    <button type="button" role="tab" data-tab="gest" aria-selected="true">Gestations<span class="rn-count" id="rn-cGest"></span></button>
+    <button type="button" role="tab" data-tab="vel" aria-selected="false">Vêlages<span class="rn-count" id="rn-cVel"></span></button>
+    <button type="button" role="tab" data-tab="hist" aria-selected="false">Historique<span class="rn-count" id="rn-cHist"></span></button>
+    <button type="button" role="tab" data-tab="param" aria-selected="false">Réglages</button>
+    <button type="button" role="tab" data-tab="data" aria-selected="false">Import et sauvegarde</button>
+  </div>
+
+  <section class="rn-panel" id="rn-p-gest">
+    <form class="rn-add" id="rn-fGest">
+      <label class="rn-f">N° animal<input type="text" class="rn-num" id="rn-gNum" inputmode="numeric" required></label>
+      <label class="rn-f">Vêlage prévu<input type="date" id="rn-gDate" required></label>
+      <label class="rn-f">Semence<select id="rn-gSem"><option value="">À saisir</option><option value="sexee">Sexée</option><option value="conv">Conventionnelle</option><option value="viande">Viande</option></select></label>
+      <button class="rn-btn rn-primary" type="submit">Ajouter la gestation</button>
+      <div class="rn-err" id="rn-gErr" hidden></div>
+    </form>
+    <div class="rn-toolbar">
+      <label><input type="checkbox" id="rn-onlyMissing"> Seulement les semences à saisir</label>
+      <span class="rn-muted rn-small" id="rn-gestInfo"></span>
+    </div>
+    <div class="rn-list" id="rn-gestList"></div>
+  </section>
+
+  <section class="rn-panel" id="rn-p-vel" hidden>
+    <form class="rn-add" id="rn-fVel">
+      <label class="rn-f">N° mère<input type="text" class="rn-num" id="rn-vNum" inputmode="numeric" required></label>
+      <label class="rn-f">Date<input type="date" id="rn-vDate" required></label>
+      <label class="rn-f">Semence<select id="rn-vSem" required><option value="sexee">Sexée</option><option value="conv" selected>Conventionnelle</option><option value="viande">Viande</option></select></label>
+      <label class="rn-f" id="rn-vSexBox">Veau<select id="rn-vSex"><option value="">Sexe à saisir</option><option value="F">Femelle</option><option value="M">Mâle</option></select></label>
+      <button class="rn-btn rn-primary" type="submit">Ajouter le vêlage</button>
+      <div class="rn-err" id="rn-vErr" hidden></div>
+    </form>
+    <p class="rn-muted rn-small">Une femelle compte pour 1 si elle est issue de semence sexée ou conventionnelle. Les veaux issus de semence viande ne comptent pas et leur sexe n'est pas demandé. Jumeaux : saisir deux vêlages.</p>
+    <div class="rn-list" id="rn-velList"></div>
+  </section>
+
+  <section class="rn-panel" id="rn-p-hist" hidden>
+    <p class="rn-muted rn-small">Une photo du bilan est gardée à chaque mise à jour (la dernière de la journée), pendant un an. Chaque point a sa propre fenêtre de 12 mois : elle avance avec les nouvelles gestations.</p>
+    <div class="rn-card"><h3>Femelles prévues et besoin</h3><div class="rn-hist-chart" id="rn-histChart"></div>
+      <div class="rn-legend"><span><i style="background:var(--rn-nees)"></i>Femelles sur la fenêtre (nées + attendues)</span><span><i style="background:none;border-top:2px dashed var(--primary);border-radius:0;height:0;width:16px"></i>Besoin (marge incluse)</span></div></div>
+    <div class="rn-tbl" id="rn-histTable"></div>
+  </section>
+
+  <section class="rn-panel" id="rn-p-param" hidden>
+    <div class="rn-grid2">
+      <div class="rn-card">
+        <h3>Élevage</h3>
+        <label class="rn-f">Nom affiché<input type="text" id="rn-pName"></label>
+        <label class="rn-f">Vaches (lactation + taries)<input type="number" id="rn-pEff" min="1" step="1"></label>
+        <label class="rn-f">Taux de renouvellement visé (%)<input type="number" id="rn-pTaux" min="1" max="80" step="1"></label>
+        <label class="rn-f">Marge de sécurité (femelles)<input type="number" id="rn-pMarge" min="0" step="1"></label>
+        <p class="rn-small rn-muted" id="rn-needTxt"></p>
+      </div>
+      <div class="rn-card">
+        <h3>Probabilité d'une femelle</h3>
+        <label class="rn-f">Semence sexée<input type="number" id="rn-pSex" min="0" max="1" step="0.01"></label>
+        <label class="rn-f">Semence conventionnelle<input type="number" id="rn-pConv" min="0" max="1" step="0.01"></label>
+        <p class="rn-small rn-muted">Viande : 0. Les gestations étant confirmées, seul le sexe du veau reste incertain. Valeurs courantes : 0,90 en sexée, 0,47 à 0,50 en conventionnelle Holstein.</p>
+        <label class="rn-f">Durée de gestation (jours)<input type="number" id="rn-pGest" min="270" max="295" step="1"></label>
+        <p class="rn-small rn-muted">Sert à dater le vêlage des vaches en lactation importées depuis Horizon (date d'IA + durée). Horizon utilise 282 jours.</p>
+      </div>
+    </div>
+    <div class="rn-card">
+      <h3>Règle de la fenêtre</h3>
+      <p>La fenêtre se termine à la date de vêlage prévue de la dernière gestante confirmée et commence un an plus tôt. Le compteur additionne les femelles déjà nées dans cette fenêtre et les femelles attendues des gestations en cours, puis compare le total au besoin : vaches × taux de renouvellement + marge.</p>
+    </div>
+  </section>
+
+  <section class="rn-panel" id="rn-p-data" hidden>
+    <div class="rn-card">
+      <h3>Importer depuis Lely Horizon</h3>
+      <p class="rn-small">Sélectionnez l'export CSV <b>17 - Planning - Aperçu troupeau</b>, rapport standard d'Horizon : il contient toutes les gestantes, génisses comprises, avec leur date de vêlage attendue, et les jours de lactation qui permettent de repérer les vêlages. L'outil passe en vêlage les gestantes qui ont vêlé et signale celles qui ont disparu d'Horizon. Les exports <b>Planning génisse et taries</b> et <b>VL en lactation</b>, importés ensemble, conviennent aussi. Le type de semence et le sexe des veaux restent à saisir ici.</p>
+      <div class="rn-inline">
+        <label class="rn-f">Fichiers CSV<input type="file" id="rn-csvIn" accept=".csv,text/csv" multiple></label>
+        <label class="rn-f">Date de l'export (si absente du nom)<input type="date" id="rn-expDate"></label>
+      </div>
+      <div class="rn-report" id="rn-impReport" hidden></div>
+    </div>
+    <div class="rn-card">
+      <h3>Sauvegarde</h3>
+      <p class="rn-small" id="rn-storeTxt"></p>
+      <div class="rn-inline">
+        <button type="button" class="rn-btn" data-act="saveFile">Enregistrer une copie (.json)</button>
+        <label class="rn-btn" for="rn-jsonIn">Restaurer une copie…</label>
+        <input type="file" id="rn-jsonIn" accept=".json,application/json" hidden>
+      </div>
+      <div class="rn-report" id="rn-restReport" hidden></div>
+    </div>
+    <div class="rn-card">
+      <h3>Tout effacer</h3>
+      <p class="rn-small">Supprime gestations et vêlages. Les réglages sont conservés.</p>
+      <div id="rn-wipeBox"><button type="button" class="rn-btn rn-danger" data-act="wipeAsk">Effacer les données…</button></div>
+    </div>
+  </section>
+
+  <p class="rn-foot">Les données restent dans ce navigateur, sur votre appareil. Rien n'est envoyé. Estimation : le résultat dépend du type de semence saisi et suppose que les gestations confirmées vont à terme.</p>
+  <div class="rn-tip" id="rn-tip" hidden></div>
+  <div class="rn-toast" id="rn-toast" role="status" hidden></div>
+</div>
+
+<style>
+#rn {
+  --rn-line: var(--tertiary);
+  --rn-nees: #16865F; --rn-sexee: #7457B0; --rn-conv: #C9741A; --rn-viande: var(--secondary);
+  --rn-good: #1E7A45; --rn-good-bg: #E2F2E7; --rn-warn: #946200; --rn-warn-bg: #FBF0D4; --rn-bad: #B3261E; --rn-bad-bg: #FBE4E1;
+  --rn-mono: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  margin: 1.5rem 0; display: grid; gap: 20px;
+  font-size: 16px; line-height: 1.5; color: var(--primary); font-variant-numeric: tabular-nums;
+}
+[data-theme="dark"] #rn {
+  --rn-nees: #2E9E76; --rn-sexee: #8C6FD6; --rn-conv: #C77A22;
+  --rn-good: #6FD39A; --rn-good-bg: #183326; --rn-warn: #E9B949; --rn-warn-bg: #36290D; --rn-bad: #F2857B; --rn-bad-bg: #3A1A17;
+}
+#rn [hidden] { display: none !important; }
+#rn > *, #rn .rn-bilan > *, #rn .rn-panel > * { min-width: 0; }
+#rn h3 { margin: 0; font-size: 1.05rem; font-weight: 700; line-height: 1.2; }
+#rn p { margin: 0; }
+#rn ul { margin: 4px 0 0; padding-left: 18px; }
+#rn li { margin-top: 0; }
+#rn button, #rn input, #rn select { font: inherit; color: inherit; }
+#rn button { cursor: pointer; }
+#rn :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+#rn .rn-eyebrow { font-size: .72rem; letter-spacing: .09em; text-transform: uppercase; color: var(--secondary); font-weight: 600; }
+#rn .rn-muted { color: var(--secondary); }
+#rn .rn-small { font-size: .85rem; }
+
+#rn .rn-top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 16px; }
+#rn .rn-farm { font-weight: 700; font-size: 1.15rem; }
+#rn .rn-sync { font-size: .8rem; color: var(--secondary); display: flex; align-items: center; gap: 6px; }
+#rn .rn-sync i { width: 8px; height: 8px; border-radius: 50%; background: var(--secondary); display: inline-block; }
+#rn .rn-sync.rn-err i { background: var(--rn-bad); }
+#rn .rn-sync.rn-err { color: var(--rn-bad); }
+#rn .rn-banner { background: var(--rn-warn-bg); border: 1px solid color-mix(in srgb, var(--rn-warn) 35%, transparent); border-radius: var(--radius); padding: 12px 14px; display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; font-size: .92rem; }
+
+/* Bilan */
+#rn .rn-bilan { background: var(--entry); border: 1px solid var(--rn-line); border-radius: var(--radius); padding: 18px; display: grid; gap: 16px; }
+#rn .rn-verdict { display: flex; flex-wrap: wrap; gap: 12px 28px; align-items: flex-end; }
+#rn .rn-big { font-weight: 800; font-size: 3rem; line-height: 1; }
+#rn .rn-big small { font-size: 1rem; font-weight: 600; color: var(--secondary); margin-left: 6px; }
+#rn .rn-kv { display: grid; gap: 2px; }
+#rn .rn-kv b { font-size: 1.5rem; font-weight: 700; line-height: 1.1; }
+#rn .rn-status { display: flex; flex-wrap: wrap; gap: 6px; }
+#rn .rn-pill { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 3px 10px; font-weight: 600; font-size: .85rem; white-space: nowrap; }
+#rn .rn-pill.rn-good { background: var(--rn-good-bg); color: var(--rn-good); }
+#rn .rn-pill.rn-warn { background: var(--rn-warn-bg); color: var(--rn-warn); }
+#rn .rn-pill.rn-bad { background: var(--rn-bad-bg); color: var(--rn-bad); }
+#rn .rn-pill svg { width: 14px; height: 14px; }
+#rn .rn-window { font-size: .9rem; color: var(--secondary); }
+#rn .rn-window b { color: var(--primary); font-weight: 600; }
+#rn .rn-gauge { display: grid; gap: 6px; margin-top: 14px; }
+#rn .rn-gtrack { position: relative; height: 22px; background: var(--code-bg); border-radius: 6px; }
+#rn .rn-gseg { position: absolute; top: 0; bottom: 0; }
+#rn .rn-gseg.rn-nees { background: var(--rn-nees); border-radius: 6px 0 0 6px; }
+#rn .rn-gseg.rn-sexee { background: var(--rn-sexee); }
+#rn .rn-gseg.rn-conv { background: var(--rn-conv); }
+#rn .rn-gseg + .rn-gseg { box-shadow: -2px 0 0 var(--entry); }
+#rn .rn-gmark { position: absolute; top: -5px; bottom: -5px; width: 2px; background: var(--primary); }
+#rn .rn-gmark.rn-light { background: none; width: 0; border-left: 2px dashed var(--secondary); }
+#rn .rn-gmark span { position: absolute; top: -20px; transform: translateX(-50%); font-size: .75rem; white-space: nowrap; color: var(--primary); font-weight: 600; }
+#rn .rn-gmark.rn-light span { color: var(--secondary); font-weight: 500; top: auto; bottom: -20px; }
+#rn .rn-legend { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: .82rem; color: var(--secondary); }
+#rn .rn-legend span { display: inline-flex; align-items: center; gap: 6px; }
+#rn .rn-legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+#rn .rn-reco { font-size: .92rem; border-top: 1px solid var(--rn-line); padding-top: 12px; }
+#rn .rn-chart, #rn .rn-hist-chart { overflow-x: auto; }
+#rn .rn-chart svg, #rn .rn-hist-chart svg { display: block; height: auto; max-width: none; }
+#rn .rn-chart text, #rn .rn-hist-chart text { fill: var(--secondary); font-size: 12px; font-family: inherit; }
+#rn .rn-chart .rn-val, #rn .rn-hist-chart .rn-val { fill: var(--primary); font-weight: 600; }
+#rn .rn-chart .rn-grid, #rn .rn-hist-chart .rn-grid { stroke: var(--rn-line); }
+#rn .rn-chart .rn-need { stroke: var(--primary); stroke-dasharray: 4 4; opacity: .55; }
+#rn .rn-hist-chart .rn-tot { stroke: var(--rn-nees); stroke-width: 2; fill: none; }
+#rn .rn-hist-chart .rn-need { stroke: var(--primary); stroke-width: 1.5; stroke-dasharray: 5 4; fill: none; opacity: .7; }
+#rn .rn-hist-chart .rn-pt { fill: var(--rn-nees); stroke: var(--entry); stroke-width: 2; }
+#rn .rn-tip { position: fixed; pointer-events: none; background: var(--primary); color: var(--theme); font-size: .8rem; line-height: 1.4; padding: 6px 9px; border-radius: 6px; z-index: 10; max-width: 240px; }
+
+/* Onglets */
+#rn .rn-tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--rn-line); overflow-x: auto; }
+#rn .rn-tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 12px; font-weight: 600; font-size: .95rem; color: var(--secondary); white-space: nowrap; }
+#rn .rn-tabs button[aria-selected="true"] { color: var(--primary); border-bottom-color: var(--primary); }
+#rn .rn-count { font-family: var(--rn-mono); font-size: .8rem; margin-left: 4px; color: var(--secondary); }
+#rn .rn-panel { display: grid; gap: 14px; }
+
+#rn .rn-add { background: var(--entry); border: 1px solid var(--rn-line); border-radius: var(--radius); padding: 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+#rn .rn-f { display: grid; gap: 3px; font-size: .78rem; color: var(--secondary); font-weight: 600; }
+#rn input[type=text], #rn input[type=number], #rn input[type=date], #rn select { background: var(--theme); color: var(--primary); border: 1px solid var(--rn-line); border-radius: 7px; padding: 7px 9px; min-width: 0; font-size: .95rem; font-weight: 400; }
+#rn input[type=file] { font-size: .85rem; font-weight: 400; color: var(--primary); max-width: 100%; }
+#rn .rn-num { width: 7.5em; font-family: var(--rn-mono); }
+#rn .rn-btn { display: inline-block; border: 1px solid var(--rn-line); background: var(--entry); color: var(--primary); border-radius: 8px; padding: 7px 12px; font-weight: 600; font-size: .95rem; line-height: 1.4; }
+#rn .rn-btn.rn-primary { background: var(--primary); border-color: var(--primary); color: var(--theme); }
+#rn .rn-btn.rn-danger { color: var(--rn-bad); }
+#rn .rn-btn.rn-sm { padding: 4px 9px; font-size: .85rem; }
+#rn label.rn-btn { cursor: pointer; }
+#rn .rn-err { color: var(--rn-bad); font-size: .85rem; flex-basis: 100%; }
+#rn .rn-inline { display: flex; flex-wrap: wrap; gap: 10px; align-items: flex-end; }
+
+#rn .rn-toolbar { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; font-size: .88rem; }
+#rn .rn-toolbar label { display: inline-flex; gap: 6px; align-items: center; }
+
+#rn .rn-list { display: grid; border: 1px solid var(--rn-line); border-radius: var(--radius); background: var(--entry); overflow: hidden; }
+#rn .rn-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 6px 12px; align-items: center; padding: 10px 12px; border-top: 1px solid var(--rn-line); }
+#rn .rn-row:first-child { border-top: 0; }
+#rn .rn-row.rn-out { opacity: .55; }
+#rn .rn-mid { display: grid; gap: 2px; min-width: 0; }
+#rn .rn-date { font-weight: 600; }
+#rn .rn-meta { font-size: .8rem; color: var(--secondary); }
+#rn .rn-acts { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+#rn .rn-expand { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: var(--code-bg); border-radius: 8px; padding: 8px 10px; }
+#rn .rn-empty { padding: 22px 14px; color: var(--secondary); text-align: center; }
+
+/* Numéro de l'animal, en forme de boucle d'oreille */
+#rn .rn-tag { position: relative; font-family: var(--rn-mono); font-weight: 600; font-size: .92rem; background: var(--code-bg); color: var(--primary); border: 1px solid var(--rn-line); padding: 8px 8px 2px; border-radius: 9px 9px 4px 4px; min-width: 3.6em; text-align: center; }
+#rn .rn-tag::before { content: ""; position: absolute; top: 3px; left: 50%; width: 4px; height: 4px; margin-left: -2px; border-radius: 50%; background: var(--secondary); opacity: .5; }
+
+#rn .rn-seg { display: inline-flex; border: 1px solid var(--rn-line); border-radius: 8px; overflow: hidden; }
+#rn .rn-seg button { border: 0; background: transparent; padding: 4px 9px; font-size: .82rem; font-weight: 600; color: var(--secondary); border-left: 1px solid var(--rn-line); }
+#rn .rn-seg button:first-child { border-left: 0; }
+#rn .rn-seg button[aria-pressed="true"].rn-sexee { background: var(--rn-sexee); color: #fff; }
+#rn .rn-seg button[aria-pressed="true"].rn-conv { background: var(--rn-conv); color: #fff; }
+#rn .rn-seg button[aria-pressed="true"].rn-viande { background: var(--rn-viande); color: var(--theme); }
+#rn .rn-seg button[aria-pressed="true"].rn-F { background: var(--rn-nees); color: #fff; }
+#rn .rn-seg button[aria-pressed="true"].rn-M { background: var(--secondary); color: var(--theme); }
+#rn .rn-seg.rn-missing { border-color: var(--rn-bad); box-shadow: 0 0 0 1px var(--rn-bad); }
+#rn .rn-flag { font-size: .75rem; font-weight: 600; border-radius: 5px; padding: 1px 6px; }
+#rn .rn-flag.rn-warn { background: var(--rn-warn-bg); color: var(--rn-warn); }
+#rn .rn-counts { font-family: var(--rn-mono); font-size: .85rem; color: var(--secondary); min-width: 3.5em; text-align: right; }
+
+#rn .rn-card { background: var(--entry); border: 1px solid var(--rn-line); border-radius: var(--radius); padding: 14px; display: grid; gap: 10px; }
+#rn .rn-card p { max-width: 68ch; }
+#rn .rn-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+#rn .rn-report { font-size: .88rem; display: grid; gap: 4px; }
+#rn .rn-tbl { overflow-x: auto; border: 1px solid var(--rn-line); border-radius: var(--radius); background: var(--entry); }
+#rn .rn-tbl table { display: table; border-collapse: collapse; width: 100%; font-size: .88rem; white-space: nowrap; margin: 0; }
+#rn .rn-tbl th, #rn .rn-tbl td { min-width: 0; padding: 7px 10px; border: 0; border-top: 1px solid var(--rn-line); text-align: right; line-height: 1.4; }
+#rn .rn-tbl th { border-top: 0; color: var(--secondary); font-weight: 600; font-size: .78rem; }
+#rn .rn-tbl th:first-child, #rn .rn-tbl td:first-child, #rn .rn-tbl th:nth-child(2), #rn .rn-tbl td:nth-child(2) { text-align: left; }
+#rn .rn-tbl td.rn-pos { color: var(--rn-good); font-weight: 600; }
+#rn .rn-tbl td.rn-neg { color: var(--rn-bad); font-weight: 600; }
+#rn .rn-toast { position: fixed; left: 50%; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--primary); color: var(--theme); padding: 9px 14px; border-radius: 8px; font-size: .9rem; z-index: 20; max-width: calc(100% - 32px); }
+#rn .rn-foot { font-size: .8rem; color: var(--secondary); max-width: 70ch; }
+@media (max-width: 560px) {
+  #rn .rn-big { font-size: 2.4rem; }
+  #rn .rn-row { grid-template-columns: auto minmax(0, 1fr); }
+  #rn .rn-row .rn-acts { grid-column: 1 / -1; justify-content: flex-start; }
+}
+@media (prefers-reduced-motion: no-preference) { #rn .rn-gseg { transition: width .3s, left .3s; } }
+</style>
+
+<script>
+(function () {
+"use strict";
+const root = document.getElementById("rn");
+if (!root) return;
+const KEY = "compteur-renouvellement-v1";
+const SEM = {sexee:"Sexée", conv:"Conv.", viande:"Viande"};
+const DEFAULT_PARAMS = {nomElevage:"Mon élevage", effectif:60, taux:30, marge:3, coefSexee:0.9, coefConv:0.5, dureeGestation:282};
+const TABS = ["gest","vel","hist","param","data"];
+const $ = id => document.getElementById("rn-" + id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt1 = n => n.toLocaleString("fr-FR",{minimumFractionDigits:1,maximumFractionDigits:1});
+const uid = () => Math.random().toString(36).slice(2,10) + Date.now().toString(36).slice(-4);
+const sansAccent = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+
+/* ---------- dates (UTC, ISO aaaa-mm-jj) ---------- */
+const todayISO = () => { const d=new Date(); return new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())).toISOString().slice(0,10); };
+const toD = s => new Date(s+"T00:00:00Z");
+const toISO = d => d.toISOString().slice(0,10);
+const addDays = (s,n) => { const d=toD(s); d.setUTCDate(d.getUTCDate()+n); return toISO(d); };
+const minusYear = s => { const d=toD(s); return toISO(new Date(Date.UTC(d.getUTCFullYear()-1,d.getUTCMonth(),d.getUTCDate()))); };
+const daysBetween = (a,b) => Math.round((toD(b)-toD(a))/86400000);
+const frDate = s => s ? s.slice(8,10)+"/"+s.slice(5,7)+"/"+s.slice(0,4) : "";
+const frShort = s => s ? s.slice(8,10)+"/"+s.slice(5,7)+"/"+s.slice(2,4) : "";
+function parseDate(s){
+  s = String(s||"").trim(); let m;
+  if ((m = s.match(/^(\d{4})-(\d{2})-(\d{2})/))) return m[1]+"-"+m[2]+"-"+m[3];
+  if ((m = s.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/))) { const y = m[3].length===2 ? "20"+m[3] : m[3]; return y+"-"+m[2].padStart(2,"0")+"-"+m[1].padStart(2,"0"); }
+  return null;
+}
+
+/* ---------- état ---------- */
+let state = null;
+function blank(params){ return {app:"renouvellement-femelles", version:1, params:Object.assign({},DEFAULT_PARAMS,params||{}), gestations:[], velages:[], historique:[], example:false, updatedAt:null}; }
+function normalize(o){
+  const s = blank(o && o.params);
+  if (!o) return s;
+  s.gestations = (o.gestations||[]).filter(g=>g && g.num && parseDate(g.dateVelage)).map(g=>({id:g.id||uid(), num:String(g.num), dateVelage:parseDate(g.dateVelage), semence:SEM[g.semence]?g.semence:"", note:g.note||"", absent:!!g.absent}));
+  s.velages = (o.velages||[]).filter(v=>v && v.num && parseDate(v.date)).map(v=>({id:v.id||uid(), num:String(v.num), date:parseDate(v.date), semence:SEM[v.semence]?v.semence:"conv", sexe:v.sexe==="F"?"F":v.sexe==="M"?"M":"", note:v.note||""}));
+  s.example = !!o.example; s.updatedAt = o.updatedAt||null; s.lastImport = o.lastImport||null;
+  s.historique = (o.historique||[]).filter(h=>h && parseDate(h.date) && isFinite(h.total)).map(h=>({date:parseDate(h.date), debut:h.debut||"", fin:h.fin||"", nees:+h.nees||0, attendues:+h.attendues||0, total:+h.total, besoin:+h.besoin||0, sansSemence:+h.sansSemence||0, gestations:+h.gestations||0})).sort((a,b)=>a.date.localeCompare(b.date));
+  return s;
+}
+function exampleState(){
+  // Élevage fictif de 60 vaches, dates calées sur aujourd'hui.
+  const t = todayISO(), s = blank({nomElevage:"Élevage exemple"}); s.example = true;
+  const sems = ["sexee","conv","viande","conv","sexee","viande","conv","viande","sexee","conv"];
+  let n = 4101;
+  for (let i=0;i<36;i++){ const d = addDays(t, 6 + Math.round(i*7.4) + (i%3)*2); s.gestations.push({id:uid(), num:String(n++), dateVelage:d, semence:i===33?"":sems[i%sems.length], note:"", absent:false}); }
+  const vel = [["F","conv"],["M","conv"],["F","sexee"],["M","viande"],["F","conv"],["F","sexee"],["M","viande"],["M","conv"],["F","conv"],["M","viande"],["F","sexee"],["M","conv"]];
+  vel.forEach((v,i)=>s.velages.push({id:uid(), num:String(n++), date:addDays(t,-12-i*13), semence:v[1], sexe:v[0], note:""}));
+  return s;
+}
+
+/* ---------- calcul ---------- */
+function coef(sem){ const p=state.params; return sem==="sexee"?+p.coefSexee : sem==="conv"?+p.coefConv : sem==="viande"?0 : null; }
+function compute(){
+  const p = state.params, G = state.gestations, V = state.velages;
+  const end = G.length ? G.reduce((m,g)=>g.dateVelage>m?g.dateVelage:m, G[0].dateVelage) : null;
+  const start = end ? minusYear(end) : null;
+  const inW = d => end && d>=start && d<=end;
+  let nees=0, attS=0, attC=0, nSans=0, nSexe=0;
+  V.forEach(v=>{ if (!inW(v.date)) return; if (!v.sexe && v.semence!=="viande") nSexe++;
+    if (v.semence==="viande") return;
+    if (v.sexe==="F") nees++; else if (!v.sexe) { if (v.semence==="sexee") attS+=coef("sexee"); else attC+=coef("conv"); } });
+  G.forEach(g=>{ if (!inW(g.dateVelage)) return; if (!g.semence) { nSans++; return; } if (g.semence==="sexee") attS+=coef("sexee"); else if (g.semence==="conv") attC+=coef("conv"); });
+  const base = (+p.effectif||0)*(+p.taux||0)/100, need = base + (+p.marge||0);
+  const total = nees+attS+attC;
+  const last = end ? G.filter(g=>g.dateVelage===end).map(g=>g.num) : [];
+  return {end,start,inW,nees,attS,attC,nSans,nSexe,base,need,total,gap:total-need,last};
+}
+function quarters(c){
+  if (!c.end) return [];
+  const qOf = s => { const d=toD(s); return d.getUTCFullYear()*4 + Math.floor(d.getUTCMonth()/3); };
+  const q0=qOf(c.start), q1=qOf(c.end), out=[];
+  for (let q=q0;q<=q1;q++) out.push({q, label:"T"+(q%4+1)+" "+String(Math.floor(q/4)).slice(2), nees:0, s:0, c:0, partial:(q===q0||q===q1)});
+  const at = s => out[qOf(s)-q0];
+  state.velages.forEach(v=>{ if (!c.inW(v.date) || v.semence==="viande") return; if (v.sexe==="F") at(v.date).nees++; else if (!v.sexe) { if (v.semence==="sexee") at(v.date).s+=coef("sexee"); else at(v.date).c+=coef("conv"); } });
+  state.gestations.forEach(g=>{ if (!c.inW(g.dateVelage)||!g.semence) return; if (g.semence==="sexee") at(g.dateVelage).s+=coef("sexee"); if (g.semence==="conv") at(g.dateVelage).c+=coef("conv"); });
+  return out;
+}
+
+/* ---------- rendu ---------- */
+let tab = "gest", onlyMissing = false, openRow = null, delAsk = null;
+const ICON = {
+  good:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 8.5l3 3 7-7"/></svg>',
+  warn:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M8 2l6.5 12h-13z"/><path d="M8 7v3"/></svg>',
+  bad:'<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M5.5 5.5l5 5M10.5 5.5l-5 5"/></svg>'};
+const chartWidth = el => Math.max(280, Math.min(760, el.clientWidth || 640));
+
+function render(){
+  const p = state.params, c = compute();
+  $("farmName").textContent = p.nomElevage || "Mon élevage";
+  $("exampleBanner").hidden = !state.example;
+  $("cGest").textContent = state.gestations.length;
+  $("cVel").textContent = state.velages.length;
+
+  if (!c.end){
+    $("windowTxt").textContent = "Aucune gestation confirmée : ajoutez-en une ou importez votre export Horizon pour ouvrir la fenêtre de 12 mois.";
+    ["total","need","gap"].forEach(id=>$(id).textContent="–"); $("status").innerHTML=""; $("gauge").innerHTML=""; $("reco").textContent=""; $("chart").innerHTML="";
+  } else {
+    $("windowTxt").innerHTML = `Fenêtre du <b>${frDate(c.start)}</b> au <b>${frDate(c.end)}</b> · fin fixée par le dernier vêlage attendu (${c.last.map(esc).join(", ")})`;
+    $("total").innerHTML = fmt1(c.total) + `<small>dont ${c.nees} née${c.nees>1?"s":""}</small>`;
+    $("need").textContent = fmt1(c.need);
+    $("gap").textContent = (c.gap>=0?"+":"−") + fmt1(Math.abs(c.gap));
+    let st;
+    if (c.total >= c.need) st = ["good","Suffisant"]; else if (c.total >= c.base) st = ["warn","Marge entamée"]; else st = ["bad","Insuffisant"];
+    $("status").innerHTML = `<span class="rn-pill rn-${st[0]}">${ICON[st[0]]}${st[1]}</span>` + (c.nSans ? `<span class="rn-pill rn-bad">${c.nSans} semence${c.nSans>1?"s":""} à saisir</span>` : "") + (c.nSexe ? `<span class="rn-pill rn-warn">${c.nSexe} sexe${c.nSexe>1?"s":""} à saisir</span>` : "");
+    // jauge
+    const max = Math.max(c.total, c.need, c.base) * 1.12 || 1, pc = x => (x/max*100).toFixed(2)+"%";
+    $("gauge").setAttribute("aria-label", `${fmt1(c.total)} femelles pour un besoin de ${fmt1(c.need)}`);
+    $("gauge").innerHTML =
+      `<div class="rn-gseg rn-nees" style="left:0;width:${pc(c.nees)}"></div>`+
+      `<div class="rn-gseg rn-sexee" style="left:${pc(c.nees)};width:${pc(c.attS)}"></div>`+
+      `<div class="rn-gseg rn-conv" style="left:${pc(c.nees+c.attS)};width:${pc(c.attC)}"></div>`+
+      (p.marge>0 ? `<div class="rn-gmark rn-light" style="left:${pc(c.base)}"><span>sans marge ${fmt1(c.base)}</span></div>` : "")+
+      `<div class="rn-gmark" style="left:${pc(c.need)}"><span>besoin ${fmt1(c.need)}</span></div>`;
+    // pilotage
+    let r;
+    if (c.nSans) r = `${c.nSans} gestation${c.nSans>1?"s":""} sans type de semence ${c.nSans>1?"ne sont":"n'est"} pas comptée${c.nSans>1?"s":""} : jusqu'à ${fmt1(c.nSans*coef("sexee"))} femelle${c.nSans>1?"s":""} de plus si toutes étaient en sexée. `;
+    else r = "";
+    if (c.gap >= 0) r += `Excédent de ${fmt1(c.gap)} femelle${c.gap>=2?"s":""}, soit l'équivalent de ${Math.floor(c.gap/coef("conv")||0)} IA conventionnelles ou ${Math.floor(c.gap/(coef("sexee")||1))} IA sexées qui pourraient passer en viande sans descendre sous le besoin.`;
+    else r += `Il manque ${fmt1(-c.gap)} femelle${-c.gap>=2?"s":""}, soit environ ${Math.ceil(-c.gap/(coef("sexee")||1))} gestations en sexée ou ${Math.ceil(-c.gap/(coef("conv")||1))} en conventionnelle. Les prochaines IA allongent aussi la fenêtre : refaites le point après chaque diagnostic.`;
+    $("reco").textContent = r;
+    renderChart(c);
+  }
+  renderGest(c); renderVel(c); renderHist(); renderParams(c); renderStore();
+}
+
+function showTip(e, html){ const t=$("tip"); t.hidden=false; t.innerHTML=html; t.style.left=Math.min(e.clientX+12, innerWidth-250)+"px"; t.style.top=(e.clientY+12)+"px"; }
+function hideTip(){ $("tip").hidden = true; }
+
+function renderChart(c){
+  const Q = quarters(c); if (!Q.length){ $("chart").innerHTML=""; return; }
+  const W=chartWidth($("chart")), H=230, L=34, R=10, T=22, B=40, iw=W-L-R, ih=H-T-B;
+  const perQ = c.need/4;
+  const top = Math.max(perQ, ...Q.map(q=>q.nees+q.s+q.c));
+  const step = top<=6?1: top<=12?2: top<=30?5:10, ymax = Math.ceil(top*1.1/step)*step || step;
+  const y = v => T + ih - v/ymax*ih, bw = Math.min(56, iw/Q.length*0.58), gx = i => L + iw/Q.length*(i+.5);
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="Femelles nées et attendues par trimestre">`;
+  for (let v=0; v<=ymax; v+=step) s += `<line class="rn-grid" x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L-6}" y="${y(v)+4}" text-anchor="end">${v}</text>`;
+  Q.forEach((q,i)=>{
+    const x = gx(i)-bw/2; let acc = 0;
+    const parts=[["nees",q.nees,"var(--rn-nees)"],["s",q.s,"var(--rn-sexee)"],["c",q.c,"var(--rn-conv)"]].filter(p=>p[1]>0);
+    parts.forEach((p,k)=>{ const h = p[1]/ymax*ih, yy = y(acc+p[1]); const last = k===parts.length-1;
+      s += last ? `<path style="fill:${p[2]}" d="M${x},${yy+h} V${yy+4} q0,-4 4,-4 H${x+bw-4} q4,0 4,4 V${yy+h} Z"/>` : `<rect style="fill:${p[2]}" x="${x}" y="${yy}" width="${bw}" height="${Math.max(0,h-2)}"/>`;
+      acc += p[1]; });
+    const tot = q.nees+q.s+q.c;
+    if (tot>0) s += `<text class="rn-val" x="${gx(i)}" y="${y(tot)-6}" text-anchor="middle">${fmt1(tot)}</text>`;
+    s += `<text x="${gx(i)}" y="${H-B+18}" text-anchor="middle">${q.label}</text>`;
+    if (q.partial) s += `<text x="${gx(i)}" y="${H-B+32}" text-anchor="middle" style="font-size:10px">partiel</text>`;
+    s += `<rect data-q="${i}" x="${gx(i)-iw/Q.length/2}" y="${T}" width="${iw/Q.length}" height="${ih}" fill="transparent"/>`;
+  });
+  s += `<line class="rn-need" x1="${L}" x2="${W-R}" y1="${y(perQ)}" y2="${y(perQ)}"/><text x="${W-R}" y="${y(perQ)-5}" text-anchor="end">besoin / 4 = ${fmt1(perQ)}</text>`;
+  $("chart").innerHTML = s + "</svg>";
+  $("chart").querySelectorAll("rect[data-q]").forEach(el=>{
+    const q = Q[+el.dataset.q];
+    el.addEventListener("pointermove", e=>showTip(e, `<b>${q.label}${q.partial?" (partiel)":""}</b><br>Nées : ${q.nees}<br>Attendues sexée : ${fmt1(q.s)}<br>Attendues conv. : ${fmt1(q.c)}`));
+    el.addEventListener("pointerleave", hideTip);
+  });
+}
+
+function segSem(id, cur, kind){
+  return `<span class="rn-seg${cur?"":" rn-missing"}" role="group" aria-label="Type de semence">` + ["sexee","conv","viande"].map(k=>`<button type="button" class="rn-${k}" aria-pressed="${cur===k}" data-act="${kind}Sem" data-id="${id}" data-v="${k}">${SEM[k]}</button>`).join("") + `</span>`;
+}
+function renderGest(c){
+  const t = todayISO();
+  const G = state.gestations.slice().sort((a,b)=>a.dateVelage.localeCompare(b.dateVelage)||a.num.localeCompare(b.num)).filter(g=>!onlyMissing||!g.semence);
+  const nMiss = state.gestations.filter(g=>!g.semence).length, nAbs = state.gestations.filter(g=>g.absent).length;
+  $("gestInfo").textContent = [nMiss?`${nMiss} sans semence`:"", nAbs?`${nAbs} absente${nAbs>1?"s":""} du dernier import`:""].filter(Boolean).join(" · ");
+  if (!G.length){ $("gestList").innerHTML = `<div class="rn-empty">${onlyMissing?"Toutes les semences sont saisies.":"Aucune gestation. Ajoutez-en une ci-dessus ou importez votre export Horizon."}</div>`; return; }
+  $("gestList").innerHTML = G.map(g=>{
+    const d = daysBetween(t, g.dateVelage), when = d>0 ? `dans ${d} j` : d===0 ? "aujourd'hui" : `dépassé de ${-d} j`;
+    const k = coef(g.semence);
+    let ex = "";
+    if (openRow===g.id) ex = `<div class="rn-expand"><span class="rn-small">Vêlage de <b>${esc(g.num)}</b> le</span><input type="date" id="rn-cvDate" value="${g.dateVelage<t?g.dateVelage:t}">${g.semence==="viande" ? `<button type="button" class="rn-btn rn-sm rn-primary" data-act="calve" data-id="${g.id}" data-v="">Enregistrer</button>` : `<span class="rn-seg" role="group" aria-label="Sexe du veau"><button type="button" class="rn-F" data-act="calve" data-id="${g.id}" data-v="F">Femelle</button><button type="button" class="rn-M" data-act="calve" data-id="${g.id}" data-v="M">Mâle</button></span>`}<button type="button" class="rn-btn rn-sm" data-act="closeRow">Annuler</button></div>`;
+    if (delAsk===g.id) ex = `<div class="rn-expand"><span class="rn-small">Supprimer la gestation de <b>${esc(g.num)}</b> (avortement, réforme, erreur) ?</span><button type="button" class="rn-btn rn-sm rn-danger" data-act="gDel" data-id="${g.id}">Supprimer</button><button type="button" class="rn-btn rn-sm" data-act="closeRow">Annuler</button></div>`;
+    return `<div class="rn-row">
+      <span class="rn-tag">${esc(g.num)}</span>
+      <div class="rn-mid"><span class="rn-date">${frDate(g.dateVelage)} <span class="rn-muted rn-small">· ${when}</span></span>
+        <span class="rn-meta">${g.absent?'<span class="rn-flag rn-warn">absente du dernier import</span> ':""}${esc(g.note)}</span></div>
+      <div class="rn-acts">${segSem(g.id,g.semence,"g")}<span class="rn-counts" title="Femelles attendues">${k===null?"–":fmt1(k).replace(",0","")}</span>
+        <button type="button" class="rn-btn rn-sm" data-act="openCalve" data-id="${g.id}">Vêlée</button><button type="button" class="rn-btn rn-sm" data-act="askDel" data-id="${g.id}" aria-label="Supprimer">✕</button></div>
+      ${ex}</div>`;
+  }).join("");
+}
+function renderVel(c){
+  const V = state.velages.slice().sort((a,b)=>b.date.localeCompare(a.date));
+  if (!V.length){ $("velList").innerHTML = `<div class="rn-empty">Aucun vêlage saisi. Marquez une gestation « Vêlée » ou ajoutez un vêlage ci-dessus.</div>`; return; }
+  $("velList").innerHTML = V.map(v=>{
+    const inw = c.inW(v.date), cnt = v.semence==="viande" ? 0 : v.sexe==="F" ? 1 : v.sexe==="M" ? 0 : coef(v.semence);
+    const ex = delAsk===v.id ? `<div class="rn-expand"><span class="rn-small">Supprimer ce vêlage ?</span><button type="button" class="rn-btn rn-sm rn-danger" data-act="vDel" data-id="${v.id}">Supprimer</button><button type="button" class="rn-btn rn-sm" data-act="closeRow">Annuler</button></div>` : "";
+    return `<div class="rn-row${inw?"":" rn-out"}">
+      <span class="rn-tag">${esc(v.num)}</span>
+      <div class="rn-mid"><span class="rn-date">${frDate(v.date)}</span><span class="rn-meta">${inw?"":"hors fenêtre · "}${esc(v.note)}</span></div>
+      <div class="rn-acts">${segSem(v.id,v.semence,"v")}
+        ${v.semence==="viande" ? `<span class="rn-muted rn-small" style="min-width:4.6em;text-align:center">sexe non suivi</span>` : `<span class="rn-seg${v.sexe?"":" rn-missing"}" role="group" aria-label="Sexe du veau"><button type="button" class="rn-F" aria-pressed="${v.sexe==="F"}" data-act="vSex" data-id="${v.id}" data-v="F">F</button><button type="button" class="rn-M" aria-pressed="${v.sexe==="M"}" data-act="vSex" data-id="${v.id}" data-v="M">M</button></span>`}
+        <span class="rn-counts" title="Compte dans le renouvellement">${inw ? fmt1(cnt).replace(",0","") : "0"}</span>
+        <button type="button" class="rn-btn rn-sm" data-act="askDel" data-id="${v.id}" aria-label="Supprimer">✕</button></div>${ex}</div>`;
+  }).join("");
+}
+function renderHist(){
+  const H = state.historique||[];
+  $("cHist").textContent = H.length || "";
+  if (!H.length){ $("histChart").innerHTML = `<div class="rn-empty">Le premier point sera enregistré à la prochaine mise à jour (import, saisie ou réglage).</div>`; $("histTable").innerHTML = ""; $("histTable").hidden = true; return; }
+  $("histTable").hidden = false;
+  const W = chartWidth($("histChart")), Hh = 220, L = 34, R = 16, T = 20, B = 30;
+  const x0 = toD(H[0].date).getTime(), x1 = toD(H[H.length-1].date).getTime(), span = Math.max(x1-x0, 86400000*7);
+  const X = d => H.length===1 ? (L+W-R)/2 : L + (toD(d).getTime()-x0)/span*(W-L-R);
+  // Échelle resserrée sur les valeurs (pas de zéro) : amplitude mini de 4 femelles pour ne pas grossir le bruit.
+  const vals = H.flatMap(h=>[h.total,h.besoin]); let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi-lo < 4){ const mid=(hi+lo)/2; lo = mid-2; hi = mid+2; }
+  const pad = (hi-lo)*0.12, raw = (hi-lo+2*pad)/5, step = [0.5,1,2,5,10].find(x=>x>=raw) || 10;
+  const ymin = Math.floor((lo-pad)/step)*step, ymax = Math.ceil((hi+pad)/step)*step;
+  const Y = v => T + (Hh-T-B) - (v-ymin)/(ymax-ymin)*(Hh-T-B);
+  const tick = v => step<1 ? fmt1(v) : String(Math.round(v));
+  let s = `<svg width="${W}" height="${Hh}" viewBox="0 0 ${W} ${Hh}" role="img" aria-label="Évolution des femelles prévues sur la fenêtre de 12 mois">`;
+  for (let v=ymin; v<=ymax+1e-9; v+=step) s += `<line class="rn-grid" x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}"/><text x="${L-6}" y="${Y(v)+4}" text-anchor="end">${tick(v)}</text>`;
+  // étiquettes de dates : on part de la plus récente et on saute celles à moins de 56 px de la précédente
+  const ticks = []; for (let i=H.length-1;i>=0;i--){ const d=H[i].date; if (!ticks.length || X(ticks[0])-X(d) >= 56) ticks.unshift(d); }
+  ticks.forEach(d=> s += `<text x="${X(d)}" y="${Hh-8}" text-anchor="${H.length===1?"middle": X(d)-L<30?"start": W-R-X(d)<30?"end":"middle"}">${frShort(d)}</text>`);
+  const path = k => H.map((h,i)=>(i?"L":"M")+X(h.date).toFixed(1)+","+Y(h[k]).toFixed(1)).join(" ");
+  if (H.length>1){ s += `<path class="rn-need" d="${path("besoin")}"/><path class="rn-tot" d="${path("total")}"/>`; }
+  else s += `<line class="rn-need" x1="${L}" x2="${W-R}" y1="${Y(H[0].besoin)}" y2="${Y(H[0].besoin)}"/>`;
+  H.forEach((h,i)=> s += `<circle class="rn-pt" cx="${X(h.date)}" cy="${Y(h.total)}" r="${i===H.length-1?5:3.5}"/><rect data-h="${i}" x="${X(h.date)-12}" y="${T}" width="24" height="${Hh-T-B}" fill="transparent"/>`);
+  const last = H[H.length-1];
+  const above = last.total >= last.besoin;
+  s += `<text class="rn-val" x="${Math.min(X(last.date), W-R-4)}" y="${Y(last.total)+(above?-10:18)}" text-anchor="${H.length>1?"end":"middle"}">${fmt1(last.total)}</text>`;
+  s += `<text x="${Math.min(X(last.date), W-R-4)}" y="${Y(last.besoin)+(above?16:-8)}" text-anchor="${H.length>1?"end":"middle"}">besoin ${fmt1(last.besoin)}</text>`;
+  $("histChart").innerHTML = s + "</svg>";
+  $("histChart").querySelectorAll("rect[data-h]").forEach(el=>{ const h = H[+el.dataset.h];
+    el.addEventListener("pointermove", e=>showTip(e, `<b>${frDate(h.date)}</b><br>Femelles : ${fmt1(h.total)} (${h.nees} née${h.nees>1?"s":""})<br>Besoin : ${fmt1(h.besoin)}<br>Fenêtre ${frShort(h.debut)} → ${frShort(h.fin)}`));
+    el.addEventListener("pointerleave", hideTip); });
+  $("histTable").innerHTML = `<table><thead><tr><th>Mise à jour</th><th>Fenêtre</th><th>Nées</th><th>Attendues</th><th>Total</th><th>Besoin</th><th>Écart</th><th>Sans semence</th></tr></thead><tbody>` +
+    H.slice().reverse().map(h=>{ const g = h.total-h.besoin; return `<tr><td>${frDate(h.date)}</td><td>${frShort(h.debut)} → ${frShort(h.fin)}</td><td>${h.nees}</td><td>${fmt1(h.attendues)}</td><td><b>${fmt1(h.total)}</b></td><td>${fmt1(h.besoin)}</td><td class="${g>=0?"rn-pos":"rn-neg"}">${g>=0?"+":"−"}${fmt1(Math.abs(g))}</td><td>${h.sansSemence||""}</td></tr>`; }).join("") + `</tbody></table>`;
+}
+function renderParams(c){
+  const p = state.params, set = (id,v)=>{ const el=$(id); if (document.activeElement!==el) el.value = v; };
+  set("pName",p.nomElevage); set("pEff",p.effectif); set("pTaux",p.taux); set("pMarge",p.marge); set("pSex",p.coefSexee); set("pConv",p.coefConv); set("pGest",p.dureeGestation);
+  $("needTxt").textContent = `Besoin : ${p.effectif} × ${p.taux} % = ${fmt1(c.base)}, + ${p.marge} de marge = ${fmt1(c.need)} femelles sur 12 mois.`;
+}
+
+/* ---------- stockage : navigateur du visiteur uniquement ---------- */
+let storeOk = true;
+function loadLocal(){ try { const s = localStorage.getItem(KEY); return s ? normalize(JSON.parse(s)) : null; } catch(e){ return null; } }
+function saveLocal(){ try { localStorage.setItem(KEY, JSON.stringify(state)); storeOk = true; } catch(e){ storeOk = false; } }
+function renderStore(){
+  const el = $("sync");
+  el.className = "rn-sync" + (storeOk ? "" : " rn-err");
+  el.querySelector("span").textContent = storeOk ? "Enregistré dans ce navigateur" : "Non enregistré : faites une copie";
+  $("storeTxt").textContent = storeOk
+    ? "Vos données sont enregistrées dans ce navigateur uniquement. Elles ne passent pas d'un appareil à l'autre et disparaissent si les données du site sont effacées : enregistrez une copie régulièrement."
+    : "Ce navigateur refuse l'enregistrement (navigation privée ou stockage bloqué) : vos saisies seront perdues à la fermeture de la page. Enregistrez une copie avant de partir.";
+}
+function recordHistory(){
+  if (state.example) return;
+  const c = compute(); if (!c.end) return;
+  const t = todayISO(), r1 = x => Math.round(x*10)/10, lim = minusYear(t);
+  const h = (state.historique||[]).filter(x=>x.date!==t && x.date>=lim);
+  h.push({date:t, debut:c.start, fin:c.end, nees:c.nees, attendues:r1(c.attS+c.attC), total:r1(c.total), besoin:r1(c.need), sansSemence:c.nSans, gestations:state.gestations.length});
+  state.historique = h.sort((a,b)=>a.date.localeCompare(b.date));
+}
+function persist(){
+  recordHistory();
+  state.updatedAt = new Date().toISOString();
+  saveLocal(); render();
+}
+
+/* ---------- actions ---------- */
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.hidden=false; clearTimeout(toast.t); toast.t=setTimeout(()=>t.hidden=true, 3200); }
+function leaveExample(){ if (state.example){ const p = state.params; state = blank(Object.assign({}, p, {nomElevage: p.nomElevage==="Élevage exemple" ? "Mon élevage" : p.nomElevage})); toast("Exemple effacé"); } }
+const findG = id => state.gestations.find(g=>g.id===id), findV = id => state.velages.find(v=>v.id===id);
+function showTab(t){
+  tab = t;
+  root.querySelectorAll("#rn-tabs button").forEach(x=>x.setAttribute("aria-selected", x.dataset.tab===tab));
+  TABS.forEach(k=>$("p-"+k).hidden = k!==tab);
+  if (tab==="hist") renderHist();   // la largeur du graphique n'est connue qu'une fois l'onglet affiché
+}
+
+root.addEventListener("click", e=>{
+  const b = e.target.closest("[data-act],[data-tab]"); if (!b || !root.contains(b)) return;
+  if (b.dataset.tab){ showTab(b.dataset.tab); try{ sessionStorage.setItem(KEY+"-tab", tab); }catch(_){} return; }
+  const id = b.dataset.id, v = b.dataset.v;
+  switch (b.dataset.act){
+    case "gSem": { const g=findG(id); g.semence = g.semence===v ? "" : v; persist(); break; }
+    case "vSem": { const x=findV(id); x.semence = v; if (v==="viande") x.sexe = ""; persist(); break; }
+    case "vSex": { const x=findV(id); x.sexe = v; x.note = (x.note||"").replace(/\s*·?\s*sexe à saisir/,"").trim(); persist(); break; }
+    case "openCalve": openRow = openRow===id?null:id; delAsk=null; render(); break;
+    case "askDel": delAsk = delAsk===id?null:id; openRow=null; render(); break;
+    case "closeRow": openRow=null; delAsk=null; render(); break;
+    case "calve": {
+      const g=findG(id); const d = parseDate($("cvDate").value) || todayISO();
+      if (!g.semence){ toast("Indiquez d'abord le type de semence de cette gestation."); break; }
+      state.velages.push({id:uid(), num:g.num, date:d, semence:g.semence, sexe:g.semence==="viande"?"":v, note:""});
+      state.gestations = state.gestations.filter(x=>x.id!==id); openRow=null;
+      persist(); toast(`Vêlage de ${g.num} enregistré` + (g.semence==="viande" ? "" : ` (${v==="F"?"femelle":"mâle"})`)); break; }
+    case "gDel": state.gestations = state.gestations.filter(x=>x.id!==id); delAsk=null; persist(); break;
+    case "vDel": state.velages = state.velages.filter(x=>x.id!==id); delAsk=null; persist(); break;
+    case "clearExample": leaveExample(); persist(); break;
+    case "saveFile": saveFile(); break;
+    case "wipeAsk": $("wipeBox").innerHTML = `<span class="rn-small">Effacer ${state.gestations.length} gestations et ${state.velages.length} vêlages ?</span> <button type="button" class="rn-btn rn-danger" data-act="wipe">Oui, tout effacer</button> <button type="button" class="rn-btn" data-act="wipeNo">Annuler</button>`; break;
+    case "wipeNo": $("wipeBox").innerHTML = `<button type="button" class="rn-btn rn-danger" data-act="wipeAsk">Effacer les données…</button>`; break;
+    case "wipe": state.gestations=[]; state.velages=[]; state.example=false; persist(); $("wipeBox").innerHTML = `<button type="button" class="rn-btn rn-danger" data-act="wipeAsk">Effacer les données…</button>`; toast("Données effacées"); break;
+  }
+});
+
+$("fGest").addEventListener("submit", e=>{
+  e.preventDefault(); const num=$("gNum").value.trim(), d=parseDate($("gDate").value), err=$("gErr");
+  if (!num || !d){ err.textContent="Indiquez le numéro et la date de vêlage prévue."; err.hidden=false; return; }
+  leaveExample();
+  if (state.gestations.some(g=>g.num===num)){ err.textContent=`${num} a déjà une gestation en cours. Modifiez-la ou supprimez-la d'abord.`; err.hidden=false; return; }
+  err.hidden=true; state.gestations.push({id:uid(), num, dateVelage:d, semence:$("gSem").value, note:"", absent:false});
+  $("gNum").value=""; persist(); $("gNum").focus(); toast(`Gestation de ${num} ajoutée`);
+});
+$("fVel").addEventListener("submit", e=>{
+  e.preventDefault(); const num=$("vNum").value.trim(), d=parseDate($("vDate").value), err=$("vErr");
+  if (!num || !d){ err.textContent="Indiquez le numéro de la mère et la date."; err.hidden=false; return; }
+  leaveExample(); err.hidden=true;
+  const g = state.gestations.find(x=>x.num===num);
+  state.velages.push({id:uid(), num, date:d, semence:$("vSem").value, sexe:$("vSem").value==="viande" ? "" : $("vSex").value, note:""});
+  if (g){ state.gestations = state.gestations.filter(x=>x!==g); toast(`Vêlage ajouté · gestation de ${num} clôturée`); } else toast(`Vêlage de ${num} ajouté`);
+  $("vNum").value=""; persist();
+});
+$("vSem").addEventListener("change", e=>{ $("vSexBox").hidden = e.target.value==="viande"; });
+$("onlyMissing").addEventListener("change", e=>{ onlyMissing = e.target.checked; render(); });
+[["pName","nomElevage",false],["pEff","effectif",true],["pTaux","taux",true],["pMarge","marge",true],["pSex","coefSexee",true],["pConv","coefConv",true],["pGest","dureeGestation",true]].forEach(([id,k,num])=>{
+  $(id).addEventListener("change", e=>{ const v = num ? parseFloat(String(e.target.value).replace(",", ".")) : e.target.value.trim(); if (num && !(v>=0)) { render(); return; } state.params[k] = v; persist(); });
+});
+
+/* ---------- import Lely Horizon ---------- */
+// Exports en UTF-8 ; repli sur Windows-1252 si le fichier a été réenregistré sous Windows (Excel).
+async function lireTexte(f){
+  const b = await f.arrayBuffer();
+  try { return new TextDecoder("utf-8", {fatal:true}).decode(b); }
+  catch(e){ return new TextDecoder("windows-1252").decode(b); }
+}
+function parseCSV(text){
+  text = text.replace(/^﻿/, "");
+  const first = text.split(/\r?\n/,1)[0], sep = (first.split(";").length > first.split(",").length) ? ";" : ",";
+  const rows=[]; let row=[], f="", q=false;
+  for (let i=0;i<text.length;i++){ const ch=text[i];
+    if (q){ if (ch==='"'){ if (text[i+1]==='"'){ f+='"'; i++; } else q=false; } else f+=ch; }
+    else if (ch==='"') q=true; else if (ch===sep){ row.push(f); f=""; }
+    else if (ch==="\n"||ch==="\r"){ if (ch==="\r"&&text[i+1]==="\n") i++; row.push(f); rows.push(row); row=[]; f=""; }
+    else f+=ch; }
+  if (f!==""||row.length){ row.push(f); rows.push(row); }
+  return rows.filter(r=>r.some(x=>x.trim()!==""));
+}
+const norm = s => sansAccent(s.toLowerCase()).replace(/[^a-z0-9]+/g," ").trim();
+function readHorizon(text, fname, fallbackDate){
+  const rows = parseCSV(text); if (rows.length<2) return {err:"fichier vide"};
+  const H = rows[0].map(norm), col = (...keys) => H.findIndex(h=>keys.every(k=>h.includes(k)));
+  const iNum = col("animal"); if (iNum<0) return {err:"colonne « N° d'animal » introuvable"};
+  const data = rows.slice(1).filter(r=>r[iNum] && !/^(avg|sum)$/i.test(r[iNum].trim()));
+  const out = [];
+  const iVel = col("date","velage","attendue"), iEtatR = col("etat","reproduction");
+  if (iVel>=0 && iEtatR>=0){
+    // recherche par mot entier : « Emplacement » contient « lac », « Etat de reproduction » contient « production »
+    const iLac = H.findIndex(h=>/\blac\b/.test(h) && !h.includes("jours")), iProd = H.findIndex(h=>h.includes("etat") && /\bproduction\b/.test(h)), iJEL = col("jours","lactation");
+    const cat = r => { const pr = iProd>=0 ? norm(r[iProd]||"") : "";
+      if (pr.startsWith("en lactation")) return "VL lactation";
+      if (pr.startsWith("taris")) return "VL tarie";
+      return (iLac>=0 && (r[iLac]||"").trim()) ? (iProd>=0 ? "Vache" : "VL tarie") : "Génisse"; };
+    data.forEach(r=>{ if (norm(r[iEtatR]||"").startsWith("gestante")){ const d=parseDate(r[iVel]); if (d) out.push({num:r[iNum].trim(), date:d, cat:cat(r)}); }});
+    // Rapport complet (ex. « 17 - Planning - Aperçu troupeau ») : il porte aussi les jours de lactation de tout le troupeau,
+    // ce qui suffit à repérer les vêlages sans second fichier. Vêlage = date de l'export − jours de lactation.
+    if (iJEL>=0){
+      const m = fname.match(/(\d{2})_(\d{2})_(\d{4})/); const exp = m ? `${m[3]}-${m[2]}-${m[1]}` : fallbackDate;
+      if (exp){
+        const calvings = new Map();
+        data.forEach(r=>{ const j=parseInt(r[iJEL],10); if (j>=0) calvings.set(r[iNum].trim(), addDays(exp, -j)); });
+        return {type:"complet", items:out, exportDate:exp, calvings};
+      }
+      return {type:"planning", items:out, warn:"date de l'export introuvable : vêlages non recherchés (renseignez-la à côté du bouton)"};
+    }
+    return {type:"planning", items:out};
+  }
+  const iEtatG = col("etat","gestation"), iJIA = col("jours","insemination");
+  if (iEtatG>=0 && iJIA>=0){
+    const m = fname.match(/(\d{2})_(\d{2})_(\d{4})/); const exp = m ? `${m[3]}-${m[2]}-${m[1]}` : fallbackDate;
+    if (!exp) return {err:"date de l'export introuvable : renseignez-la à côté du bouton"};
+    const dur = +state.params.dureeGestation || 282;
+    data.forEach(r=>{ if (norm(r[iEtatG]||"").startsWith("gestante")){ const j=parseInt(r[iJIA],10); if (j>=0) out.push({num:r[iNum].trim(), date:addDays(exp, dur-j), cat:"VL lactation"}); }});
+    // date de vêlage de chaque vache en lactation = export − jours de lactation
+    const iJEL = col("jours","lactation"), calvings = new Map();
+    if (iJEL>=0) data.forEach(r=>{ const j=parseInt(r[iJEL],10); if (j>=0) calvings.set(r[iNum].trim(), addDays(exp, -j)); });
+    return {type:"lactation", items:out, exportDate:exp, calvings};
+  }
+  return {err:"format non reconnu (attendu : 17 - Planning - Aperçu troupeau, Planning génisse et taries ou VL en lactation)"};
+}
+$("csvIn").addEventListener("change", async e=>{
+  const files = [...e.target.files]; if (!files.length) return;
+  const fb = parseDate($("expDate").value);
+  const types = new Set(), found = new Map(), lines = []; let calvings = new Map();
+  for (const f of files){
+    const res = readHorizon(await lireTexte(f), f.name, fb);
+    if (res.err){ lines.push(`<li><b>${esc(f.name)}</b> : ${esc(res.err)}</li>`); continue; }
+    types.add(res.type); res.items.forEach(it=>found.set(it.num, it)); if (res.calvings) res.calvings.forEach((d,k)=>calvings.set(k,d));
+    lines.push(`<li><b>${esc(f.name)}</b> : ${res.items.length} gestante${res.items.length>1?"s":""}${res.exportDate?` (export du ${frDate(res.exportDate)})`:""}${res.warn?` · ${esc(res.warn)}`:""}</li>`);
+  }
+  if (found.size){
+    leaveExample();
+    let added=0, moved=0, flagged=0; const calved=[], noSem=[];
+    found.forEach((it,num)=>{ const g = state.gestations.find(x=>x.num===num);
+      if (g){ if (g.dateVelage!==it.date){ g.dateVelage=it.date; moved++; } g.absent=false; }
+      else { state.gestations.push({id:uid(), num, dateVelage:it.date, semence:"", note:it.cat, absent:false}); added++; } });
+    const both = types.has("complet") || (types.has("planning") && types.has("lactation"));
+    if (both) state.gestations.slice().forEach(g=>{ if (found.has(g.num)) return;
+      // vêlage détecté : la vache est en lactation avec un vêlage à ±40 j de la date prévue. Le sexe n'est jamais déduit.
+      const d = calvings.get(g.num);
+      if (d && Math.abs(daysBetween(g.dateVelage, d)) <= 40){
+        if (!g.semence){ noSem.push(g.num); if(!g.absent) flagged++; g.absent = true; return; }
+        state.velages.push({id:uid(), num:g.num, date:d, semence:g.semence, sexe:"", note:"détecté depuis Horizon"});
+        state.gestations = state.gestations.filter(x=>x!==g); calved.push(g);
+        return; }
+      if(!g.absent) flagged++; g.absent = true; });
+    state.lastImport = todayISO();
+    persist();
+    lines.push(`<li>${added} gestation${added>1?"s":""} ajoutée${added>1?"s":""}, ${moved} date${moved>1?"s":""} mise${moved>1?"s":""} à jour.</li>`);
+    if (both){
+      const ns = calved.filter(g=>g.semence!=="viande");
+      lines.push(`<li>${calved.length} vêlage${calved.length>1?"s":""} détecté${calved.length>1?"s":""}${calved.length?" : "+calved.map(g=>esc(g.num)+" ("+SEM[g.semence].toLowerCase()+")").join(", "):""}.${ns.length?` Saisissez le sexe du veau dans l'onglet Vêlages pour ${ns.map(g=>esc(g.num)).join(", ")}.`:""}</li>`);
+      if (noSem.length) lines.push(`<li>Vêlée${noSem.length>1?"s":""} mais sans type de semence : ${noSem.map(esc).join(", ")}. Indiquez la semence puis utilisez « Vêlée ».</li>`);
+      lines.push(`<li>${flagged} gestation${flagged>1?"s":""} absente${flagged>1?"s":""} d'Horizon sans vêlage (avortement, réforme ?), signalée${flagged>1?"s":""} dans la liste.</li>`);
+    }
+    else lines.push(`<li>Export incomplet : les vêlages et les gestations disparues ne sont pas recherchés. Importez le rapport 17 - Planning - Aperçu troupeau, ou les deux listes ensemble.</li>`);
+    if (added) lines.push(`<li>Saisissez le type de semence des nouvelles gestations (filtre « Seulement les semences à saisir »).</li>`);
+  }
+  $("impReport").innerHTML = `<ul>${lines.join("")}</ul>`; $("impReport").hidden = false; e.target.value = "";
+});
+
+/* ---------- copie fichier ---------- */
+function saveFile(){
+  const data = JSON.stringify(Object.assign({}, state, {exportedAt:todayISO()}), null, 1);
+  const name = `renouvellement_${sansAccent((state.params.nomElevage||"elevage").toLowerCase()).replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}_${todayISO()}.json`;
+  try {
+    const url = URL.createObjectURL(new Blob([data],{type:"application/json"}));
+    const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url), 1000); toast("Copie enregistrée");
+  } catch(err){ toast("Enregistrement impossible dans ce navigateur."); }
+}
+$("jsonIn").addEventListener("change", async e=>{
+  const f = e.target.files[0]; if (!f) return; const rep = $("restReport");
+  try { const o = JSON.parse(await f.text()); if (!o || !Array.isArray(o.gestations)) throw 0;
+    state = normalize(o); state.example = false; persist();
+    rep.textContent = `Copie restaurée : ${state.gestations.length} gestations, ${state.velages.length} vêlages.`; }
+  catch(err){ rep.textContent = "Ce fichier n'est pas une copie du compteur (.json enregistré depuis cette page)."; }
+  rep.hidden = false; e.target.value = "";
+});
+
+/* ---------- démarrage ---------- */
+state = loadLocal() || exampleState();
+try { const t = sessionStorage.getItem(KEY+"-tab"); if (t && TABS.includes(t)) showTab(t); } catch(_){}
+$("gDate").value = addDays(todayISO(), 200); $("vDate").value = todayISO();
+render();
+let rz; addEventListener("resize", ()=>{ clearTimeout(rz); rz=setTimeout(()=>{ const c=compute(); if (c.end) renderChart(c); renderHist(); }, 150); });
+})();
+</script>

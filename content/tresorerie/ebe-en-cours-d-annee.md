@@ -28,7 +28,7 @@ Les réponses servent à décider d'un achat, d'un prélèvement, d'une DEP ou d
 
 > « Pouvez-vous m'exporter le grand livre analytique des comptes 6 et 7, au format Excel, pour l'exercice en cours et les deux exercices précédents ? »
 
-Les amortissements, les stocks et les autres écritures de clôture n'y figurent qu'une fois l'exercice clôturé par le comptable, souvent plusieurs mois après sa fin : un grand livre exporté avant cette clôture est à réexporter ensuite.
+Les amortissements, le stock final et les autres écritures de clôture n'y figurent qu'une fois l'exercice clôturé par le comptable, souvent plusieurs mois après sa fin : un grand livre exporté avant cette clôture est à réexporter ensuite.
 
 **À défaut : la balance à date.** Il faut une **balance générale** arrêtée à une date de l'exercice en cours, avec, si possible, les colonnes de comparaison : le solde de chaque compte à la même date un an et deux ans plus tôt. Le comptable la sort en quelques minutes ; certains logiciels la proposent directement à l'exploitant.
 
@@ -46,7 +46,7 @@ L'excédent brut d'exploitation mesure ce que l'activité dégage avant le finan
 | Composante | Comptes | Traitement |
 |-|-|-|
 | Produits d'exploitation | 70 à 75 | retenus, sauf 757 (cessions d'immobilisations) |
-| Charges d'exploitation | 60 à 65 | retenues, cotisations sociales personnelles de l'exploitant comprises, sauf la rémunération de son travail |
+| Charges d'exploitation | 60 à 65 | retenues, cotisations sociales personnelles de l'exploitant comprises, sauf la rémunération du travail de l'exploitant et des associés |
 | Variations de stocks | 603 et 71 | écartées : elles ne sont passées qu'à la clôture |
 | Financier | 66 et 76 | écartés : ils relèvent du financement |
 | Exceptionnel, amortissements, reprises | 67, 68, 77, 78, 79 | écartés |
@@ -91,7 +91,7 @@ Le cumul de l'exercice a un défaut : en début d'exercice, il porte sur peu de 
 - **Le chiffre se compare directement aux annuités et aux prélèvements annuels**, sans prorata.
 - **Il se recalcule chaque mois** : à la fin de chaque mois, la courbe des 12 mois glissants montre si la tendance se redresse ou continue de se dégrader.
 
-Sa limite : la période contient une clôture. Le comptable passe les stocks après la clôture : le stock initial au premier jour de l'exercice, le stock final au dernier. Tant que l'exercice en cours n'est pas clôturé, la période contient le stock final de l'exercice précédent sans le stock initial qui l'annule : les stocks sont donc écartés, et le chiffre suppose des stocks stables. Si l'exercice traversé n'est pas encore clôturé lui non plus, ses amortissements et ses écritures de clôture manquent aussi.
+Sa limite : la période contient une clôture. Le comptable y saisit, en même temps, le stock final de l'exercice clos (au dernier jour) et le stock initial de l'exercice suivant (au premier jour) : les deux tombent dans la période et s'annulent ; avant cette clôture, ni l'un ni l'autre n'est saisi. Le chiffre revient donc à supposer des stocks stables. Tant que l'exercice traversé n'est pas clôturé, ses amortissements et ses autres écritures de clôture manquent aussi.
 
 Il faut un grand livre pour le calculer : une balance à date ne dit rien des mois de l'exercice précédent qui ont suivi la même date.
 

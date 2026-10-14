@@ -22,18 +22,22 @@ Le but n'est pas d'anticiper le bilan à l'euro près. Il est de répondre à tr
 
 Les réponses servent à décider d'un achat, d'un prélèvement, d'une DEP ou d'un rendez-vous avec la banque avant la clôture, et non après. Elles servent aussi à dimensionner la réserve décrite dans [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/) : un exercice qui s'annonce faible appelle une réserve plus épaisse.
 
-## 2. La matière première : la balance à date ou le grand livre
+## 2. La matière première : le grand livre ou la balance à date
 
-Il faut une **balance générale** arrêtée à une date de l'exercice en cours, avec, si possible, les colonnes de comparaison : le solde de chaque compte à la même date un an et deux ans plus tôt. Le comptable la sort en quelques minutes ; certains logiciels la proposent directement à l'exploitant.
+**Le plus complet : le grand livre analytique.** Il donne chaque écriture avec sa date, son code activité et ses quantités : on y calcule n'importe quelle période, mois par mois, sans attendre la même date l'année suivante. Il suffit d'un export par exercice, limité aux comptes 6 et 7 : quelques centaines de kilo-octets pour une année. L'exercice en cours se remet à jour en exportant à nouveau son seul fichier. Si vous n'avez pas accès au logiciel comptable, la demande au comptable tient en une phrase :
+
+> « Pouvez-vous m'exporter le grand livre analytique des comptes 6 et 7, au format Excel, pour l'exercice en cours et les deux exercices précédents ? »
+
+Les amortissements, les stocks et les autres écritures de clôture n'y figurent qu'une fois l'exercice clôturé par le comptable, souvent plusieurs mois après sa fin : un grand livre exporté avant cette clôture est à réexporter ensuite.
+
+**À défaut : la balance à date.** Il faut une **balance générale** arrêtée à une date de l'exercice en cours, avec, si possible, les colonnes de comparaison : le solde de chaque compte à la même date un an et deux ans plus tôt. Le comptable la sort en quelques minutes ; certains logiciels la proposent directement à l'exploitant.
 
 En option, une **balance analytique** par année : les mêmes comptes, ventilés par code activité (blé, maïs ensilage, vaches laitières, lait…), avec les quantités. Elle donne les marges par atelier et le prix du lait au litre.
 
-Deux précautions :
+Deux précautions, quel que soit le fichier :
 
 - **Toujours comparer à la même date.** Une balance au 1er octobre se compare à la balance au 1er octobre de l'année précédente, jamais à un exercice clos.
-- **Sortir la balance après la saisie des dernières factures** : une balance arrêtée avant la saisie d'un mois de factures fausse la comparaison bien plus que tout le reste.
-
-**Mieux encore : le grand livre analytique.** Une balance ne donne qu'un total arrêté à une date. Le grand livre donne chaque écriture avec sa date, son code activité et ses quantités : on y calcule n'importe quelle période, mois par mois, sans attendre la même date l'année suivante. Il suffit d'un export par exercice, limité aux comptes 6 et 7 : quelques centaines de kilo-octets pour une année. Un seul export par exercice remplace toute la série de balances, et l'exercice en cours se remet à jour en exportant à nouveau son seul fichier.
+- **Exporter après la saisie des dernières factures** : un fichier arrêté avant la saisie d'un mois de factures fausse la comparaison bien plus que tout le reste.
 
 ## 3. L'EBE de gestion
 
@@ -42,7 +46,7 @@ L'excédent brut d'exploitation mesure ce que l'activité dégage avant le finan
 | Composante | Comptes | Traitement |
 |-|-|-|
 | Produits d'exploitation | 70 à 75 | retenus, sauf 757 (cessions d'immobilisations) |
-| Charges d'exploitation | 60 à 65 | retenues, sauf la rémunération du travail et les cotisations sociales personnelles de l'exploitant |
+| Charges d'exploitation | 60 à 65 | retenues, cotisations sociales personnelles de l'exploitant comprises, sauf la rémunération de son travail |
 | Variations de stocks | 603 et 71 | écartées : elles ne sont passées qu'à la clôture |
 | Financier | 66 et 76 | écartés : ils relèvent du financement |
 | Exceptionnel, amortissements, reprises | 67, 68, 77, 78, 79 | écartés |
@@ -52,6 +56,13 @@ On l'appelle ici **EBE de gestion** pour le distinguer de celui du bilan, parce 
 - **les variations de stocks** : les ventes enregistrées à date portent souvent sur la récolte précédente, quand les charges portent sur la campagne en cours ;
 - **les amortissements**, qui ne décaissent rien et n'entrent pas dans l'EBE de toute façon, mais qui manquent pour passer au résultat ;
 - **les écritures de clôture** : fermage provisionné, rémunération de l'exploitant, régularisations de fin d'exercice.
+
+**Les cotisations sociales personnelles de l'exploitant restent dans les charges** : elles sortent de la trésorerie comme les autres, et ce qui reste après les annuités et les prélèvements est alors vraiment disponible. Deux conséquences :
+
+- elles suivent les revenus des années passées, par les appels provisoires et la régularisation : une régularisation MSA peut à elle seule créer un écart d'une année sur l'autre ;
+- selon les centres de gestion, elles sont comptées avant ou après l'EBE : vérifiez dans votre dossier de gestion avant de comparer les deux chiffres.
+
+L'écriture par laquelle le comptable les réintègre à la clôture est un retraitement fiscal : elle est écartée.
 
 C'est pour cela qu'il se compare **d'une année sur l'autre à la même date**, où les mêmes manques jouent à peu près de la même façon, et jamais au bilan.
 
@@ -68,6 +79,8 @@ Un EBE de gestion de neuf mois ne se compare pas à des annuités annuelles. On 
 
 > **Exemple chiffré (fictif).** Exercice commencé en janvier, balance au 1er octobre : neuf mois couverts. EBE de gestion à date : 60 000 €. Annuités : 40 000 € par an, soit 30 000 € sur neuf mois. Prélèvements privés : 24 000 € par an, soit 18 000 € sur neuf mois. Disponible après annuités : 30 000 € ; après prélèvements : 12 000 €. Les annuités absorbent la moitié de l'EBE, et l'exercice dégage encore de la trésorerie, sans marge pour un dernier trimestre difficile.
 
+Les prélèvements privés s'entendent hors cotisations de l'exploitant, déjà comprises dans l'EBE de gestion : les y ajouter les compterait deux fois.
+
 Le prorata suppose des annuités et des prélèvements réguliers. Une annuité annuelle unique, ou un prélèvement exceptionnel, se traite à part.
 
 ## 5. Les 12 mois glissants
@@ -78,7 +91,7 @@ Le cumul de l'exercice a un défaut : en début d'exercice, il porte sur peu de 
 - **Le chiffre se compare directement aux annuités et aux prélèvements annuels**, sans prorata.
 - **Il se recalcule chaque mois** : à la fin de chaque mois, la courbe des 12 mois glissants montre si la tendance se redresse ou continue de se dégrader.
 
-Sa limite : la période contient une clôture, avec ses écritures (fermage provisionné, régularisations). Le stock de clôture et sa reprise au premier jour de l'exercice suivant tombent tous deux dans la période et s'annulent ; le chiffre revient donc à supposer des stocks stables.
+Sa limite : la période contient une clôture. Le comptable passe les stocks après la clôture : le stock initial au premier jour de l'exercice, le stock final au dernier. Tant que l'exercice en cours n'est pas clôturé, la période contient le stock final de l'exercice précédent sans le stock initial qui l'annule : les stocks sont donc écartés, et le chiffre suppose des stocks stables. Si l'exercice traversé n'est pas encore clôturé lui non plus, ses amortissements et ses écritures de clôture manquent aussi.
 
 Il faut un grand livre pour le calculer : une balance à date ne dit rien des mois de l'exercice précédent qui ont suivi la même date.
 
@@ -103,17 +116,17 @@ Côté cultures de vente, la marge à date dit où en est la trésorerie, pas ce
 
 Le bénéfice brut sert à anticiper ce qui en dépend : l'impôt sur le revenu et les cotisations sociales de l'exploitant. Il part de l'EBE de gestion et y ajoute ce que celui-ci écarte :
 
-> bénéfice brut = EBE de gestion − amortissements ± variations de stocks + résultat financier + exceptionnel + reprises et transferts de charges
+> bénéfice brut = EBE de gestion − amortissements ± variations de stocks + résultat financier + exceptionnel + reprises et transferts de charges + cotisations personnelles de l'exploitant
 
-On le prend **avant rémunération du travail et avant cotisations personnelles de l'exploitant** : ces deux postes relèvent de l'exploitant, pas de l'exploitation. Les cotisations personnelles passées en charges sont d'ailleurs souvent réintégrées par le comptable à la clôture.
+On le prend **avant rémunération du travail et avant cotisations personnelles de l'exploitant** : ces deux postes relèvent de l'exploitant, pas de l'exploitation. Les cotisations, comprises dans l'EBE de gestion, sont donc rajoutées ; le comptable les réintègre d'ailleurs souvent lui-même à la clôture.
 
-- **Sur un exercice clos**, le grand livre donne le chiffre exact, clôture comprise. Il peut encore différer du bénéfice fiscal de quelques retraitements extra-comptables, comme la DEP.
-- **Sur 12 mois glissants**, le chiffre est réel lui aussi : la période contient une clôture et ses amortissements.
-- **En cours d'exercice**, ce n'est qu'une estimation : on retire les amortissements de l'exercice ramenés aux mois écoulés, et l'on suppose les stocks stables jusqu'à la clôture. C'est l'hypothèse qui pèse le plus : une récolte stockée ou vendue d'ici la clôture déplace le résultat de plusieurs dizaines de milliers d'euros.
+- **Sur un exercice clôturé par le comptable**, le grand livre donne le chiffre exact, amortissements et stocks compris. Il peut encore différer du bénéfice fiscal de quelques retraitements extra-comptables, comme la DEP.
+- **Sur 12 mois glissants**, c'est une estimation : les stocks sont supposés stables, et les amortissements ne sont réels que si l'exercice traversé est clôturé.
+- **En cours d'exercice**, c'est aussi une estimation : on retire les amortissements de l'exercice ramenés aux mois écoulés, et l'on suppose les stocks stables jusqu'à la clôture. C'est l'hypothèse qui pèse le plus : une récolte stockée ou vendue d'ici la clôture déplace le résultat de plusieurs dizaines de milliers d'euros.
 
 **Les amortissements de l'exercice** se lisent dans le tableau des immobilisations que le comptable établit avec chaque bilan : il donne la dotation de l'exercice suivant pour tous les biens déjà en place. On y ajoute les biens mis en service depuis, au prorata. Les annuités ne s'en approchent pas : elles remboursent le capital au rythme de la banque, quand l'amortissement suit la durée de vie du bien.
 
-> **Exemple chiffré (fictif).** Neuf mois d'exercice écoulés. EBE de gestion à date : 60 000 €. Amortissements de l'exercice : 48 000 €, soit 36 000 € sur neuf mois. Frais financiers à date : 3 000 €. Bénéfice brut estimé : 21 000 €, avant variation de stocks de fin d'exercice.
+> **Exemple chiffré (fictif).** Neuf mois d'exercice écoulés. EBE de gestion à date : 60 000 €. Amortissements de l'exercice : 48 000 €, soit 36 000 € sur neuf mois. Frais financiers à date : 3 000 €. Cotisations personnelles de l'exploitant à date : 9 000 €, rajoutées. Bénéfice brut estimé : 30 000 €, avant variation de stocks de fin d'exercice.
 
 **Pour les cotisations sociales**, l'assiette des exploitants agricoles part depuis 2026 du revenu professionnel avant déduction des cotisations, diminué d'un abattement forfaitaire de 26 %, avec un plancher et un plafond. Pour l'impôt, on part du bénéfice fiscal, après la DEP et les autres retraitements. Dans les deux cas, le bénéfice brut donne un ordre de grandeur à faire valider avec le comptable, pas un montant à déclarer.
 
@@ -127,11 +140,12 @@ On le prend **avant rémunération du travail et avant cotisations personnelles 
 
 - Une balance ou, mieux, un grand livre en cours d'année suffit pour prendre la température de l'exploitation.
 - L'EBE de gestion se compare à la même date de l'année précédente, jamais au bilan : il n'a ni stocks, ni amortissements, ni écritures de clôture.
-- Les annuités et les prélèvements se ramènent aux mois couverts par la balance ; sur 12 mois glissants, ils se comparent tels quels.
+- Les cotisations personnelles de l'exploitant restent dans l'EBE de gestion : elles ne s'ajoutent pas aux prélèvements.
+- Les annuités et les prélèvements se ramènent aux mois couverts ; sur 12 mois glissants, ils se comparent tels quels.
 - Les 12 mois glissants effacent les saisons et se recalculent chaque mois.
 - Un grand écart d'une année sur l'autre se lit d'abord dans le détail par poste : une échéance ou une paie de lait décalée suffit à le créer.
 - Les cultures fourragères se rangent dans l'élevage ; la marge sur coût alimentaire se lit en coût acheté et en coût total.
-- Le bénéfice brut s'estime en cours d'exercice avec les amortissements de l'exercice et des stocks supposés stables ; c'est un ordre de grandeur pour anticiper impôt et cotisations.
+- Le bénéfice brut rajoute à l'EBE les cotisations de l'exploitant et retire les amortissements ; hors exercice clôturé, il suppose des stocks stables : c'est un ordre de grandeur pour anticiper impôt et cotisations.
 
 ## Pages liées
 

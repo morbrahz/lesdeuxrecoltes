@@ -6,6 +6,9 @@
      part, jamais le contenu des fichiers ni les résultats. Sans GoatCounter
      (développement local, script bloqué), l'appel ne fait rien. */}}
 <script>window.ldrEvenement = function (nom) { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: nom, title: nom, event: true }); } catch (e) {} };</script>
+{{/* Téléchargements : un clic sur un lien vers un fichier .xlsx compte un
+     événement « telechargement-<nom du fichier> », sans autre donnée. */}}
+<script>document.addEventListener("click", function (e) { var a = e.target.closest && e.target.closest('a[href$=".xlsx"]'); if (a && window.ldrEvenement) window.ldrEvenement("telechargement-" + a.pathname.split("/").pop().replace(/\.xlsx$/, "")); });</script>
 {{- if and site.Params.goatcounter (eq hugo.Environment "production") }}
 <script data-goatcounter="https://{{ site.Params.goatcounter }}.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>

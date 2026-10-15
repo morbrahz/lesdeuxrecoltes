@@ -12,7 +12,7 @@ Ce site utilise **GoatCounter** pour compter les visites. Cet outil :
 - ne dépose **aucun cookie** et n'utilise aucun identifiant publicitaire ;
 - ne conserve **pas les adresses IP** : elles servent uniquement, de façon temporaire et sous forme non réversible, à distinguer deux visites ;
 - collecte la page consultée, la date, la provenance (site ou moteur de recherche d'origine), le type de navigateur et le pays ;
-- compte aussi, pour chaque [outil en ligne](#outils-en-ligne), le nombre de calculs lancés : un simple compteur, qui ne transmet rien du contenu de vos fichiers ni des résultats.
+- compte aussi, pour chaque [outil en ligne](#outils-en-ligne), le nombre de calculs lancés, ainsi que les téléchargements des tableurs : un simple compteur, qui ne transmet rien du contenu de vos fichiers ni des résultats.
 
 Ces données sont agrégées. Elles ne permettent pas d'identifier une personne et ne sont ni revendues, ni partagées, ni utilisées à des fins publicitaires.
 

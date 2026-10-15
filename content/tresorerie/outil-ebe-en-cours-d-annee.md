@@ -30,6 +30,8 @@ Le format de référence est celui des exports d'**Isacompta**. Les colonnes son
 
 {{< outil-temperature-exploitation >}}
 
+**Conseiller, centre de gestion, structure agricole ?** Si vous souhaitez utiliser cet outil pour les dossiers de vos clients, écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr).
+
 ## 3. Lire les résultats
 
 - **Avec les grands livres**, choisissez la lecture (cumul de l'exercice ou 12 mois glissants) et la date d'arrêté : la dernière écriture saisie, ou une fin de mois.

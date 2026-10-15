@@ -36,6 +36,8 @@ Précautions :
 
 {{< outil-vaches-a-pousser >}}
 
+**Conseiller d'élevage, organisme de contrôle laitier, concessionnaire ?** Si vous souhaitez utiliser cet outil pour les élevages que vous suivez, écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr).
+
 ## 3. Lire le résultat
 
 - **À pousser maintenant** : les vaches en retard selon le robot et non autonomes selon le classement. C'est la liste de la tournée.

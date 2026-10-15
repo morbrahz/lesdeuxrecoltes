@@ -32,6 +32,8 @@ Au premier affichage, l'outil montre un **élevage fictif** de 60 vaches, calé 
 
 {{< outil-renouvellement >}}
 
+**Conseiller d'élevage, organisme de contrôle laitier, concessionnaire ?** Si vous souhaitez utiliser cet outil pour les élevages que vous suivez, écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr).
+
 ## 3. La fenêtre de 12 mois et le calcul
 
 **La fenêtre** se termine à la date de vêlage prévue de la dernière gestante confirmée et commence un an plus tôt, les deux dates comprises. Elle avance donc avec chaque nouvelle gestation confirmée.

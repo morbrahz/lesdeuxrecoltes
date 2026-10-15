@@ -41,6 +41,8 @@ Dans tous les cas, trois colonnes sont indispensables : N° d'animal, Production
 
 {{< outil-bilan-troupeau >}}
 
+**Conseiller d'élevage, organisme de contrôle laitier, concessionnaire ?** Si vous souhaitez utiliser cet outil pour les élevages que vous suivez, écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr).
+
 ## 3. Lire le bilan
 
 - **Avec les rapports standard**, chaque chiffre d'une vache est celui du jour d'export. **Avec la copie enrichie**, c'est sa moyenne sur la période exportée, cases vides ignorées, et le troupeau étudié est celui qui est au robot le dernier jour.

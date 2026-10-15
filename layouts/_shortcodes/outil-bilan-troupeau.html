@@ -234,6 +234,7 @@
       const r = JSON.parse(m.bilan_fichiers_json(JSON.stringify(fichiers), JSON.stringify(par)));
       if (r.erreur) { res.hidden = true; dire(r.erreur, true); return; }
       afficher(r);
+      window.ldrEvenement && window.ldrEvenement("outil-bilan-troupeau-calcul");
       dire(`Bilan établi sur ${r.troupeau.n} vaches. Rien n'a quitté cet ordinateur.`);
       res.scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (e) {

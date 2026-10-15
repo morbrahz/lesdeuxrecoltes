@@ -256,6 +256,7 @@
       const r = JSON.parse(m.classer_json(textes.production, textes.visites, textes.retard, JSON.stringify(parametres())));
       if (r.erreur) { res.hidden = true; dire(r.erreur, true); return; }
       afficher(r);
+      window.ldrEvenement && window.ldrEvenement("outil-vaches-a-pousser-calcul");
       dire(`Calcul fait sur ${r.vaches.length} vaches. Rien n'a quitté cet ordinateur.`);
       if (r.avec_visites && !r.parametres.poussees.length) dire("Aucune plage de poussée : tous les passages sont comptés comme spontanés.", true);
       res.scrollIntoView({ behavior: "smooth", block: "start" });

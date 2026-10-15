@@ -1,6 +1,11 @@
 {{/* Mesure d'audience GoatCounter — sans cookie.
      Le code du site se règle dans hugo.toml : params.goatcounter.
      Vide ou en développement local, aucun script n'est chargé. */}}
+{{/* Comptage de l'usage des outils : chaque outil appelle
+     ldrEvenement("nom") après un calcul réussi. Seul le nom de l'événement
+     part, jamais le contenu des fichiers ni les résultats. Sans GoatCounter
+     (développement local, script bloqué), l'appel ne fait rien. */}}
+<script>window.ldrEvenement = function (nom) { try { if (window.goatcounter && window.goatcounter.count) window.goatcounter.count({ path: nom, title: nom, event: true }); } catch (e) {} };</script>
 {{- if and site.Params.goatcounter (eq hugo.Environment "production") }}
 <script data-goatcounter="https://{{ site.Params.goatcounter }}.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>

@@ -708,6 +708,7 @@ $("csvIn").addEventListener("change", async e=>{
       if(!g.absent) flagged++; g.absent = true; });
     state.lastImport = todayISO();
     persist();
+    window.ldrEvenement && window.ldrEvenement("outil-renouvellement-import");
     lines.push(`<li>${added} gestation${added>1?"s":""} ajoutée${added>1?"s":""}, ${moved} date${moved>1?"s":""} mise${moved>1?"s":""} à jour.</li>`);
     if (both){
       const ns = calved.filter(g=>g.semence!=="viande");

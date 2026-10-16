@@ -1,0 +1,26 @@
+/* Tableaux de résultats des outils (bilan du troupeau, EBE).
+   PaperMod impose à toute cellule de tableau une largeur minimale de 80 px
+   (md-content.css), ce qui portait les tableaux du bilan à trois largeurs
+   d'écran sur téléphone. Sélecteurs par identifiant pour passer devant la
+   règle du thème. Contrôle du 16 octobre 2026. */
+#bt-res th, #bt-res td,
+#te-res th, #te-res td {
+  min-width: 0;
+  padding: .3rem .4rem;
+  border: 0;
+  border-bottom: 1px solid var(--tertiary);
+}
+@media (max-width: 600px) {
+  #bt-res table, #te-res table { font-size: .8em; }
+  #bt-res th { white-space: normal; }
+  #bt-res th, #bt-res td { padding: .3rem .25rem; }
+  /* première colonne fixe pendant le défilement horizontal */
+  #bt-res th:first-child, #bt-res td:first-child,
+  #te-res th:first-child, #te-res td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: var(--entry);
+    padding-right: .5rem;
+  }
+}

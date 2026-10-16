@@ -271,6 +271,7 @@
 #rn .rn-card p { max-width: 68ch; }
 #rn .rn-grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
 #rn .rn-report { font-size: .88rem; display: grid; gap: 4px; }
+#rn .rn-report .rn-ko { color: var(--rn-bad); }
 #rn .rn-tbl { overflow-x: auto; border: 1px solid var(--rn-line); border-radius: var(--radius); background: var(--entry); }
 #rn .rn-tbl table { display: table; border-collapse: collapse; width: 100%; font-size: .88rem; white-space: nowrap; margin: 0; }
 #rn .rn-tbl th, #rn .rn-tbl td { min-width: 0; padding: 7px 10px; border: 0; border-top: 1px solid var(--rn-line); text-align: right; line-height: 1.4; }
@@ -642,7 +643,7 @@ const norm = s => sansAccent(s.toLowerCase()).replace(/[^a-z0-9]+/g," ").trim();
 function readHorizon(text, fname, fallbackDate){
   const rows = parseCSV(text); if (rows.length<2) return {err:"fichier vide"};
   const H = rows[0].map(norm), col = (...keys) => H.findIndex(h=>keys.every(k=>h.includes(k)));
-  const iNum = col("animal"); if (iNum<0) return {err:"colonne « N° d'animal » introuvable"};
+  const iNum = col("animal"); if (iNum<0) return {err:"colonne « N° d'animal » introuvable : utilisez l'export CSV « 17 - Planning - Aperçu troupeau » d'Horizon"};
   const data = rows.slice(1).filter(r=>r[iNum] && !/^(avg|sum)$/i.test(r[iNum].trim()));
   const out = [];
   const iVel = col("date","velage","attendue"), iEtatR = col("etat","reproduction");
@@ -686,7 +687,7 @@ $("csvIn").addEventListener("change", async e=>{
   const types = new Set(), found = new Map(), lines = []; let calvings = new Map();
   for (const f of files){
     const res = readHorizon(await lireTexte(f), f.name, fb);
-    if (res.err){ lines.push(`<li><b>${esc(f.name)}</b> : ${esc(res.err)}</li>`); continue; }
+    if (res.err){ lines.push(`<li class="rn-ko"><b>${esc(f.name)}</b> : ${esc(res.err)}</li>`); continue; }
     types.add(res.type); res.items.forEach(it=>found.set(it.num, it)); if (res.calvings) res.calvings.forEach((d,k)=>calvings.set(k,d));
     lines.push(`<li><b>${esc(f.name)}</b> : ${res.items.length} gestante${res.items.length>1?"s":""}${res.exportDate?` (export du ${frDate(res.exportDate)})`:""}${res.warn?` · ${esc(res.warn)}`:""}</li>`);
   }

@@ -31,3 +31,16 @@
   font-size: 15px;
   line-height: 1.5;
 }
+
+/* Titre de l'accueil : PaperMod le coupe à 3 lignes (« écrites… ») ;
+   sur téléphone il en prend 5. Contrôle du 16 octobre 2026. */
+.home-info .entry-header {
+  display: block;
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+@media (max-width: 600px) {
+  .home-info .entry-header h1 {
+    font-size: 27px;
+  }
+}

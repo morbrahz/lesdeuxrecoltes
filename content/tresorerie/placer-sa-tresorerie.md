@@ -2,7 +2,7 @@
 title = "Comment placer la trésorerie d'une exploitation agricole"
 seoTitle = "Comment placer la trésorerie d'une exploitation agricole"
 date = 2026-09-20
-lastmod = 2026-09-26
+lastmod = 2026-10-17
 draft = false
 weight = 3
 summary = "Placer la trésorerie d'une exploitation agricole : chaque barreau sur un support de même durée, cinq critères de choix, les familles de supports."
@@ -10,7 +10,7 @@ summary = "Placer la trésorerie d'une exploitation agricole : chaque barreau su
 
 Une trésorerie dimensionnée et répartie n'a pas encore d'emploi : elle est sur un compte courant, et elle y reste. Cette page traite la question suivante — que mettre sur chaque barreau, c'est-à-dire sur chacune des quatre durées de la réserve. Elle suppose réglées celles du total et de sa répartition, traitées dans [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/), et s'arrête à la limite du total : ce qui le dépasse n'est plus de la trésorerie.
 
-*Dernière mise à jour : 26 septembre 2026.*
+*Dernière mise à jour : 17 octobre 2026.*
 
 ## 1. Une réserve qui dort se réduit toute seule
 
@@ -54,10 +54,13 @@ Le dernier critère est le plus souvent sous-estimé. Un montage qui rapporte un
 | **Fonds monétaires** | Quelques jours à un an | Un jour ouvré en général | Marginale | Suivent le taux auquel les banques de la zone euro se prêtent au jour le jour, l'€STR (2,19 % mi-septembre 2026) |
 | **Fonds obligataires court terme** (1 à 3 ans) | 1 à 3 ans | Un à quelques jours ouvrés | Réelle à court terme, faible à l'horizon du fonds | La valeur bouge avec les taux ; l'horizon de détention doit être respecté |
 | **Fonds obligataires datés** (échéance fixe) | 3 à 5 ans | Liquides, mais conçus pour être portés au terme | Faible si porté à l'échéance | Rendement connu à l'entrée si l'on va au bout : se marie exactement avec un barreau daté |
+| **Fonds euros** (assurance-vie, contrat de capitalisation) | 1 à 5 ans | Quelques jours à quelques semaines en temps normal ; retraits suspendables jusqu'à six mois en cas de crise | Aucune sur le capital (garantie de l'assureur, parfois nette des frais de gestion) | Assurance-vie réservée aux personnes physiques ; contrat de capitalisation ouvert aussi aux personnes morales. Rendement fixé chaque année par l'assureur, connu après coup |
 
 Une précision sur la lecture des rendements affichés. Sur un fonds monétaire, le chiffre mis en avant est souvent une **moyenne** — des trente derniers jours, ou des douze derniers mois. Ce n'est pas le taux servi aujourd'hui. Quand les taux baissent, cette moyenne reste au-dessus du marché et avantage optiquement le fonds face à un compte à terme, dont le taux est annoncé pour demain ; quand les taux montent, l'erreur joue dans l'autre sens. Avant de comparer deux supports, vérifier que les deux chiffres regardent dans la même direction.
 
 Seconde précision : sous le même nom de « fonds monétaire » coexistent deux montages. Le premier **détient réellement** des titres d'État à très court terme. Le second obtient le même rendement par un **contrat d'échange avec une banque**, garanti par d'autres titres. Sur une fiche de rendement, les deux se ressemblent ; mais le second dépend en plus de la solidité de cette banque. Sur de l'argent qui sert d'assurance, ce point se vérifie avant de comparer les frais.
+
+Troisième précision, sur le fonds euros. Il ne perd pas en capital, mais sa **disponibilité n'est pas garantie** : depuis la loi Sapin 2, le Haut Conseil de stabilité financière peut, en cas de crise, limiter ou suspendre les retraits des contrats d'assurance, pour trois mois renouvelables une fois. Pour de l'argent qui doit pouvoir sortir en quelques jours, c'est disqualifiant ; sur un barreau de 1 à 5 ans, ce risque reste compatible avec la durée du besoin. L'assurance-vie se souscrit au nom d'une personne physique : elle ne peut porter que la part personnelle de la réserve, celle dont il est question à la fin du paragraphe 5. Une société peut souscrire un contrat de capitalisation, dont la fiscalité dépend de la structure : à voir avec son comptable.
 
 Hors champ, et volontairement : actions, immobilier, parts sociales, actifs numériques. Ces classes d'actifs relèvent de l'épargne, pas de la trésorerie, parce qu'elles n'offrent aucune garantie sur la valeur disponible à une date donnée. Les placer dans un barreau revient à accepter exactement le risque contre lequel les barreaux ont été construits.
 
@@ -67,8 +70,8 @@ Hors champ, et volontairement : actions, immobilier, parts sociales, actifs num�
 |-|-|-|
 | **Quelques jours à quelques mois** | Décalage du cycle, imprévu | Compte courant pour le sas, **fonds monétaire à liquidité quotidienne** pour le reste |
 | **Moins d'un an** | Hausses de charges connues à l'avance | Fonds monétaire, livret, ou compte à terme dont l'échéance tombe **avant** le besoin |
-| **1 à 3 ans** | Un mauvais exercice | Fonds obligataire court terme, compte à terme de durée équivalente |
-| **3 à 5 ans** | Deux mauvais exercices consécutifs | Fonds obligataire daté d'échéance 3 à 5 ans |
+| **1 à 3 ans** | Un mauvais exercice | Fonds obligataire court terme, compte à terme de durée équivalente, fonds euros |
+| **3 à 5 ans** | Deux mauvais exercices consécutifs | Fonds obligataire daté d'échéance 3 à 5 ans, fonds euros |
 
 Sur les barreaux courts, le fonds monétaire est le support le plus directement apparié : il rapporte le taux court du marché tout en restant récupérable en un jour ouvré. Il en existe trois voies d'accès : un fonds monétaire proposé par la banque, un fonds monétaire coté en bourse (ETF) détenu sur un compte-titres, ou une souscription en direct auprès d'un émetteur spécialisé — Spiko, par exemple, un fonds monétaire agréé par l'AMF, accessible sans compte-titres et aux personnes morales comme aux personnes physiques. Les trois voies donnent accès au même taux de marché ; elles se départagent sur les frais et sur le délai de récupération, pas sur la nature du placement.
 
@@ -86,11 +89,12 @@ Dernier point, propre aux structures transparentes fiscalement : les besoins per
 
 - Chercher un demi-point de plus au prix d'un délai de récupération allongé sur le premier barreau.
 - Bloquer le barreau court, même contre une rémunération sensiblement meilleure.
+- Mettre le barreau court sur un fonds euros : ses retraits peuvent être suspendus jusqu'à six mois.
 - Confondre un fonds obligataire daté, dont le rendement est connu si on le porte au terme, et un fonds obligataire sans échéance, dont la valeur dépend des taux le jour de la vente.
 - Ouvrir un support par barreau par réflexe de symétrie, puis six au total.
 - Placer une fois et ne plus rien regarder : les taux courts bougent, les échéances des comptes à terme arrivent, les barreaux se vident et se remplissent.
 
-> **Cas observé.** Sur une exploitation en polyculture-élevage sortie de plusieurs années de court terme subi, trois supports couvrent les quatre barreaux. Deux mois de charges sur les durées courtes, dont 60 % en compte courant et en livrets — le compte courant ne portant que le mois à venir — et le reste en fonds monétaire. Le troisième mois en obligataire, aux deux tiers sur du 1 à 3 ans, pour le reste sur du 3 à 5 ans. Les rendements servis suivaient la durée, d'un peu moins de 3 % sur le monétaire à un peu plus de 4 % sur le 3 à 5 ans : chaque cran de durée supplémentaire rapportait de l'ordre d'un demi-point de plus. C'est cette pente qui est transférable, pas son niveau. Mais l'essentiel n'est pas dans ce classement. Le court terme subi coûtait 4 % sur la seule ligne d'intérêts : entre payer quatre points sur de l'argent emprunté et percevoir deux à quatre points sur de l'argent détenu, l'**écart se compte en six à huit points** — avant même d'y ajouter les deux tiers du coût complet qui ne figurent pas dans les intérêts. Aucun arbitrage entre supports ne produit un écart de cet ordre.
+> **Cas observé.** Sur une exploitation en polyculture-élevage sortie de plusieurs années de court terme subi, trois supports couvrent les quatre barreaux. Voies d'accès : fonds monétaire souscrit en direct auprès de Spiko, fonds obligataires cotés (ETF) sur un compte-titres chez Interactive Brokers ; s'y ajoute, pour la part personnelle, un fonds euros d'assurance-vie (Linxea Spirit). Deux mois de charges sur les durées courtes, dont 60 % en compte courant et en livrets — le compte courant ne portant que le mois à venir — et le reste en fonds monétaire. Le troisième mois en obligataire, aux deux tiers sur du 1 à 3 ans, pour le reste sur du 3 à 5 ans. Les rendements servis suivaient la durée, d'un peu moins de 3 % sur le monétaire à un peu plus de 4 % sur le 3 à 5 ans : chaque cran de durée supplémentaire rapportait de l'ordre d'un demi-point de plus. C'est cette pente qui est transférable, pas son niveau. Mais l'essentiel n'est pas dans ce classement. Le court terme subi coûtait 4 % sur la seule ligne d'intérêts : entre payer quatre points sur de l'argent emprunté et percevoir deux à quatre points sur de l'argent détenu, l'**écart se compte en six à huit points** — avant même d'y ajouter les deux tiers du coût complet qui ne figurent pas dans les intérêts. Aucun arbitrage entre supports ne produit un écart de cet ordre.
 
 ## 7. Une revue par an
 
@@ -115,4 +119,4 @@ Les taux cités sur cette page dateront ; la règle d'appariement, non.
 
 ---
 
-*Cette page décrit une méthode de gestion appliquée à une exploitation. Elle ne constitue pas un conseil personnalisé. Les supports cités le sont à titre d'illustration, sans lien rémunéré ni recommandation.*
+*Cette page décrit une méthode de gestion appliquée à une exploitation. Elle ne constitue pas un conseil personnalisé. Les supports et prestataires cités le sont à titre d'illustration ou parce qu'ils sont ceux du cas observé, sans lien rémunéré ni recommandation.*

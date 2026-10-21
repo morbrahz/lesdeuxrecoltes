@@ -127,4 +127,4 @@ Agrandir un paddock, créer un chemin d'accès au pâturage ou regrouper deux pa
 - **Octobre-novembre** : examen du projet de loi de finances 2027 au Parlement, dont les mesures sur le photovoltaïque et le suramortissement.
 - **Fin octobre** : accord recherché entre les États membres sur la réforme de la PAC après 2027.
 
-*Veille préparée avec l'aide d'une IA et relue avant publication. Ces informations ne constituent pas un conseil juridique, fiscal ou financier.*
+*Veille relue avant publication. Ces informations ne constituent pas un conseil juridique, fiscal ou financier.*

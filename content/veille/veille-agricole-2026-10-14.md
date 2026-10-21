@@ -121,5 +121,5 @@ Pour aller plus loin : [Calculer l'EBE de son exploitation agricole en cours d'a
 * **27 octobre** : vote du budget de la Sécurité sociale 2027 à l'Assemblée nationale.
 * **1er novembre** : début de la remise de 20 centimes par litre sur le GNR annoncée par TotalEnergies.
 
-*Veille préparée avec l'aide d'une IA et relue avant publication. Ces informations ne constituent pas un conseil juridique, fiscal ou financier.*
+*Veille relue avant publication. Ces informations ne constituent pas un conseil juridique, fiscal ou financier.*
 

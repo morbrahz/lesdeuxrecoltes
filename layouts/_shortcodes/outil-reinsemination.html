@@ -1,0 +1,282 @@
+{{/* Outil « Quand arrêter d'inséminer une vache ».
+     Le calcul est fait par static/outils/reinsemination/regle_reinsemination.py,
+     exécuté dans le navigateur par Pyodide (static/outils/pyodide/, hébergé
+     sur le site : aucune requête vers un tiers). Les fichiers déposés ne
+     quittent pas l'ordinateur du visiteur. */}}
+<div id="rei" class="rei">
+  <label class="rei-fichier">
+    <span class="rei-num">1</span>
+    <span class="rei-lib"><strong>Production journalière par vache</strong> (copie enrichie)<br><small>au moins 6 mois · plusieurs fichiers acceptés, ils sont fusionnés</small></span>
+    <input type="file" accept=".csv,text/csv" multiple>
+    <span class="rei-nom">Choisir le ou les fichiers…</span>
+  </label>
+
+  <details class="rei-reglages">
+    <summary>Réglages</summary>
+    <div class="rei-grille">
+      <label>Seuil des primipares (%)<input type="number" id="rei-s1" value="90" step="1" min="50" max="100"></label>
+      <label>Seuil des rangs 2 (%)<input type="number" id="rei-s2" value="80" step="1" min="50" max="100"></label>
+      <label>Seuil des rangs 3 et plus (%)<input type="number" id="rei-s3" value="80" step="1" min="50" max="100"></label>
+      <label>Plus d'IA après (jours de lactation)<input type="number" id="rei-jmax" value="300" step="10" min="100"></label>
+      <label>Pas de décision avant (jours de lactation)<input type="number" id="rei-jmin" value="60" step="5" min="7"></label>
+      <label>Jours de données exigés<input type="number" id="rei-nmin" value="30" step="5" min="7"></label>
+      <label>Dernier jour complet<input type="date" id="rei-ancrage"></label>
+    </div>
+    <p class="rei-note">Laissé vide, le dernier jour complet est détecté : une journée exportée en cours de traite est écartée.</p>
+    <fieldset class="rei-exclus">
+      <legend>Jours perturbés à écarter</legend>
+      <p class="rei-note">Panne du robot, coupure de courant, journée de contrôle mal enregistrée : ces jours faussent la courbe du jour pour tout le troupeau.</p>
+      <div id="rei-exclus-liste"></div>
+      <button type="button" class="rei-bouton second rei-petit" id="rei-exclu-plus">+ Ajouter un jour</button>
+    </fieldset>
+    <p class="rei-note">Les valeurs par défaut sont celles de la méthode.</p>
+  </details>
+
+  <button type="button" id="rei-go" disabled>Calculer</button>
+  <p id="rei-etat" class="rei-etat" aria-live="polite">Déposez l'export de production journalière.</p>
+
+  <div id="rei-res" hidden></div>
+</div>
+
+<style>
+.rei { margin: 1.5rem 0; }
+.rei-fichier { display: grid; grid-template-columns: 2rem 1fr; gap: .2rem .8rem; align-items: center;
+  padding: .8rem 1rem; border: 1px dashed var(--tertiary); border-radius: var(--radius); cursor: pointer;
+  background: var(--entry); }
+.rei-fichier:hover, .rei-fichier:focus-within { border-color: var(--secondary); }
+.rei-fichier.ok { border-style: solid; border-color: var(--primary); }
+.rei-fichier input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.rei-num { grid-row: span 2; width: 2rem; height: 2rem; border-radius: 50%; display: grid; place-items: center;
+  background: var(--code-bg); font-weight: 600; }
+.rei-fichier.ok .rei-num { background: var(--primary); color: var(--theme); }
+.rei-lib small, .rei-nom { color: var(--secondary); font-size: .85em; }
+.rei-nom { grid-column: 2; overflow-wrap: anywhere; }
+.rei-reglages { margin: 1rem 0; }
+.rei-reglages summary { cursor: pointer; color: var(--secondary); }
+.rei-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: .6rem 1rem; margin-top: .8rem; }
+.rei-grille label { display: flex; flex-direction: column; gap: .2rem; font-size: .85em; color: var(--secondary); }
+.rei input[type=number], .rei input[type=date] { padding: .35rem .5rem; border: 1px solid var(--tertiary); border-radius: 6px;
+  background: var(--theme); color: var(--primary); font: inherit; font-size: 1rem; min-width: 0; }
+.rei-exclus { margin: 1rem 0 0; padding: .6rem 1rem .8rem; border: 1px solid var(--tertiary); border-radius: var(--radius); }
+.rei-exclus legend { font-size: .9em; padding: 0 .3rem; }
+.rei-exclu { display: flex; align-items: center; gap: .4rem; margin: .4rem 0; }
+.rei-exclu button { border: none; background: none; color: var(--secondary); cursor: pointer; font-size: 1.2rem; line-height: 1; padding: .2rem .4rem; }
+.rei-note { font-size: .85em; color: var(--secondary); margin-top: .6rem; }
+#rei-go, .rei-bouton { padding: .55rem 1.2rem; border-radius: var(--radius); border: 1px solid var(--primary);
+  background: var(--primary); color: var(--theme); font: inherit; cursor: pointer; }
+#rei-go:disabled { opacity: .45; cursor: not-allowed; }
+.rei-bouton.second { background: transparent; color: var(--primary); }
+.rei-petit { padding: .3rem .8rem; font-size: .9em; margin-top: .3rem; }
+.rei-etat { font-size: .9em; color: var(--secondary); margin-top: .6rem; }
+.rei-etat.erreur { color: #b3261e; }
+[data-theme="dark"] .rei-etat.erreur { color: #f2b8b5; }
+.rei-bloc { margin-top: 1.4rem; padding: 1rem 1.2rem; border-radius: var(--radius); background: var(--code-bg); }
+.rei-alerte { border-left: 4px solid #b3261e; }
+[data-theme="dark"] .rei-alerte { border-left-color: #f2b8b5; }
+.rei-bloc h3 { margin: 0 0 .3rem; font-size: 1.1rem; }
+.rei-bloc > p { margin: .2rem 0 .6rem; font-size: .9em; color: var(--secondary); }
+.rei-resume { display: grid; grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr)); gap: .6rem; margin: .6rem 0; }
+.rei-carte { padding: .5rem .7rem; border-radius: 6px; background: var(--theme); }
+.rei-carte b { display: block; font-size: 1.25rem; }
+.rei-carte span { font-size: .8em; color: var(--secondary); }
+.rei-carte b small { display: block; font-size: .65em; font-weight: 400; color: var(--secondary); }
+.rei-liste { font-size: 1.5rem; font-weight: 700; letter-spacing: .02em; line-height: 1.5; margin: .4rem 0 .8rem; word-spacing: .4em; }
+.rei-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.rei-vaches { list-style: none; margin: .8rem 0 0; padding: 0; font-size: .9em; }
+.rei-vaches li { padding: .5rem 0; border-top: 1px solid var(--tertiary); margin: 0; }
+.rei-meta { color: var(--secondary); font-size: .9em; }
+.rei-pos { font-weight: 600; }
+.rei-pastille { display: inline-block; padding: 0 .4rem; border-radius: 4px; font-size: .8em; background: var(--primary); color: var(--theme); }
+.rei details.rei-bloc summary { cursor: pointer; font-weight: 600; }
+@media print {
+  body * { visibility: hidden; }
+  #rei-res, #rei-res * { visibility: visible; }
+  #rei-res { position: absolute; left: 0; top: 0; width: 100%; }
+  .rei-actions { display: none; }
+}
+</style>
+
+<script src="{{ "outils/pyodide/pyodide.js" | relURL }}" defer></script>
+<script>
+(function () {
+  const INDEX = "{{ "outils/pyodide/" | relURL }}";
+  const MOTEUR = "{{ "outils/reinsemination/regle_reinsemination.py" | relURL }}";
+  const zone = document.querySelector("#rei .rei-fichier");
+  const input = zone.querySelector("input");
+  const etat = document.getElementById("rei-etat");
+  const bouton = document.getElementById("rei-go");
+  const res = document.getElementById("rei-res");
+  let textes = [];
+  let moteur = null;
+
+  function dire(msg, erreur) { etat.textContent = msg; etat.classList.toggle("erreur", !!erreur); }
+  function esc(s) { return String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+  async function lireTexte(f) {
+    const brut = await f.arrayBuffer();
+    try { return new TextDecoder("utf-8", { fatal: true }).decode(brut); }
+    catch (e) { return new TextDecoder("windows-1252").decode(brut); }
+  }
+
+  function charger() {
+    if (moteur) return moteur;
+    moteur = (async () => {
+      while (typeof loadPyodide === "undefined") await new Promise(r => setTimeout(r, 50));
+      const py = await loadPyodide({ indexURL: INDEX });
+      const code = await (await fetch(MOTEUR)).text();
+      py.FS.writeFile("regle_reinsemination.py", code);
+      return py.pyimport("regle_reinsemination");
+    })();
+    moteur.catch(() => { moteur = null; });
+    return moteur;
+  }
+
+  input.addEventListener("change", async () => {
+    const fichiers = [...input.files];
+    if (!fichiers.length) return;
+    textes = await Promise.all(fichiers.map(async f => [f.name, await lireTexte(f)]));
+    zone.querySelector(".rei-nom").textContent = fichiers.map(f => f.name).join(" · ");
+    zone.classList.add("ok");
+    bouton.disabled = false;
+    dire("Prêt. Le premier calcul charge le moteur (une douzaine de Mo, une seule fois).");
+    charger();
+  });
+
+  const listeExclus = document.getElementById("rei-exclus-liste");
+  function ajouterExclu(v) {
+    const d = document.createElement("div");
+    d.className = "rei-exclu";
+    d.innerHTML = `<input type="date" value="${v || ""}" aria-label="jour à écarter">
+      <button type="button" title="Retirer ce jour" aria-label="Retirer ce jour">×</button>`;
+    d.querySelector("button").addEventListener("click", () => d.remove());
+    listeExclus.appendChild(d);
+  }
+  document.getElementById("rei-exclu-plus").addEventListener("click", () => ajouterExclu(""));
+
+  function parametres() {
+    const n = id => { const v = document.getElementById(id).value; return v === "" ? null : Number(v); };
+    const pct = id => { const v = n(id); return v === null ? null : v / 100; };
+    return {
+      seuil_p1: pct("rei-s1"), seuil_r2: pct("rei-s2"), seuil_r3: pct("rei-s3"),
+      jel_max_ia: n("rei-jmax"), jel_min_decision: n("rei-jmin"), jours_min: n("rei-nmin"),
+      ancrage: document.getElementById("rei-ancrage").value || null,
+      exclus: [...listeExclus.querySelectorAll("input")].map(i => i.value).filter(Boolean),
+    };
+  }
+
+  const JOUR = s => { const [a, m, j] = s.split("-"); return `${j}/${m}/${a}`; };
+  const PCT = v => v === null || v === undefined ? "–" : Math.round(v * 100) + " %";
+  const DEC = (v, k) => v === null || v === undefined ? "–" : v.toFixed(k).replace(".", ",");
+  const RANG = { "P1": "primipare", "R2": "rang 2", "R3+": "rang 3 et plus" };
+
+  function lecture(v, r) {
+    const p = r.parametres;
+    if (v.verdict === "sous_seuil") return v.alertes.length
+      ? "Cause passagère possible (" + v.alertes.map(a => a === "traites" ? "moins de 2 traites par jour" : "cellules au-dessus de 300 000").join(", ") + " sur 14 jours) : attendre qu'elle soit levée, puis recalculer."
+      : "Aucune cause passagère visible dans l'export. Après avoir écarté une mammite ou une boiterie récente : ne plus inséminer, si vous le décidez.";
+    if (v.verdict === "delai_depasse") return `Plus de ${p.jel_max_ia} jours de lactation : pas de nouvelle insémination` + (/ins[ée]min[ée]e/i.test(v.statut) ? " si elle revient en chaleur." : ".");
+    if (v.verdict === "limite") return "Moins de 2 points au-dessus du seuil : continuer, et la revoir au prochain calcul.";
+    if (v.verdict === "trop_tot") return v.position !== null && v.position < v.seuil + p.marge_limite
+      ? `Sous le seuil ou tout près, mais trop tôt pour décider (moins de ${p.jel_min_decision} jours de lactation ou de ${p.jours_min} jours de données) : à revoir.`
+      : `Trop tôt pour décider (moins de ${p.jel_min_decision} jours de lactation ou de ${p.jours_min} jours de données).`;
+    if (v.verdict === "continuer") return "Au-dessus du seuil : continuer.";
+    return "Gestante ou déjà marquée « ne pas inséminer » : non classée.";
+  }
+
+  function liste(vaches, r) {
+    return '<ul class="rei-vaches">' + vaches.map(v => {
+      const meta = [RANG[v.rang], v.jel + " JEL", v.statut || "statut vide",
+                    v.jours ? v.jours + " jours de données" : null].filter(Boolean).join(" · ");
+      const recents = [v.lait14 !== null ? DEC(v.lait14, 1) + " kg/j" : null,
+                       v.traites14 !== null ? DEC(v.traites14, 1) + " traites/j" : null,
+                       v.cel_max14 !== null ? "cellules max " + Math.round(v.cel_max14) + " 000" : null].filter(Boolean).join(" · ");
+      return `<li><strong>${esc(v.vache)}</strong> <span class="rei-meta">${esc(meta)}</span>
+        ${v.alertes.length ? ' <span class="rei-pastille">cause passagère ?</span>' : ""}
+        <br><span class="rei-pos">Position ${PCT(v.position)}</span> <span class="rei-meta">· seuil ${PCT(v.seuil)}${recents ? " · 14 derniers jours : " + esc(recents) : ""}</span>
+        <br>${esc(lecture(v, r))}</li>`;
+    }).join("") + "</ul>";
+  }
+
+  function bloc(titre, intro, vaches, r, ouvert, copie) {
+    const n = vaches.length;
+    const nums = vaches.map(v => v.vache);
+    return `<section class="rei-bloc"><h3>${titre} : ${n} vache${n > 1 ? "s" : ""}</h3><p>${intro}</p>
+      ${n ? `<div class="rei-liste">${nums.map(esc).join(" ")}</div>` : ""}
+      ${n && copie ? `<div class="rei-actions"><button type="button" class="rei-bouton second" data-copie="${esc(nums.join(", "))}">Copier la liste</button>
+        <button type="button" class="rei-bouton second" onclick="window.print()">Imprimer</button></div>` : ""}
+      ${n ? liste(vaches, r) : ""}</section>`;
+  }
+
+  function afficher(r) {
+    const p = r.parametres;
+    const par = s => r.vaches.filter(v => v.verdict === s);
+    const sous = par("sous_seuil"), delai = par("delai_depasse"), limite = par("limite");
+    const tot = par("trop_tot");
+    const surveiller = tot.filter(v => v.position !== null && v.position < v.seuil + p.marge_limite);
+    const autresTot = tot.filter(v => !surveiller.includes(v));
+    const continuer = par("continuer"), non = par("non_classee");
+    let h = "";
+    if (r.note_ancrage) h += `<section class="rei-bloc"><h3>Dernier jour écarté</h3><p>${esc(r.note_ancrage)} Pour choisir un autre jour, renseignez « Dernier jour complet » dans les réglages.</p></section>`;
+    if (r.fenetre_courte) h += `<section class="rei-bloc rei-alerte"><h3>Période trop courte</h3>
+      <p>L'export ne couvre que ${r.jours_fenetre} jours de production. Il en faut au moins 6 mois pour que chaque rang ait une
+      courbe complète, du début à la fin de lactation : les positions ci-dessous sont à prendre avec prudence.</p></section>`;
+    if (r.inconnus.length) h += `<section class="rei-bloc rei-alerte"><h3>Statut de reproduction non reconnu</h3>
+      <p>Ces vaches sont classées comme si leur statut était vide : ${r.inconnus.map(i => esc(i.vache) + " « " + esc(i.statut) + " »").join(", ")}.
+      Vérifiez leur statut dans Horizon ; une gestante mal renseignée apparaîtrait ici à tort.</p></section>`;
+    if (r.colonnes_absentes.length) h += `<section class="rei-bloc"><h3>Alertes de cause passagère incomplètes</h3>
+      <p>Colonne(s) absente(s) de l'export : ${r.colonnes_absentes.map(esc).join(", ")}. Le calcul est fait, mais la baisse
+      de traites ou les cellules ne peuvent pas être signalées. Vérifiez-les dans Horizon pour les vaches sous le seuil.</p></section>`;
+
+    const rap = k => r.rapports[k] ? `${DEC(r.rapports[k].rapport, 2)} <small>(${DEC(r.rapports[k].bas, 2)} à ${DEC(r.rapports[k].haut, 2)})</small>` : "–";
+    h += `<section class="rei-bloc"><h3>Données lues</h3>
+      <p>Production du ${JOUR(r.fenetre[0])} au ${JOUR(r.fenetre[1])}, vaches entre 7 et 305 jours de lactation. Classement au ${JOUR(r.ancrage)}${r.exclus.length ? " ; jours écartés : " + r.exclus.map(JOUR).join(", ") : ""}.</p>
+      <div class="rei-resume">
+        <div class="rei-carte"><b>${r.nb_vaches}</b><span>vaches</span></div>
+        <div class="rei-carte"><b>${r.nb_lactations}</b><span>lactations</span></div>
+        <div class="rei-carte"><b>${r.vache_jours.toLocaleString("fr-FR")}</b><span>jours de production</span></div>
+        <div class="rei-carte"><b>${rap("P1")}</b><span>primipares / rangs 3+</span></div>
+        <div class="rei-carte"><b>${rap("R2")}</b><span>rangs 2 / rangs 3+</span></div>
+      </div>
+      <p>Les deux rapports disent combien une primipare et une vache de rang 2 produisent par rapport à une vache de rang 3 et plus,
+      au même stade et le même jour, avec leur intervalle de confiance à 95 %. Ils montrent pourquoi chaque vache se compare à la courbe de son rang.</p></section>`;
+
+    h += bloc("Sous le seuil", "Production moyenne de la lactation en cours sous le seuil de leur rang. Vérifier d'abord une cause passagère.", sous, r, true, true);
+    h += bloc("Délai dépassé", `Plus de ${p.jel_max_ia} jours de lactation et pas encore gestantes.`, delai, r, true, true);
+    if (limite.length) h += bloc("À la limite", "Moins de 2 points au-dessus du seuil.", limite, r, true, false);
+    if (surveiller.length) h += bloc("Trop tôt, à surveiller", "Sous le seuil ou tout près, mais pas encore assez de jours pour décider.", surveiller, r, true, false);
+    const repli = (titre, vaches, intro) => vaches.length
+      ? `<details class="rei-bloc"><summary>${titre} : ${vaches.length}</summary><p class="rei-note">${intro}</p>${liste(vaches, r)}</details>` : "";
+    h += repli("Continuer", continuer, "Au-dessus du seuil de leur rang.");
+    h += repli("Trop tôt", autresTot, `Moins de ${p.jel_min_decision} jours de lactation ou de ${p.jours_min} jours de données dans la lactation.`);
+    h += repli("Non classées", non, "Gestantes ou déjà marquées « ne pas inséminer ».");
+    res.innerHTML = h;
+    res.hidden = false;
+    res.querySelectorAll("[data-copie]").forEach(b => b.addEventListener("click", async () => {
+      try { await navigator.clipboard.writeText(b.dataset.copie); b.textContent = "Copiée"; }
+      catch (e) { b.textContent = "Copie impossible"; }
+      setTimeout(() => { b.textContent = "Copier la liste"; }, 2000);
+    }));
+  }
+
+  bouton.addEventListener("click", async () => {
+    bouton.disabled = true;
+    try {
+      dire("Chargement du moteur de calcul…");
+      const m = await charger();
+      dire("Calcul… (quelques secondes sur plusieurs mois de données)");
+      await new Promise(r => setTimeout(r, 30));
+      const r = JSON.parse(m.calculer_json(JSON.stringify(textes), JSON.stringify(parametres())));
+      if (r.erreur) { res.hidden = true; dire(r.erreur, true); return; }
+      afficher(r);
+      window.ldrEvenement && window.ldrEvenement("outil-reinsemination-calcul");
+      dire(`Calcul fait sur ${r.vaches.length} vaches présentes le ${JOUR(r.ancrage)}. Rien n'a quitté cet ordinateur.`);
+      res.scrollIntoView({ behavior: "smooth", block: "start" });
+    } catch (e) {
+      console.error(e);
+      dire("Le calcul a échoué : " + (e.message || e).toString().split("\n").slice(-2).join(" "), true);
+    } finally {
+      bouton.disabled = !textes.length;
+    }
+  });
+})();
+</script>

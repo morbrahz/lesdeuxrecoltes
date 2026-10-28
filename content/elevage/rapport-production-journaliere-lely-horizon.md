@@ -2,17 +2,17 @@
 title = "Créer un rapport de production journalière par vache dans Lely Horizon"
 seoTitle = "Rapport de production journalière par vache dans Lely Horizon"
 date = 2026-09-27
-lastmod = 2026-10-14
+lastmod = 2026-10-28
 draft = false
 weight = 3
 summary = "Lely Horizon : dupliquer le rapport de production journalière par vache et y ajouter refus, traites et jours de lactation, pour un export CSV complet."
 +++
 
-Les rapports standards de Lely Horizon ne contiennent pas forcément toutes les colonnes dont on a besoin. Horizon permet en revanche d'en faire une copie et d'y ajouter les champs voulus. Cette page décrit la copie du rapport de production journalière par vache utilisée par l'[outil des vaches à pousser au robot](/elevage/outil-vaches-a-pousser/), qui applique la méthode décrite dans [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/). Elle contient plus de champs que cet outil n'en lit : les autres servent au [bilan du troupeau](/elevage/outil-bilan-troupeau/). Celui-ci fonctionne aussi avec les rapports standard, sans copie, pour les chiffres du troupeau ; la copie y reste recommandée pour la liste des vaches à regarder, parce qu'elle permet de moyenner les indications sur plusieurs jours.
+Les rapports standards de Lely Horizon ne contiennent pas forcément toutes les colonnes dont on a besoin. Horizon permet en revanche d'en faire une copie et d'y ajouter les champs voulus. Cette page décrit la copie du rapport de production journalière par vache utilisée par l'[outil des vaches à pousser au robot](/elevage/outil-vaches-a-pousser/), qui applique la méthode décrite dans [Quelles vaches pousser au robot de traite](/elevage/quelles-vaches-pousser-au-robot/). Elle contient plus de champs que cet outil n'en lit : les autres servent au [bilan du troupeau](/elevage/outil-bilan-troupeau/). Celui-ci fonctionne aussi avec les rapports standard, sans copie, pour les chiffres du troupeau ; la copie y reste recommandée pour la liste des vaches à regarder, parce qu'elle permet de moyenner les indications sur plusieurs jours. Exportée sur plusieurs mois, la même copie sert aussi à l'[outil qui dit quand arrêter d'inséminer une vache](/elevage/outil-reinsemination/), qui lit en plus l'état de reproduction et le rang de lactation.
 
 La manipulation prend quelques minutes et ne se fait qu'une fois. Le rapport d'origine n'est pas modifié.
 
-*Dernière mise à jour : 14 octobre 2026.*
+*Dernière mise à jour : 28 octobre 2026.*
 
 ## 1. Le contenu du rapport
 
@@ -73,6 +73,8 @@ Cliquer sur **Enregistrer rapport**. La copie est prête ; elle se réutilise te
 ## 5. Exporter et vérifier
 
 Ouvrir le rapport, choisir la période — **les 3 à 5 derniers jours**, pour l'outil des vaches à pousser comme pour le bilan du troupeau — et l'exporter au format **CSV**. La même période vaut pour la liste des traites, exportée à côté.
+
+Pour l'[outil de fin des inséminations](/elevage/outil-reinsemination/), la période est beaucoup plus longue : **au moins 6 mois**, idéalement depuis le 1er janvier. Si Horizon limite la période d'un export, on exporte en plusieurs fois et on dépose les fichiers ensemble.
 
 Pour vérifier le rapport, le plus simple est de déposer l'export dans l'[outil en ligne](/elevage/outil-vaches-a-pousser/). S'il manque un champ, l'outil l'indique par son nom, sans rien calculer ; il suffit alors de revenir au § 3.
 

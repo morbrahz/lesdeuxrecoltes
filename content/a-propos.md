@@ -1,7 +1,7 @@
 +++
 title = "À propos et méthode"
 date = 2026-09-17
-lastmod = 2026-11-04
+lastmod = 2026-09-17
 draft = false
 summary = "Qui écrit Les Deux Récoltes, un exploitant en polyculture-élevage, pourquoi ce site existe et les règles qu'il suit : décrire, pas prescrire."
 +++
@@ -24,7 +24,7 @@ Des **notes datées** s'y ajoutent au fil de l'eau, secondaires par nature : ell
 
 ## Les règles que je m'impose
 
-- **Décrire, pas prescrire.** J'explique ce que j'ai fait, pourquoi, et ce que ça a coûté. Je n'écris pas ce qu'il faut faire, et je ne recommande aucun produit financier, aucun support ni aucun titre.
+- **Décrire, pas prescrire.** J'explique ce que j'ai fait, pourquoi, et ce que ça a coûté. Je n'écris pas ce qu'il faut faire, et je ne recommande aucun produit, aucun support ni aucun titre.
 - **Publier une page utilisable plutôt qu'une page finie.** Une page incomplète mais juste vaut mieux qu'une page parfaite jamais publiée.
 
 ## Ce que ce site n'est pas
@@ -39,4 +39,4 @@ Une erreur, une objection, une pratique différente de la mienne : écrivez à *
 
 ---
 
-*Dernière mise à jour : 4 novembre 2026.*
+*Dernière mise à jour : 17 septembre 2026.*

@@ -1,0 +1,12 @@
+{{/* Carte d'une formule de licence :
+     {{< vente-formule titre="Exploitant" prix="prix_exploitant" dossiers="1 à 2 dossiers" texte="…" commande="exploitant" >}}
+     prix : clé de hugo.toml [params.vente], ou « sur devis ». Texte simple, sans Markdown. */}}
+{{- partial "vente-controle.html" . -}}
+{{- $prix := .Get "prix" -}}
+<div class="vente-formule">
+<h3>{{ .Get "titre" }}</h3>
+<div class="vente-montant">{{ if eq $prix "sur devis" }}Sur devis{{ else }}{{ index site.Params.vente $prix }} <small>par an</small>{{ end }}</div>
+<p><strong>{{ .Get "dossiers" }}</strong></p>
+<p>{{ .Get "texte" }}</p>
+{{ with .Get "commande" }}{{ partial "vente-commande.html" . }}{{ end }}
+</div>

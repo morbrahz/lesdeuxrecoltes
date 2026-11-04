@@ -1,14 +1,14 @@
 +++
 title = "À propos et méthode"
 date = 2026-09-17
-lastmod = 2026-09-17
+lastmod = 2026-11-04
 draft = false
 summary = "Qui écrit ici, pourquoi, et selon quelles règles."
 +++
 
 ## Qui écrit
 
-J'exploite une ferme en polyculture-élevage et j'écris ici sous le pseudonyme **Morbrazh**. Je ne suis ni conseiller, ni formateur, ni vendeur de méthode : je suis un exploitant qui a dû résoudre des problèmes de gestion et d'investissement pour son propre compte, et qui en publie les réponses.
+J'exploite une ferme en polyculture-élevage et j'écris ici sous le pseudonyme **Morbrazh**. Je ne suis ni conseiller, ni formateur, ni vendeur de méthode : je suis un exploitant qui a dû résoudre des problèmes de gestion et d'investissement pour son propre compte, et qui en publie les réponses. Une seule chose est à vendre, à part : le [Tableau d'exploitation](/tableau-exploitation/), un logiciel tiré de mes propres outils de gestion (voir plus bas).
 
 ## Pourquoi ce site
 
@@ -33,7 +33,7 @@ Ce n'est **pas un conseil personnalisé**. Aucune page ne tient compte de votre 
 
 Ce n'est **pas une recommandation d'investissement**. Le site publie des méthodes et des grilles vierges, pas des avis d'achat ou de vente, ni de sélection de titres.
 
-Ce n'est **pas un produit**. Rien n'est à vendre.
+Ce n'est **pas un produit**. Les pages et les outils en ligne sont gratuits, sans publicité ni contenu réservé. Une seule chose est vendue, et présentée comme telle : le [Tableau d'exploitation](/tableau-exploitation/), logiciel de gestion pour les conseillers et les exploitants qui suivent plusieurs dossiers. Il est tiré du tableau que j'utilise pour ma propre exploitation ; l'outil gratuit [EBE en cours d'année](/tresorerie/outil-ebe-en-cours-d-annee/) applique la même méthode et le reste. Acheter le logiciel ne donne accès à aucune page réservée et ne change rien à ce qui est publié ici.
 
 ## Me joindre
 
@@ -41,4 +41,4 @@ Une erreur, une objection, une pratique différente de la mienne : écrivez à *
 
 ---
 
-*Dernière mise à jour : 17 septembre 2026.*
+*Dernière mise à jour : 4 novembre 2026.*

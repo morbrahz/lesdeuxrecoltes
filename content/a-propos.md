@@ -33,8 +33,6 @@ Ce n'est **pas un conseil personnalisé**. Aucune page ne tient compte de votre 
 
 Ce n'est **pas une recommandation d'investissement**. Le site publie des méthodes et des grilles vierges, pas des avis d'achat ou de vente, ni de sélection de titres.
 
-Ce n'est **pas une vitrine commerciale**. Les pages et les outils en ligne sont gratuits, sans inscription, et aucun contenu n'est écrit pour vendre quoi que ce soit. Une seule exception, signalée comme telle : le [Tableau d'exploitation](/tableau-exploitation/), version professionnelle de l'outil EBE destinée aux conseillers et aux cabinets, proposé sous licence après un essai gratuit. Les pages de méthode n'en dépendent pas : elles restent complètes sans lui.
-
 ## Me joindre
 
 Une erreur, une objection, une pratique différente de la mienne : écrivez à **contact@lesdeuxrecoltes.fr**. Les retours d'exploitants sont ce qui corrige le mieux une méthode.

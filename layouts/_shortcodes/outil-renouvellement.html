@@ -683,6 +683,7 @@ function readHorizon(text, fname, fallbackDate){
 }
 $("csvIn").addEventListener("change", async e=>{
   const files = [...e.target.files]; if (!files.length) return;
+  window.ldrDepot && window.ldrDepot("outil-renouvellement-depot");
   const fb = parseDate($("expDate").value);
   const types = new Set(), found = new Map(), lines = []; let calvings = new Map();
   for (const f of files){

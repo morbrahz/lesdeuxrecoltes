@@ -12,7 +12,7 @@ Ce site compte ses visites avec deux outils, utilisés en parallèle à titre d'
 - ne déposent **aucun cookie** et n'utilisent aucun identifiant publicitaire ;
 - ne conservent **pas les adresses IP** : elles servent uniquement, de façon temporaire et sous forme non réversible, à distinguer deux visites ;
 - collectent la page consultée, la date, la provenance (site ou moteur de recherche d'origine), le type de navigateur et d'appareil, et la localisation approximative (pays, région) ;
-- comptent aussi, pour chaque [outil en ligne](#outils-en-ligne), le nombre de calculs lancés, ainsi que les téléchargements des tableurs : un simple compteur, qui ne transmet rien du contenu de vos fichiers ni des résultats.
+- comptent aussi, pour chaque [outil en ligne](#outils-en-ligne), le nombre de fichiers déposés et de calculs lancés, ainsi que les téléchargements des tableurs : un simple compteur, qui ne transmet ni le nom ni le contenu de vos fichiers, ni les résultats.
 
 Umami ne compte pas les visites des navigateurs réglés sur « Ne pas me pister » (Do Not Track). Ses données sont conservées six mois.
 

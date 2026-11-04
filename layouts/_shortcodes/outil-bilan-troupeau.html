@@ -119,6 +119,7 @@
   }
   zone.querySelector("input").addEventListener("change", async e => {
     const fs = [...e.target.files]; if (!fs.length) return;
+    window.ldrDepot && window.ldrDepot("outil-bilan-troupeau-depot");
     fichiers = await Promise.all(fs.map(async f => ({ nom: f.name, texte: await lireTexte(f) })));
     zone.querySelector(".bt-nom").textContent = fs.map(f => f.name).join(" · "); zone.classList.add("ok");
     bouton.disabled = false;

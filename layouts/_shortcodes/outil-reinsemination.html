@@ -133,6 +133,7 @@
 
   input.addEventListener("change", async () => {
     const fichiers = [...input.files];
+    if (fichiers.length) window.ldrDepot && window.ldrDepot("outil-reinsemination-depot");
     if (!fichiers.length) return;
     textes = await Promise.all(fichiers.map(async f => [f.name, await lireTexte(f)]));
     zone.querySelector(".rei-nom").textContent = fichiers.map(f => f.name).join(" · ");

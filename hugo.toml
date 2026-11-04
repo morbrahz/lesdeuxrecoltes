@@ -23,6 +23,10 @@ disableKinds = ['taxonomy', 'term']
   description = "Méthodes de gestion, d'investissement et d'élevage laitier écrites depuis une exploitation : trésorerie, épargne, placements, structures, traite robotisée."
   # Mesure d'audience GoatCounter : code du site (sous-domaine choisi a l'inscription).
   goatcounter = 'lesdeuxrecoltes'
+  # Mesure d'audience Umami Cloud (region UE), en essai parallele a GoatCounter
+  # jusqu'a la revue trimestrielle : identifiant du site (data-website-id).
+  # Vide, aucun script Umami n'est charge.
+  umamiWebsiteId = 'cfa94274-7910-4190-a2cd-032abc6cc27a'
   # Inscription aux nouvelles pages : adresse du formulaire Brevo
   # (https://....sibforms.com/serve/..., code « HTML simple » du formulaire).
   # Vide, le formulaire n'apparait nulle part (layouts/_partials/inscription.html).

@@ -1,18 +1,20 @@
 +++
 title = "Confidentialité"
 date = 2026-09-17
-lastmod = 2026-10-15
+lastmod = 2026-11-04
 summary = "Ce que ce site mesure, ce qu'il collecte pour la lettre d'information, et comment exercer vos droits."
 +++
 
 ## Mesure d'audience
 
-Ce site utilise **GoatCounter** pour compter les visites. Cet outil :
+Ce site compte ses visites avec deux outils, utilisés en parallèle à titre d'essai : **GoatCounter** et **Umami** (Umami Software, Inc., données hébergées sur des serveurs situés dans l'Union européenne). Ces deux outils :
 
-- ne dépose **aucun cookie** et n'utilise aucun identifiant publicitaire ;
-- ne conserve **pas les adresses IP** : elles servent uniquement, de façon temporaire et sous forme non réversible, à distinguer deux visites ;
-- collecte la page consultée, la date, la provenance (site ou moteur de recherche d'origine), le type de navigateur et le pays ;
-- compte aussi, pour chaque [outil en ligne](#outils-en-ligne), le nombre de calculs lancés, ainsi que les téléchargements des tableurs : un simple compteur, qui ne transmet rien du contenu de vos fichiers ni des résultats.
+- ne déposent **aucun cookie** et n'utilisent aucun identifiant publicitaire ;
+- ne conservent **pas les adresses IP** : elles servent uniquement, de façon temporaire et sous forme non réversible, à distinguer deux visites ;
+- collectent la page consultée, la date, la provenance (site ou moteur de recherche d'origine), le type de navigateur et d'appareil, et la localisation approximative (pays, région) ;
+- comptent aussi, pour chaque [outil en ligne](#outils-en-ligne), le nombre de calculs lancés, ainsi que les téléchargements des tableurs : un simple compteur, qui ne transmet rien du contenu de vos fichiers ni des résultats.
+
+Umami ne compte pas les visites des navigateurs réglés sur « Ne pas me pister » (Do Not Track). Ses données sont conservées six mois.
 
 Ces données sont agrégées. Elles ne permettent pas d'identifier une personne et ne sont ni revendues, ni partagées, ni utilisées à des fins publicitaires.
 
@@ -48,4 +50,4 @@ En dehors de la lettre d'information, aucune donnée personnelle identifiante n'
 
 ---
 
-*Dernière mise à jour : 14 octobre 2026.*
+*Dernière mise à jour : 4 novembre 2026.*

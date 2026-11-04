@@ -30,3 +30,6 @@
 {{- with site.Params.googleSiteVerification }}
 <meta name="google-site-verification" content="{{ . }}">
 {{- end }}
+
+{{/* Page d'un logiciel (Tableau d'exploitation) : description structurée schema.org */}}
+{{- if .Params.logiciel }}{{ partial "schema-logiciel.html" . }}{{ end }}

@@ -37,6 +37,10 @@ jobs:
           verifier tableau-exploitation/index.html "telechargement-tableau-exploitation"
           verifier tableau-exploitation/index.html "contact-tableau-licence"
           verifier tableau-exploitation/tableau-exploitation.html "connect-src 'none'"
+          verifier tableau-exploitation/tableau-exploitation.html 'name="robots" content="noindex'
+          verifier tableau-exploitation/index.html '"@type":"SoftwareApplication"'
+          verifier tableau-exploitation/index.html 'og:image'
+          verifier tableau-exploitation/index.html "logiciel de suivi de l"
           test -f /tmp/site/tableau-exploitation/exemple-synthese.pdf
           test -f /tmp/site/images/tableau-exploitation/tableau-demo.jpg
           echo "Page du Tableau d'exploitation construite et vérifiée."

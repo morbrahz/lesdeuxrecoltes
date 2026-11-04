@@ -32,6 +32,12 @@ Les outils proposés sur ce site, comme la [liste des vaches à pousser au robot
 
 Seul le [compteur de renouvellement](/elevage/outil-renouvellement/) garde vos saisies d'une visite à l'autre, pour que vous n'ayez pas à tout ressaisir : elles sont enregistrées **dans la mémoire de votre navigateur** (stockage local), sur votre appareil uniquement. Elles ne sont jamais transmises au site ni à un tiers. Vous pouvez les effacer depuis l'outil (« Tout effacer ») ou en supprimant les données du site dans les réglages de votre navigateur.
 
+## Tableau d'exploitation
+
+Le [Tableau d'exploitation](/tableau-exploitation/), proposé en essai sur ce site, est un fichier qui fonctionne **entièrement dans votre navigateur**. Il ne contient aucune mesure d'audience et s'interdit toute connexion à Internet : les grands livres, les dossiers et la licence restent sur votre ordinateur. Le site compte seulement, sans autre donnée, les clics sur « Voir la démonstration », « Télécharger l'essai » et les boutons de contact.
+
+Une demande de licence ou de démonstration se fait par e-mail. Les informations que vous y donnez (nom, structure, adresse e-mail, nom à inscrire sur la licence) servent uniquement à vous répondre et à établir la licence ; elles ne sont ni cédées, ni utilisées à d'autres fins, et sont effacées sur simple demande.
+
 ## Lettre d'information
 
 Le formulaire « Être prévenu des nouvelles pages » permet de recevoir un e-mail à chaque nouvelle page publiée. C'est le seul endroit du site où une donnée personnelle est collectée.

@@ -44,14 +44,23 @@ disableKinds = ['taxonomy', 'term']
   comments = false
   hidemeta = true
 
+  # Tableau d'exploitation (version pro, en essai gratuit) : version du fichier
+  # proposé au téléchargement, dans static/tableau-exploitation/.
+  tableauVersion = '1.0.1'
+
   [params.homeInfoParams]
     Title = "Méthodes de gestion, d'investissement et d'élevage, écrites depuis une exploitation agricole"
-    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne, placements, choix des structures et conduite d'un troupeau laitier trait au robot. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\n**[Tous les outils en ligne](/outils/)**, calcul dans votre navigateur : [EBE en cours d'année](/tresorerie/outil-ebe-en-cours-d-annee/) · [vaches à pousser au robot](/elevage/outil-vaches-a-pousser/) · [bilan du troupeau](/elevage/outil-bilan-troupeau/) · [renouvellement du troupeau](/elevage/outil-renouvellement/) · [quand arrêter d'inséminer](/elevage/outil-reinsemination/).\n\nUne question, une remarque, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr) : chaque message est lu."
+    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne, placements, choix des structures et conduite d'un troupeau laitier trait au robot. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\n**[Tous les outils en ligne](/outils/)**, calcul dans votre navigateur : [EBE en cours d'année](/tresorerie/outil-ebe-en-cours-d-annee/) · [vaches à pousser au robot](/elevage/outil-vaches-a-pousser/) · [bilan du troupeau](/elevage/outil-bilan-troupeau/) · [renouvellement du troupeau](/elevage/outil-renouvellement/) · [quand arrêter d'inséminer](/elevage/outil-reinsemination/).\n\n**Conseillers, centres de gestion, cabinets** : le [Tableau d'exploitation](/tableau-exploitation/) est la version professionnelle de l'outil EBE (plusieurs dossiers, atterrissage, synthèse de rendez-vous, FEC). Essai gratuit de 30 jours.\n\nUne question, une remarque, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr) : chaque message est lu."
 
 [[menu.main]]
   name = 'Outils'
   url = '/outils/'
   weight = 5
+
+[[menu.main]]
+  name = 'Version pro'
+  url = '/tableau-exploitation/'
+  weight = 7
 
 [[menu.main]]
   name = 'Trésorerie'

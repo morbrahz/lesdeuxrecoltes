@@ -2,7 +2,7 @@
 title = "Outil en ligne : l'EBE en cours d'année depuis la comptabilité"
 seoTitle = "Outil : l'EBE en cours d'année depuis le grand livre ou la balance"
 date = 2026-10-03
-lastmod = 2026-10-14
+lastmod = 2026-11-04
 draft = false
 weight = 5
 annonce = false
@@ -13,7 +13,7 @@ Cet outil applique la méthode décrite dans [Calculer l'EBE de son exploitation
 
 **Vos fichiers ne quittent pas votre ordinateur.** Le calcul s'exécute dans votre navigateur ; rien n'est envoyé ni conservé. Au premier calcul, le navigateur télécharge le moteur de calcul depuis ce site (une douzaine de Mo, gardés ensuite en mémoire).
 
-*Dernière mise à jour : 14 octobre 2026.*
+*Dernière mise à jour : 4 novembre 2026.*
 
 ## 1. Les fichiers à préparer
 
@@ -30,7 +30,7 @@ Le format de référence est celui des exports d'**Isacompta**. Les colonnes son
 
 {{< outil-temperature-exploitation >}}
 
-**Conseiller, centre de gestion, structure agricole ?** Si vous souhaitez utiliser cet outil pour les dossiers de vos clients, écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr).
+**Conseiller, centre de gestion, cabinet, ou plusieurs structures à suivre ?** Le [Tableau d'exploitation](/tableau-exploitation/) est la version professionnelle de cet outil : plusieurs dossiers mémorisés, atterrissage de fin d'exercice, synthèse de rendez-vous à imprimer, filières, fichiers FEC, et un fonctionnement hors connexion. Essai gratuit de 30 jours.
 
 ## 3. Lire les résultats
 

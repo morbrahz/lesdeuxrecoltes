@@ -1,0 +1,36 @@
+{{- /* Image de contenu optimisée : dimensions (pas de décalage de mise en
+     page), chargement différé et variantes WebP à plusieurs largeurs, pour
+     qu'un téléphone ne télécharge pas une capture de 1 280 px.
+     Les images de static/images sont aussi montées dans assets/images
+     (hugo.toml, [module]) : Hugo peut donc les redimensionner, tandis que le
+     fichier d'origine reste publié à la même adresse (image de partage,
+     liens existants). Image introuvable ou externe : balise simple.
+     Paramètres : src, alt, title (facultatif), class (facultatif). */ -}}
+{{- $src := .src -}}
+{{- $attrs := dict "src" $src "alt" .alt "loading" "lazy" "decoding" "async" -}}
+{{- with .title }}{{ $attrs = merge $attrs (dict "title" .) }}{{ end -}}
+{{- with .class }}{{ $attrs = merge $attrs (dict "class" .) }}{{ end -}}
+{{- $u := urls.Parse $src -}}
+{{- if not $u.IsAbs -}}
+  {{- with resources.Get (strings.TrimPrefix "/" $u.Path) -}}
+    {{- if in (slice "jpeg" "png" "webp") .MediaType.SubType -}}
+      {{- $attrs = merge $attrs (dict "width" (string .Width) "height" (string .Height)) -}}
+      {{- $variantes := slice -}}
+      {{- $img := . -}}
+      {{- range slice 480 800 1200 -}}
+        {{- if lt . $img.Width -}}
+          {{- $v := $img.Resize (printf "%dx webp q80" .) -}}
+          {{- $variantes = $variantes | append (printf "%s %dw" $v.RelPermalink $v.Width) -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $v := $img.Process "webp q80" -}}
+      {{- $variantes = $variantes | append (printf "%s %dw" $v.RelPermalink $v.Width) -}}
+      {{- $attrs = merge $attrs (dict "srcset" (delimit $variantes ", ") "sizes" "(max-width: 760px) calc(100vw - 48px), 680px") -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+<img
+  {{- range $k, $v := $attrs -}}
+    {{- if $v -}}{{- printf " %s=%q" $k $v | safeHTMLAttr -}}{{- end -}}
+  {{- end -}}>
+{{- /**/ -}}

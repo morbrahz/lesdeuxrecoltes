@@ -16,7 +16,7 @@
 <script>document.addEventListener("click", function (e) { var a = e.target.closest && e.target.closest('a[href$=".xlsx"]'); if (a && window.ldrEvenement) window.ldrEvenement("telechargement-" + a.pathname.split("/").pop().replace(/\.xlsx$/, "")); });</script>
 {{- if and site.Params.goatcounter (eq hugo.Environment "production") }}
 <script data-goatcounter="https://{{ site.Params.goatcounter }}.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+        async src="https://gc.zgo.at/count.js"></script>
 {{- end }}
 {{- if and site.Params.umamiWebsiteId (eq hugo.Environment "production") }}
 <script defer src="https://cloud.umami.is/script.js"

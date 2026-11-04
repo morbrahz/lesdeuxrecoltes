@@ -1,6 +1,7 @@
 +++
 weight = 4
 title = 'Structures'
+seoTitle = "Structures agricoles : société, holding, IR ou IS"
 summary = "Choisir la structure juridique et fiscale de l'exploitation : société, holding, impôt sur le revenu ou impôt sur les sociétés."
 +++
 

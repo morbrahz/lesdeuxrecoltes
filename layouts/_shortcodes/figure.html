@@ -1,0 +1,11 @@
+{{- /* Remplace le shortcode figure de PaperMod pour servir des images
+     dimensionnées et en WebP (voir _partials/image-responsive.html).
+     Paramètres utilisés sur le site : src, alt, caption, class, link. */ -}}
+<figure{{ with .Get "class" }} class="{{ . }}"{{ end }}>
+  {{- with .Get "link" }}<a href="{{ . }}">{{ end -}}
+  {{- partial "image-responsive.html" (dict "src" (.Get "src") "alt" (or (.Get "alt") (.Get "caption" | markdownify | plainify))) -}}
+  {{- if .Get "link" }}</a>{{ end -}}
+  {{- with .Get "caption" }}
+  <figcaption><p>{{ . | markdownify }}</p></figcaption>
+  {{- end }}
+</figure>

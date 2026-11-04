@@ -1,0 +1,6 @@
+/* Images de contenu : elles portent leurs dimensions (width/height, posées
+   par _partials/image-responsive.html) pour réserver leur place pendant le
+   chargement ; la hauteur suit la largeur réelle à l'écran. */
+.post-content img[width][height] {
+  height: auto;
+}

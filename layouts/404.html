@@ -1,0 +1,21 @@
+{{- /* Page introuvable : remplace le simple « 404 » du thème par un
+     message et des liens vers les entrées du site. Non indexée
+     (_partials/head.html). */ -}}
+{{- define "main" }}
+<article class="post-single">
+<header class="post-header">
+  <h1 class="post-title">Page introuvable</h1>
+</header>
+<div class="post-content md-content">
+  <p>Cette adresse ne correspond à aucune page du site : elle a pu être mal recopiée, ou la page a changé d’adresse.</p>
+  <ul>
+    <li><a href="{{ "/" | relURL }}">Accueil</a> : toutes les pages, rangées par rubrique</li>
+    <li><a href="{{ "/outils/" | relURL }}">Outils en ligne</a> : EBE en cours d’année, vaches à pousser, bilan du troupeau, renouvellement, insémination</li>
+    {{- range site.Sections.ByWeight }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>
+    {{- end }}
+  </ul>
+  <p>Un lien cassé repéré sur le site ? Signalez-le à <a href="mailto:contact@lesdeuxrecoltes.fr">contact@lesdeuxrecoltes.fr</a>.</p>
+</div>
+</article>
+{{- end }}

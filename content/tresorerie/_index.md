@@ -1,6 +1,7 @@
 +++
 weight = 1
 title = 'Trésorerie'
+seoTitle = "Trésorerie de l'exploitation agricole : méthodes et outil EBE"
 summary = "Dimensionner, répartir et placer la trésorerie d'une exploitation agricole, et suivre l'EBE en cours d'année."
 +++
 

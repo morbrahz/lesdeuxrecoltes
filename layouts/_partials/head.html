@@ -1,7 +1,8 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-{{- if hugo.IsProduction | or (eq site.Params.env "production") | and (ne .Params.robotsNoIndex true) }}
+{{- /* Page 404 : jamais indexée (ajout local). */}}
+{{- if hugo.IsProduction | or (eq site.Params.env "production") | and (ne .Params.robotsNoIndex true) | and (ne .Kind "404") }}
 <meta name="robots" content="index, follow">
 {{- else }}
 <meta name="robots" content="noindex, nofollow">
@@ -10,20 +11,24 @@
 {{- /* Title */}}
 {{- /* Surcharge locale : seule la balise <title> change (seoTitle par page, homeTitle pour l'accueil).
      Copie de themes/PaperMod/layouts/_partials/head.html : a resynchroniser si le theme est mis a jour. */}}
-<title>{{ if .IsHome }}{{ site.Params.homeTitle | default site.Title }}{{ else }}{{ with .Params.seoTitle }}{{ . }}{{ else }}{{ if .Title }}{{ .Title }} | {{ end }}{{ site.Title }}{{ end }}{{ end }}</title>
+{{- /* Sans seoTitle, le nom du site s'ajoute au titre, sauf si l'ensemble
+     dépasse 65 caractères : au-delà, Google le coupe et le nom du site
+     (déjà affiché à part dans les résultats) mangerait la fin du titre. */}}
+{{- $suffixe := printf " | %s" site.Title }}
+<title>{{ if eq .Kind "404" }}Page introuvable | {{ site.Title }}{{ else if .IsHome }}{{ site.Params.homeTitle | default site.Title }}{{ else }}{{ with .Params.seoTitle }}{{ . }}{{ else }}{{ if .Title }}{{ .Title }}{{ if le (add (strings.RuneCount .Title) (strings.RuneCount $suffixe)) 65 }}{{ $suffixe }}{{ end }}{{ else }}{{ site.Title }}{{ end }}{{ end }}{{ end }}</title>
 
 {{- /* Meta */}}
-{{- if .IsHome }}
-{{ with site.Params.keywords -}}<meta name="keywords" content="{{- range $i, $e := . }}{{ if $i }}, {{ end }}{{ $e }}{{ end }}">{{ end }}
-{{- else }}
-<meta name="keywords" content="{{ if .Params.keywords -}}
-    {{- range $i, $e := .Params.keywords }}{{ if $i }}, {{ end }}{{ $e }}{{ end }} {{- else }}
-    {{- range $i, $e := .Params.tags }}{{ if $i }}, {{ end }}{{ $e }}{{ end }} {{- end -}}">
+{{- /* Balise keywords : seulement si des mots-clés sont déclarés (ajout
+     local ; le thème l'écrivait vide sur chaque page). */}}
+{{- with (cond .IsHome site.Params.keywords .Params.keywords) }}
+<meta name="keywords" content="{{- range $i, $e := . }}{{ if $i }}, {{ end }}{{ $e }}{{ end }}">
 {{- end }}
 <meta name="description" content="{{- with .Description }}{{ . }}{{- else }}{{- if or .IsPage .IsSection}}
     {{- .Summary | default (printf "%s - %s" .Title  site.Title) }}{{- else }}
     {{- with site.Params.description }}{{ . }}{{- end }}{{- end }}{{- end -}}">
-<meta name="author" content="{{ (partial "author.html" . ) }}">
+{{- with partial "author.html" . }}
+<meta name="author" content="{{ . }}">
+{{- end }}
 <link rel="canonical" href="{{ if .Params.canonicalURL -}} {{ trim .Params.canonicalURL " " }} {{- else -}} {{ .Permalink }} {{- end }}">
 {{- if site.Params.analytics.google.SiteVerificationTag }}
 <meta name="google-site-verification" content="{{ site.Params.analytics.google.SiteVerificationTag }}">

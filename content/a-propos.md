@@ -3,7 +3,7 @@ title = "À propos et méthode"
 date = 2026-09-17
 lastmod = 2026-09-17
 draft = false
-summary = "Qui écrit ici, pourquoi, et selon quelles règles."
+summary = "Qui écrit Les Deux Récoltes, un exploitant en polyculture-élevage, pourquoi ce site existe et les règles qu'il suit : décrire, pas prescrire."
 +++
 
 ## Qui écrit
@@ -32,8 +32,6 @@ Des **notes datées** s'y ajoutent au fil de l'eau, secondaires par nature : ell
 Ce n'est **pas un conseil personnalisé**. Aucune page ne tient compte de votre situation, et aucune ne remplace votre comptable, votre banquier ou votre conseiller.
 
 Ce n'est **pas une recommandation d'investissement**. Le site publie des méthodes et des grilles vierges, pas des avis d'achat ou de vente, ni de sélection de titres.
-
-Ce n'est **pas un produit**. Rien n'est à vendre.
 
 ## Me joindre
 

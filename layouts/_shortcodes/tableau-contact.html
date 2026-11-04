@@ -16,4 +16,4 @@
 {{- end -}}
 {{- $plus := `\+` -}}
 {{- $href := printf "mailto:contact@lesdeuxrecoltes.fr?subject=%s&body=%s" (replaceRE $plus "%20" ($sujet | urlquery)) (replaceRE $plus "%20" ($corps | urlquery)) -}}
-<p class="tableau-boutons"><a class="tableau-bouton" href="{{ $href | safeURL }}" onclick="window.ldrEvenement && ldrEvenement('tableau-contact-{{ $objet }}')">{{ $libelle }}</a></p>
+<p class="tableau-boutons"><a class="tableau-bouton" href="{{ $href | safeURL }}" onclick="window.ldrEvenement && ldrEvenement('contact-tableau-{{ $objet }}')">{{ $libelle }}</a></p>

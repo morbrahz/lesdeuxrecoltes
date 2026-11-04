@@ -33,6 +33,9 @@ jobs:
           verifier tableau-exploitation/index.html 'download="\?tableau-exploitation-1'
           verifier tableau-exploitation/index.html "mailto:contact@lesdeuxrecoltes.fr?subject="
           verifier tableau-exploitation/index.html "après-lessai"
+          verifier tableau-exploitation/index.html "outil-tableau-demo"
+          verifier tableau-exploitation/index.html "telechargement-tableau-exploitation"
+          verifier tableau-exploitation/index.html "contact-tableau-licence"
           verifier tableau-exploitation/tableau-exploitation.html "connect-src 'none'"
           test -f /tmp/site/tableau-exploitation/exemple-synthese.pdf
           test -f /tmp/site/images/tableau-exploitation/tableau-demo.jpg

@@ -4,6 +4,6 @@
      mesure d'audience du site ne compte que le clic sur ces deux boutons. */}}
 {{- $version := site.Params.tableauVersion -}}
 <p class="tableau-boutons">
-<a class="tableau-bouton" href="/tableau-exploitation/tableau-exploitation.html#demo" target="_blank" rel="noopener" onclick="window.ldrEvenement && ldrEvenement('tableau-demo')">Voir la démonstration</a>
-<a class="tableau-bouton secondaire" href="/tableau-exploitation/tableau-exploitation.html" download="tableau-exploitation-{{ $version }}.html" onclick="window.ldrEvenement && ldrEvenement('tableau-telechargement')">Télécharger l'essai gratuit (version {{ $version }})</a>
+<a class="tableau-bouton" href="/tableau-exploitation/tableau-exploitation.html#demo" target="_blank" rel="noopener" onclick="window.ldrEvenement && ldrEvenement('outil-tableau-demo')">Voir la démonstration</a>
+<a class="tableau-bouton secondaire" href="/tableau-exploitation/tableau-exploitation.html" download="tableau-exploitation-{{ $version }}.html" onclick="window.ldrEvenement && ldrEvenement('telechargement-tableau-exploitation')">Télécharger l'essai gratuit (version {{ $version }})</a>
 </p>

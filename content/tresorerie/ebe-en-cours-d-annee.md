@@ -5,7 +5,7 @@ date = 2026-10-03
 lastmod = 2026-10-14
 draft = false
 weight = 4
-summary = "Calculer l'EBE de l'exploitation agricole en cours d'année : à date ou sur 12 mois glissants, annuités au prorata, marge sur coût alimentaire du lait, bénéfice brut estimé."
+summary = "L'EBE de l'exploitation agricole en cours d'année : à date ou sur 12 mois glissants, annuités au prorata, marge sur coût alimentaire du lait, bénéfice brut estimé."
 +++
 
 Le dossier de gestion arrive plusieurs mois après la clôture, quand les décisions de l'exercice sont prises depuis longtemps. Pourtant, la comptabilité tenue au fil de l'eau contient déjà presque tout : une balance ou un grand livre sortis en cours d'année suffisent à savoir si l'exercice se présente mieux ou moins bien que le précédent. Cette page décrit comment en tirer un EBE de gestion, à date ou sur 12 mois glissants, comment passer au bénéfice brut, et comment lire ces chiffres sans leur faire dire ce qu'ils ne disent pas. Un [outil en ligne](/tresorerie/outil-ebe-en-cours-d-annee/) fait le calcul à partir de vos propres fichiers.

@@ -1,8 +1,9 @@
 baseURL = 'https://lesdeuxrecoltes.fr/'
 # Langue du site. defaultContentLanguage fixe <html lang> et les libelles du
-# theme (i18n/fr.yaml de PaperMod) ; languageCode seul ne suffit pas.
+# theme (i18n/fr.yaml de PaperMod) ; locale (ex-languageCode, renomme dans
+# Hugo 0.158) donne og:locale et la langue du flux RSS.
 defaultContentLanguage = 'fr'
-languageCode = 'fr-FR'
+locale = 'fr-FR'
 title = 'Les Deux Récoltes'
 theme = 'PaperMod'
 
@@ -14,10 +15,33 @@ enableRobotsTXT = true
 # sitemap et diluent les quelques URL du site.
 disableKinds = ['taxonomy', 'term']
 
+# Images : static/images est aussi monté dans assets/images, pour que Hugo
+# puisse en produire des variantes WebP redimensionnées
+# (layouts/_partials/image-responsive.html). Les fichiers d'origine restent
+# publiés à la même adresse par le montage static habituel.
+[module]
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+  [[module.mounts]]
+    source = 'static'
+    target = 'static'
+  [[module.mounts]]
+    source = 'static/images'
+    target = 'assets/images'
+
 [params]
   # Balise <title> de l'accueil (sinon le seul nom du site, sans mot-cle).
   homeTitle = 'Les Deux Récoltes – gestion, épargne et élevage laitier'
   env = 'production'
+  # Auteur des pages (pseudonyme, voir /a-propos/) : balise meta author et
+  # champ author des données structurées des articles.
+  author = 'Morbrazh'
+  # Image de partage par défaut (réseaux sociaux, messageries), pour les
+  # pages qui n'en déclarent pas (champ images de l'en-tête).
+  images = ['images/partage.png']
+  # Logo de l'éditeur dans les données structurées (PNG carré, 512 px).
+  logo = 'images/logo.png'
   # Utilisee comme meta description de la page d'accueil (les autres pages
   # utilisent leur propre champ summary).
   description = "Méthodes de gestion, d'investissement et d'élevage laitier écrites depuis une exploitation : trésorerie, épargne, placements, structures, traite robotisée."

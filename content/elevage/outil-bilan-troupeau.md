@@ -5,7 +5,7 @@ date = 2026-09-27
 lastmod = 2026-10-14
 draft = false
 weight = 5
-summary = "Bilan du troupeau laitier depuis les rapports standard de Lely Horizon : production, taux, cellules et vaches à regarder entre deux contrôles. Calcul dans le navigateur."
+summary = "Bilan du troupeau laitier depuis les rapports de Lely Horizon : production, taux, cellules et vaches à regarder entre deux contrôles. Calcul dans le navigateur."
 +++
 
 Cet outil établit, à partir des rapports standard de Lely Horizon, le tableau de bord décrit dans [Suivre son troupeau entre deux contrôles laitiers avec les données du robot de traite](/elevage/suivre-son-troupeau-entre-deux-controles/) : production, taux, cellules, stades de lactation, fréquentation du robot, et la liste des vaches à regarder, par numéro.

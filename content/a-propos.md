@@ -3,7 +3,7 @@ title = "À propos et méthode"
 date = 2026-09-17
 lastmod = 2026-09-17
 draft = false
-summary = "Qui écrit ici, pourquoi, et selon quelles règles."
+summary = "Qui écrit Les Deux Récoltes, un exploitant en polyculture-élevage, pourquoi ce site existe et les règles qu'il suit : décrire, pas prescrire."
 +++
 
 ## Qui écrit

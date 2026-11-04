@@ -1,6 +1,7 @@
 +++
 weight = 5
 title = 'Veille'
+seoTitle = "Veille agricole lait : prix, marchés, PAC, fiscalité"
 summary = "Veille agricole pour éleveurs laitiers : prix du lait, marchés, PAC, fiscalité, sanitaire et énergie, résumés avec leurs sources."
 +++
 

@@ -1,12 +1,12 @@
 +++
 title = "Outil en ligne : l'EBE en cours d'année depuis la comptabilité"
-seoTitle = "Outil : l'EBE en cours d'année depuis le grand livre ou la balance"
+seoTitle = "Outil : EBE en cours d'année depuis le grand livre ou la balance"
 date = 2026-10-03
 lastmod = 2026-11-04
 draft = false
 weight = 5
 annonce = false
-summary = "Déposez le grand livre ou la balance de l'exploitation : EBE à date ou sur 12 mois glissants, mois par mois, bénéfice brut estimé, marge sur coût alimentaire. Calcul dans le navigateur."
+summary = "Déposez le grand livre ou la balance : EBE à date ou sur 12 mois glissants, bénéfice brut estimé, marge sur coût alimentaire. Calcul dans le navigateur."
 +++
 
 Cet outil applique la méthode décrite dans [Calculer l'EBE de son exploitation agricole en cours d'année](/tresorerie/ebe-en-cours-d-annee/) à vos propres fichiers : EBE de gestion à date ou sur 12 mois glissants, comparaison avec les années précédentes, annuités et prélèvements ramenés aux mois écoulés, prix du lait, marge sur coût alimentaire et marges par atelier. Avec les grands livres, il ajoute l'évolution mois par mois et le bénéfice brut.

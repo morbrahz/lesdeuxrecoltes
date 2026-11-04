@@ -1,6 +1,7 @@
 +++
 weight = 2
 title = 'Épargne et retraite'
+seoTitle = "Épargne et retraite de l'agriculteur : PEA, assurance-vie, PER"
 summary = "Épargner et préparer sa retraite quand on est exploitant agricole : allocation, enveloppes, ordre de priorité."
 +++
 

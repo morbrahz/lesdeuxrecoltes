@@ -3,7 +3,7 @@ title = "Mentions légales"
 date = 2026-09-17
 lastmod = 2026-09-17
 draft = false
-summary = "Éditeur, hébergeur, contact, réutilisation des contenus."
+summary = "Mentions légales du site Les Deux Récoltes : éditeur, hébergeur, contact et conditions de réutilisation des contenus."
 +++
 
 ## Éditeur

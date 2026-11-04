@@ -1,6 +1,7 @@
 +++
 weight = 3
 title = 'Élevage laitier'
+seoTitle = "Élevage laitier en traite robotisée Lely : méthodes et outils"
 summary = "Protocoles et outils d'un élevage laitier en traite robotisée Lely : vaches à pousser, bilan du troupeau, renouvellement, suivi entre deux contrôles."
 +++
 

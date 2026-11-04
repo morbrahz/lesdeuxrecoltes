@@ -1,0 +1,19 @@
+{{/* Bouton de contact : {{< tableau-contact "licence" >}} ou {{< tableau-contact "demonstration" >}}.
+     E-mail prérempli : aucun formulaire, aucun service tiers, le message part de
+     la messagerie du visiteur. */}}
+{{- $objet := .Get 0 -}}
+{{- $sujet := "" -}}{{- $corps := "" -}}{{- $libelle := "" -}}
+{{- if eq $objet "licence" -}}
+  {{- $sujet = "Tableau d'exploitation - demande de licence" -}}
+  {{- $corps = "Bonjour,\n\nJ'ai essayé le Tableau d'exploitation et je souhaite continuer à l'utiliser.\n\nNom et prénom :\nStructure (exploitation, cabinet, organisme) :\nNombre de dossiers suivis :\nLogiciel comptable (Isacompta, autre) :\nCe qui m'intéresse, ce qui manque :\n\nCordialement," -}}
+  {{- $libelle = "Demander une licence" -}}
+{{- else if eq $objet "demonstration" -}}
+  {{- $sujet = "Tableau d'exploitation - demande de démonstration" -}}
+  {{- $corps = "Bonjour,\n\nJe souhaite une démonstration du Tableau d'exploitation (visioconférence d'environ 30 minutes).\n\nNom et prénom :\nStructure :\nNombre de dossiers suivis :\nDisponibilités :\n\nCordialement," -}}
+  {{- $libelle = "Demander une démonstration" -}}
+{{- else -}}
+  {{- errorf "tableau-contact : objet inconnu « %s » (licence ou demonstration)" $objet -}}
+{{- end -}}
+{{- $plus := `\+` -}}
+{{- $href := printf "mailto:contact@lesdeuxrecoltes.fr?subject=%s&body=%s" (replaceRE $plus "%20" ($sujet | urlquery)) (replaceRE $plus "%20" ($corps | urlquery)) -}}
+<p class="tableau-boutons"><a class="tableau-bouton" href="{{ $href | safeURL }}" onclick="window.ldrEvenement && ldrEvenement('contact-tableau-{{ $objet }}')">{{ $libelle }}</a></p>

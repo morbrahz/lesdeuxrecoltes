@@ -1,0 +1,26 @@
+/* Page du Tableau d'exploitation (shortcodes tableau-essai et tableau-contact) */
+.tableau-boutons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+.post-content a.tableau-bouton {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--theme);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: none;
+}
+.post-content a.tableau-bouton.secondaire {
+  background: var(--entry);
+  color: var(--primary);
+  border: 1px solid var(--border);
+}
+.post-content figure.tableau-capture img {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}

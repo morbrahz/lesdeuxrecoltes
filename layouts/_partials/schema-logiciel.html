@@ -1,0 +1,30 @@
+{{/* Description structurée « logiciel » (schema.org SoftwareApplication) de la page
+     du Tableau d'exploitation, activée par `logiciel = true` dans son en-tête.
+     Elle dit aux moteurs de recherche et aux assistants IA qu'il s'agit d'un
+     logiciel à télécharger, et non d'un article. Pas d'offre de prix : rien n'est
+     vendu sur le site. */}}
+{{- $donnees := dict
+  "@context" "https://schema.org"
+  "@type" "SoftwareApplication"
+  "name" "Tableau d'exploitation"
+  "applicationCategory" "BusinessApplication"
+  "applicationSubCategory" "Logiciel de gestion agricole"
+  "operatingSystem" "Navigateur web récent (Chrome, Edge) sous Windows, macOS ou Linux"
+  "softwareVersion" site.Params.tableauVersion
+  "inLanguage" "fr"
+  "description" .Params.summary
+  "url" .Permalink
+  "downloadUrl" ("tableau-exploitation/tableau-exploitation.html" | absURL)
+  "screenshot" ("images/tableau-exploitation/tableau-demo.jpg" | absURL)
+  "featureList" (slice
+    "EBE de gestion à date, en cumul de l'exercice ou sur 12 mois glissants"
+    "Prévision du résultat de fin d'exercice (atterrissage), avec fourchette"
+    "Synthèse de rendez-vous de gestion sur deux pages A4"
+    "Plusieurs dossiers, export et import"
+    "Prix et marge sur coût alimentaire du lait"
+    "Grandes cultures, bovins viande, hors-sol"
+    "Grands livres analytiques Isacompta et fichier des écritures comptables (FEC)"
+    "Fonctionne hors connexion ; aucune donnée transmise")
+  "publisher" (dict "@type" "Organization" "name" site.Title "url" site.BaseURL)
+-}}
+<script type="application/ld+json">{{ $donnees | jsonify | safeJS }}</script>

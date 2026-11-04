@@ -46,7 +46,7 @@ disableKinds = ['taxonomy', 'term']
 
   # Tableau d'exploitation (version pro, en essai gratuit) : version du fichier
   # proposé au téléchargement, dans static/tableau-exploitation/.
-  tableauVersion = '1.0.1'
+  tableauVersion = '1.0.2'
 
   [params.homeInfoParams]
     Title = "Méthodes de gestion, d'investissement et d'élevage, écrites depuis une exploitation agricole"

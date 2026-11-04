@@ -44,14 +44,39 @@ disableKinds = ['taxonomy', 'term']
   comments = false
   hidemeta = true
 
+  # Vente du Tableau d'exploitation (version professionnelle, payante).
+  # Tant qu'un champ obligatoire est vide, la construction du site ECHOUE sur les
+  # pages de vente (layouts/_partials/vente-controle.html) : rien n'est publie
+  # par erreur, le site en ligne reste le precedent.
+  [params.vente]
+    # Obligatoires : identite de l'entrepreneur individuel (micro-entreprise)
+    nom = ''                       # Prenom et nom, tels qu'inscrits au registre
+    siren = ''                     # 9 chiffres
+    adresse = ''                   # adresse professionnelle (ou de domiciliation)
+    # Obligatoires : prix annuels affiches (texte libre, ex. '120 €')
+    prix_exploitant = ''           # 1 a 2 dossiers
+    prix_conseiller = ''           # jusqu'a 25 dossiers
+    # Facultatif : lien de paiement Stripe (Payment Link) de la formule Exploitant.
+    # Vide, l'achat se fait par e-mail (facture puis virement).
+    lien_paiement_exploitant = ''
+    # Mention de TVA de la micro-entreprise en franchise en base
+    tva = 'TVA non applicable, art. 293 B du CGI'
+    # Version du tableau proposee au telechargement (static/tableau-exploitation/)
+    version = '1.0.1'
+
   [params.homeInfoParams]
     Title = "Méthodes de gestion, d'investissement et d'élevage, écrites depuis une exploitation agricole"
-    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne, placements, choix des structures et conduite d'un troupeau laitier trait au robot. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\n**[Tous les outils en ligne](/outils/)**, calcul dans votre navigateur : [EBE en cours d'année](/tresorerie/outil-ebe-en-cours-d-annee/) · [vaches à pousser au robot](/elevage/outil-vaches-a-pousser/) · [bilan du troupeau](/elevage/outil-bilan-troupeau/) · [renouvellement du troupeau](/elevage/outil-renouvellement/) · [quand arrêter d'inséminer](/elevage/outil-reinsemination/).\n\nUne question, une remarque, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr) : chaque message est lu."
+    Content = "Ce qui est publié ici a d'abord été résolu pour un usage propre : trésorerie, épargne, placements, choix des structures et conduite d'un troupeau laitier trait au robot. Les pages sont permanentes — elles se corrigent et se complètent quand la pratique évolue.\n\n**[Tous les outils en ligne](/outils/)**, calcul dans votre navigateur : [EBE en cours d'année](/tresorerie/outil-ebe-en-cours-d-annee/) · [vaches à pousser au robot](/elevage/outil-vaches-a-pousser/) · [bilan du troupeau](/elevage/outil-bilan-troupeau/) · [renouvellement du troupeau](/elevage/outil-renouvellement/) · [quand arrêter d'inséminer](/elevage/outil-reinsemination/).\n\n**Conseillers, centres de gestion, cabinets** : le [Tableau d'exploitation](/tableau-exploitation/) est la version professionnelle de l'outil EBE (plusieurs dossiers, atterrissage, synthèse de rendez-vous, FEC). Essai gratuit de 30 jours.\n\nUne question, une remarque, une pratique différente sur votre exploitation ? Écrivez à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr) : chaque message est lu."
 
 [[menu.main]]
   name = 'Outils'
   url = '/outils/'
   weight = 5
+
+[[menu.main]]
+  name = 'Version pro'
+  url = '/tableau-exploitation/'
+  weight = 7
 
 [[menu.main]]
   name = 'Trésorerie'

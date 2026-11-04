@@ -1,0 +1,50 @@
+/* Pages de vente du Tableau d'exploitation (shortcodes vente-* et tableau-essai) */
+.vente-boutons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0 18px;
+}
+.post-content a.vente-bouton {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: var(--radius);
+  background: var(--primary);
+  color: var(--theme);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: none;
+}
+.post-content a.vente-bouton.secondaire {
+  background: var(--entry);
+  color: var(--primary);
+  border: 1px solid var(--border);
+}
+.vente-formules {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+.vente-formule {
+  padding: 14px 16px;
+  background: var(--entry);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.vente-formule h3 {
+  margin: 0 0 4px;
+}
+.vente-formule .vente-montant {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 6px 0;
+}
+.vente-formule p {
+  margin: 6px 0;
+  font-size: 15px;
+}
+.post-content figure.vente-capture img {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}

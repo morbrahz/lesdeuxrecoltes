@@ -1,18 +1,20 @@
 +++
 title = "Mentions légales"
 date = 2026-09-17
-lastmod = 2026-09-17
+lastmod = 2026-11-04
 draft = false
 summary = "Éditeur, hébergeur, contact, réutilisation des contenus."
 +++
 
 ## Éditeur
 
-Ce site est édité à titre **personnel et non professionnel**, sous le pseudonyme **Morbrazh**.
+{{< vente-identite >}}
 
-Conformément à la loi pour la confiance dans l'économie numérique (LCEN, article 6), un éditeur non professionnel peut ne pas publier son identité civile, sous réserve d'avoir communiqué celle-ci à son hébergeur, qui la tient à la disposition de l'autorité judiciaire. C'est le cas ici.
+Directeur de la publication : l'éditeur. Les pages du site sont signées du pseudonyme **Morbrazh**.
 
-**Contact :** contact@lesdeuxrecoltes.fr
+## Vente
+
+Le site vend un seul produit, le logiciel [Tableau d'exploitation](/tableau-exploitation/), sous licence annuelle. Les conditions sont celles des [conditions générales de vente et de licence](/conditions-de-vente/). Le reste du site, pages et outils en ligne, est gratuit.
 
 ## Hébergeur
 
@@ -51,4 +53,4 @@ Tout contenu jugé inexact ou litigieux peut être signalé à l'adresse de cont
 
 ---
 
-*Dernière mise à jour : 17 septembre 2026.*
+*Dernière mise à jour : 4 novembre 2026.*

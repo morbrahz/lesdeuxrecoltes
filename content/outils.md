@@ -36,6 +36,10 @@ Pour préparer les exports : [créer un rapport de production journalière dans 
   L'EBE à date, mois par mois, comparé à l'année précédente, avec la marge sur coût alimentaire.\
   *À déposer : la balance ou le grand livre de l'exploitation.* · [La méthode](/tresorerie/ebe-en-cours-d-annee/)
 
+- **[Tableau d'exploitation](/tableau-exploitation/)** (version professionnelle, payante, essai gratuit de 30 jours)\
+  L'outil EBE pour plusieurs dossiers : atterrissage de fin d'exercice, synthèse de rendez-vous, filières, grands livres Isacompta ou FEC. Un fichier qui fonctionne hors connexion.\
+  *Pour les conseillers, centres de gestion, cabinets, et les exploitants qui suivent plusieurs structures.* · [Les tarifs](/tableau-exploitation/tarifs/)
+
 - **[Simulateur holding agricole](/structures/creer-une-holding-agriculteur/)** (tableur à télécharger)\
   À partir de quel bénéfice une holding à l'IS devient intéressante.\
   *Fichier Excel ou LibreOffice, sans macro.*

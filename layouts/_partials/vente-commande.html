@@ -1,0 +1,42 @@
+{{/* Bouton de commande d'une formule, appelé par les shortcodes vente-commande
+     et vente-formule avec le nom de la formule : "exploitant", "conseiller",
+     "organisme" ou "demonstration".
+     Formule Exploitant : paiement en ligne si hugo.toml [params.vente]
+     lien_paiement_exploitant est renseigné, sinon commande par e-mail.
+     Autres formules : e-mail prérempli (aucun formulaire, aucun service tiers :
+     le message part de la messagerie du visiteur). */}}
+{{- partial "vente-controle.html" . -}}
+{{- $formule := . -}}
+{{- $lien := site.Params.vente.lien_paiement_exploitant -}}
+{{- $sujet := "" -}}
+{{- $corps := "" -}}
+{{- $libelle := "" -}}
+{{- if eq $formule "exploitant" -}}
+  {{- $sujet = "Commande - Tableau d'exploitation, formule Exploitant" -}}
+  {{- $corps = "Bonjour,\n\nJe souhaite commander une licence annuelle du Tableau d'exploitation, formule Exploitant (1 à 2 dossiers).\n\nNom et prénom :\nExploitation (raison sociale) :\nAdresse de facturation :\nNom à faire figurer sur la licence :\nDate de début souhaitée :\n\nCordialement," -}}
+  {{- $libelle = "Commander par e-mail" -}}
+{{- else if eq $formule "conseiller" -}}
+  {{- $sujet = "Commande ou devis - Tableau d'exploitation, formule Conseiller" -}}
+  {{- $corps = "Bonjour,\n\nJe souhaite commander (ou recevoir un devis pour) une licence annuelle du Tableau d'exploitation, formule Conseiller (jusqu'à 25 dossiers).\n\nNom et prénom :\nStructure :\nAdresse de facturation :\nNom à faire figurer sur la licence :\nDate de début souhaitée :\nBesoin d'un devis ou d'un bon de commande : oui / non\n\nCordialement," -}}
+  {{- $libelle = "Commander ou demander un devis" -}}
+{{- else if eq $formule "organisme" -}}
+  {{- $sujet = "Demande de devis - Tableau d'exploitation, formule Organisme" -}}
+  {{- $corps = "Bonjour,\n\nNous souhaitons recevoir un devis pour le Tableau d'exploitation.\n\nOrganisme :\nContact (nom, fonction, téléphone) :\nNombre de dossiers suivis :\nNombre de conseillers utilisateurs :\nLogiciel comptable des dossiers (Isacompta, autre) :\nOptions souhaitées (paramétrage de la codification, formation, marque blanche) :\n\nCordialement," -}}
+  {{- $libelle = "Demander un devis" -}}
+{{- else if eq $formule "demonstration" -}}
+  {{- $sujet = "Demande de démonstration - Tableau d'exploitation" -}}
+  {{- $corps = "Bonjour,\n\nJe souhaite une démonstration du Tableau d'exploitation (visioconférence d'environ 30 minutes).\n\nNom et prénom :\nStructure :\nNombre de dossiers suivis :\nDisponibilités :\n\nCordialement," -}}
+  {{- $libelle = "Demander une démonstration" -}}
+{{- else -}}
+  {{- errorf "vente-commande : formule inconnue « %s » (exploitant, conseiller, organisme ou demonstration)" $formule -}}
+{{- end -}}
+{{- $plus := `\+` -}}
+{{- $href := printf "mailto:contact@lesdeuxrecoltes.fr?subject=%s&body=%s" (replaceRE $plus "%20" ($sujet | urlquery)) (replaceRE $plus "%20" ($corps | urlquery)) -}}
+<p class="vente-boutons">
+{{- if and (eq $formule "exploitant") $lien }}
+<a class="vente-bouton" href="{{ $lien }}" rel="noopener" onclick="window.ldrEvenement && ldrEvenement('tableau-paiement-exploitant')">Payer en ligne</a>
+<a class="vente-bouton secondaire" href="{{ $href | safeURL }}">ou commander par e-mail (facture et virement)</a>
+{{- else }}
+<a class="vente-bouton" href="{{ $href | safeURL }}" onclick="window.ldrEvenement && ldrEvenement('tableau-{{ $formule }}-email')">{{ $libelle }}</a>
+{{- end }}
+</p>

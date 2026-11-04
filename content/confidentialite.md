@@ -32,9 +32,26 @@ Les outils proposés sur ce site, comme la [liste des vaches à pousser au robot
 
 Seul le [compteur de renouvellement](/elevage/outil-renouvellement/) garde vos saisies d'une visite à l'autre, pour que vous n'ayez pas à tout ressaisir : elles sont enregistrées **dans la mémoire de votre navigateur** (stockage local), sur votre appareil uniquement. Elles ne sont jamais transmises au site ni à un tiers. Vous pouvez les effacer depuis l'outil (« Tout effacer ») ou en supprimant les données du site dans les réglages de votre navigateur.
 
+## Tableau d'exploitation
+
+Le [Tableau d'exploitation](/tableau-exploitation/), logiciel vendu sur ce site, est un fichier qui fonctionne **entièrement dans votre navigateur**. Il ne contient aucune mesure d'audience et s'interdit toute connexion à Internet : les grands livres, les dossiers et la licence restent sur votre ordinateur. Le site compte seulement, sans autre donnée, les clics sur « Voir la démonstration », « Télécharger l'essai » et les boutons de commande.
+
+## Commandes et demandes de devis
+
+Une commande, une demande de devis ou de démonstration se fait par e-mail, ou par paiement en ligne pour la formule Exploitant.
+
+- **Données collectées** : nom, structure, adresse de facturation, adresse e-mail et, le cas échéant, téléphone ; le nom du titulaire inscrit sur la licence.
+- **Finalité** : répondre à la demande, établir le devis et la facture, envoyer la licence, les mises à jour et l'assistance.
+- **Base légale** : l'exécution du contrat ou des mesures précontractuelles (devis), et les obligations comptables pour les factures.
+- **Paiement en ligne** : il est traité par le prestataire de paiement indiqué lors de la commande, qui agit sous sa propre responsabilité. Les données de carte bancaire ne sont jamais transmises à l'éditeur du site.
+- **Durée de conservation** : trois ans après le dernier contact pour une demande sans suite ; la durée de la relation puis trois ans pour un client ; dix ans pour les factures et les pièces comptables.
+- **Vos droits** : accès, rectification, suppression (dans la limite des obligations comptables), en écrivant à [contact@lesdeuxrecoltes.fr](mailto:contact@lesdeuxrecoltes.fr). Vous pouvez aussi adresser une réclamation à la [CNIL](https://www.cnil.fr/).
+
+Ces données ne sont ni cédées, ni revendues, ni utilisées à d'autres fins.
+
 ## Lettre d'information
 
-Le formulaire « Être prévenu des nouvelles pages » permet de recevoir un e-mail à chaque nouvelle page publiée. C'est le seul endroit du site où une donnée personnelle est collectée.
+Le formulaire « Être prévenu des nouvelles pages » permet de recevoir un e-mail à chaque nouvelle page publiée. En dehors des commandes, c'est le seul endroit du site où une donnée personnelle est collectée.
 
 - **Donnée collectée** : votre adresse e-mail, et rien d'autre. Aucun nom n'est demandé.
 - **Finalité** : vous envoyer un e-mail quand une page est ajoutée au site. L'adresse n'est utilisée à aucune autre fin, ni cédée, ni revendue, ni partagée.
@@ -46,7 +63,7 @@ Le formulaire « Être prévenu des nouvelles pages » permet de recevoir un e-m
 
 ## Vos droits
 
-En dehors de la lettre d'information, aucune donnée personnelle identifiante n'est conservée : il n'existe pas de fichier permettant de retrouver un visiteur. Pour toute question relative à cette page, la demande peut être adressée via les coordonnées figurant dans les mentions légales.
+En dehors de la lettre d'information et des commandes, aucune donnée personnelle identifiante n'est conservée : il n'existe pas de fichier permettant de retrouver un visiteur. Pour toute question relative à cette page, la demande peut être adressée via les coordonnées figurant dans les mentions légales.
 
 ---
 

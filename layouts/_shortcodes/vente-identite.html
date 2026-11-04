@@ -1,0 +1,8 @@
+{{/* Identité de l'éditeur et vendeur (mentions légales, conditions de vente).
+     Valeurs : hugo.toml, [params.vente]. */}}
+{{- partial "vente-controle.html" . -}}
+{{- $v := site.Params.vente -}}
+<p><strong>{{ $v.nom }}</strong>, entrepreneur individuel, sous le nom commercial <strong>Les Deux Récoltes</strong><br>
+SIREN {{ $v.siren }}<br>
+{{ $v.adresse }}<br>
+Contact : <a href="mailto:contact@lesdeuxrecoltes.fr">contact@lesdeuxrecoltes.fr</a></p>

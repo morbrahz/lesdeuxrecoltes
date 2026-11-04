@@ -1,0 +1,12 @@
+{{/* Garde-fou de la vente : appelé par chaque shortcode de vente. Si un champ
+     obligatoire de [params.vente] (hugo.toml) est vide, la construction du site
+     échoue avec la liste des champs manquants : aucune page de vente n'est
+     publiée sans l'identité de l'entrepreneur et les prix. */}}
+{{- $v := site.Params.vente | default dict -}}
+{{- $manque := slice -}}
+{{- range slice "nom" "siren" "adresse" "prix_exploitant" "prix_conseiller" -}}
+  {{- if not (index $v .) }}{{ $manque = $manque | append . }}{{ end -}}
+{{- end -}}
+{{- with $manque -}}
+  {{- errorf "Vente du Tableau d'exploitation : à compléter dans hugo.toml, section [params.vente] : %s. Le site n'est pas publié tant que ces champs sont vides." (delimit . ", ") -}}
+{{- end -}}

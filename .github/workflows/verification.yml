@@ -1,0 +1,61 @@
+name: Vérification de la construction (pull requests)
+
+# Construit le site sur chaque pull request, sans rien publier :
+#  1. sans les champs de vente (hugo.toml [params.vente]) : la construction doit
+#     échouer, c'est le garde-fou qui empêche de publier la vente incomplète ;
+#  2. avec des valeurs fictives : elle doit réussir, et les pages de vente
+#     doivent contenir les éléments attendus.
+# Le déploiement reste fait par hugo.yml, sur main uniquement.
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verifier:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.166.0
+    steps:
+      - name: Installer Hugo
+        run: |
+          curl -sSL "https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb" -o /tmp/hugo.deb
+          sudo dpkg -i /tmp/hugo.deb
+      - name: Récupérer le dépôt (avec les sous-modules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Construction réelle (garde-fou de la vente)
+        run: |
+          if hugo --gc --minify -d /tmp/reel > /tmp/reel.log 2>&1; then
+            if grep -q "^  \[params.vente\]" hugo.toml && [ -z "$(sed -n "s/^    siren = '\(.*\)'.*/\1/p" hugo.toml)" ]; then
+              echo "::error::La construction aurait dû échouer : SIREN vide dans hugo.toml."; exit 1
+            fi
+            echo "Construction réussie : champs de vente renseignés."
+          else
+            cat /tmp/reel.log
+            grep -q "Vente du Tableau d'exploitation : à compléter" /tmp/reel.log || { echo "::error::Échec de construction sans rapport avec le garde-fou de la vente."; exit 1; }
+            echo "::notice::Garde-fou actif : champs de vente à compléter dans hugo.toml avant de publier."
+          fi
+      - name: Construction avec des valeurs fictives
+        env:
+          HUGOxPARAMSxVENTExNOM: "Prénom Nom (vérification)"
+          HUGOxPARAMSxVENTExSIREN: "000000000"
+          HUGOxPARAMSxVENTExADRESSE: "1 rue de la Vérification, 00000 Ville"
+          HUGOxPARAMSxVENTExPRIX_EXPLOITANT: "100 €"
+          HUGOxPARAMSxVENTExPRIX_CONSEILLER: "500 €"
+        run: |
+          hugo --gc --minify -d /tmp/fictif
+          verifier() { grep -q -- "$2" "/tmp/fictif/$1" || { echo "::error::$1 : « $2 » introuvable"; exit 1; }; }
+          verifier tableau-exploitation/index.html "tableau-exploitation.html#demo"
+          verifier tableau-exploitation/index.html "mailto:contact@lesdeuxrecoltes.fr?subject="
+          verifier tableau-exploitation/tarifs/index.html "vente-formules"
+          verifier tableau-exploitation/tarifs/index.html "100 €"
+          verifier tableau-exploitation/tarifs/index.html "Sur devis"
+          verifier conditions-de-vente/index.html "000000000"
+          verifier mentions-legales/index.html "Prénom Nom (vérification)"
+          verifier tableau-exploitation/tableau-exploitation.html "connect-src 'none'"
+          test -f /tmp/fictif/tableau-exploitation/exemple-synthese.pdf
+          echo "Pages de vente construites et vérifiées."

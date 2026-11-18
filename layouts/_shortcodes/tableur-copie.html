@@ -1,0 +1,12 @@
+{{/* Bouton « Copier le tableur dans mon Google Drive ».
+     Adresse lue dans l'en-tête de la page : tableurCopie = "https://docs.google.com/spreadsheets/d/<ID>/copy".
+     Le fichier source doit appartenir au compte Google du site (contact@lesdeuxrecoltes.fr),
+     partagé « Tous les utilisateurs disposant du lien : lecteur ».
+     Sans adresse valide, la construction du site s'arrête : la page ne part pas avec un lien cassé.
+     Le clic compte un événement « copie-tableur-<nom de la page> », sans autre donnée. */}}
+{{- $url := .Page.Params.tableurCopie | default "" -}}
+{{- if not (findRE `^https://docs\.google\.com/spreadsheets/d/[A-Za-z0-9_-]{20,}/copy$` $url) -}}
+  {{- errorf "tableur-copie : renseigner tableurCopie dans l'en-tête de %s (adresse en /copy du tableur du compte du site)" .Page.File.Path -}}
+{{- end -}}
+{{- $evt := printf "copie-tableur-%s" .Page.File.ContentBaseName -}}
+<p class="tableau-boutons"><a class="tableau-bouton" href="{{ $url }}" target="_blank" rel="noopener" onclick="window.ldrEvenement && ldrEvenement('{{ $evt }}')">Copier le tableur dans mon Google Drive</a></p>

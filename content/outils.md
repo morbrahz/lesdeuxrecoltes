@@ -40,6 +40,10 @@ Pour préparer les exports : [créer un rapport de production journalière dans 
   L'outil EBE pour plusieurs dossiers : atterrissage de fin d'exercice, synthèse de rendez-vous, filières, grands livres Isacompta ou FEC. Un fichier à télécharger, qui fonctionne hors connexion.\
   *Pour les conseillers, centres de gestion, cabinets, et les exploitants qui suivent plusieurs structures.*
 
+- **[Marge sur coût alimentaire](/elevage/marge-sur-cout-alimentaire/#7-le-tableur)** (tableur Google Sheets à copier)\
+  Coût de la ration aux 1 000 litres, marge par vache et par jour, lait permis, prix payé recalculé.\
+  *À saisir : la ration à chaque changement, les collectes, la paie du mois. Compte Google nécessaire.* · [La méthode](/elevage/marge-sur-cout-alimentaire/)
+
 - **[Simulateur holding agricole](/structures/creer-une-holding-agriculteur/)** (tableur à télécharger)\
   À partir de quel bénéfice une holding à l'IS devient intéressante.\
   *Fichier Excel ou LibreOffice, sans macro.*

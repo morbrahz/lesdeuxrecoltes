@@ -106,6 +106,8 @@ La **marge sur coût alimentaire acheté** est celle que suivent la plupart des 
 
 **Le décalage de la paie de lait.** La paie d'un mois arrive souvent le mois suivant. Selon la date de la balance, il peut manquer un mois de lait : quelques milliers d'euros d'EBE en moins et un prix au litre faussé. On corrige en ajoutant le lait livré et non encore facturé, montant et litres, à la seule balance concernée.
 
+La même marge se suit aussi au jour le jour, à partir de la ration distribuée plutôt que des factures : c'est l'objet de la page [Marge sur coût alimentaire d'un troupeau laitier](/elevage/marge-sur-cout-alimentaire/), qui explique pourquoi les deux calculs divergent.
+
 ## 7. Les ateliers
 
 La balance analytique range chaque code activité dans un atelier : cultures de vente, élevage, activités annexes, structure. Une règle de méthode : **les cultures fourragères vont dans l'élevage**, qui les consomme. Laissées à part, elles forment un atelier toujours déficitaire, et la marge de l'élevage paraît meilleure qu'elle n'est.
@@ -152,6 +154,8 @@ On le prend **avant rémunération du travail et avant cotisations personnelles 
 - [Outil en ligne : l'EBE en cours d'année depuis la comptabilité](/tresorerie/outil-ebe-en-cours-d-annee/) — le calcul de cette page appliqué à vos grands livres ou à vos balances, dans votre navigateur.
 
 - [Combien de trésorerie garder sur une exploitation agricole](/tresorerie/combien-garder/) — fixer la réserve en mois de charges, annuités comprises.
+
+- [Marge sur coût alimentaire d'un troupeau laitier : la calculer par la ration et par la comptabilité](/elevage/marge-sur-cout-alimentaire/) — la marge suivie au jour le jour depuis la ration, avec un tableur gratuit.
 
 - [Suivre son troupeau entre deux contrôles laitiers avec les données du robot de traite](/elevage/suivre-son-troupeau-entre-deux-controles/) — le pendant technique du suivi économique de l'atelier lait.
 
